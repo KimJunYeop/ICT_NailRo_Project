@@ -1,7 +1,6 @@
 package com.javalec.message;
 
 import org.json.simple.JSONObject;
-import org.junit.Test;
 
 import com.google.gson.Gson;
 
