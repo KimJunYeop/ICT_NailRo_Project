@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.javalec.Response.ResRecommendRegion;
+import com.javalec.Response.ResDiscountCoupon;
 import com.javalec.message.Keyboard;
 import com.javalec.message.Message;
 import com.javalec.message.MessageButton;
@@ -30,6 +31,7 @@ import com.javalec.s3.S3UploadAndList;
 @Controller
 public class ChatbotController {
 
+	int choice = 0;	//choice변수에 따라 else if의 분기가 달라지도록 합니다. 0이면 "추천코스 검색"의 분기, 1이면 "할인혜택 검색"의 분기로 갈라지도록 했습니다.
 	/*
 	 * keyboard api
 	 */
@@ -49,25 +51,41 @@ public class ChatbotController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
+	//처음 홈화면에서 버튼을 누른 뒤 사용자가 행하는 모든 행위들이 다 /message 라우트로 들어옴으로써 분기별로 나눕니다.
+	//Kakao api에서는 이를 post방식으로 request합니다.
+	
+	/*읽어주세요! 2017-07-16 report 사용자가 버튼을 누를 때 모든 라우트가 이쪽으로 오는 것인데, "할인혜택 검색"의 입력형태 또한 추천코스 검색에서 전라도, 경상도, 강원도 등등..과 일치합니다. 즉, else if의 분기에서 걸릴 수 밖에 없다는 뜻인데, 이를 위해 변수를 이용하여 프로그래밍을 한 상태입니다.
+	2017-07-16 에러 발생 분기로 들어가지를 못함*/
 	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException {
+		
 		ResponseMessageVO res_vo = new ResponseMessageVO();
 		Message msg = new Message();
 		Keyboard keyboard = new Keyboard();
+		
 
 		if (req_msg.getContent().equals("처음으로")) {
 			msg.setText("내일로 봇에 오신것을 환영합니다!\n" + "내일로 봇으로 여행정보를 얻으세요!\n " + "추천코스, 여행지정보 또한 할인혜택까지!(하트뿅)");
 			keyboard = new Keyboard(new String[] { "메뉴얼", "할인혜택", "추천코스검색", "여행지정보", "오픈채팅방입장" });
 		} else if (req_msg.getContent().equals("추천코스검색")) {
+			choice = 0;
 			msg.setText("지역 추천코스");
 			keyboard = new Keyboard(new String[] { "전라도", "경상도", "강원도", "충청도" });
-		} else if (req_msg.getContent().equals("전라도")) {
+		} else if (req_msg.getContent().equals("전라도") && choice == 0) {
 			msg = regionRecommendLogic("전라도", msg);
-		} else if (req_msg.getContent().equals("경상도")) {
+		} else if (req_msg.getContent().equals("전라도") && choice == 1){
+			msg = discoutCouponLogic("전라도", msg);
+		} else if (req_msg.getContent().equals("경상도") && choice == 0) {
 			msg = regionRecommendLogic("경상도", msg);
-		} else if (req_msg.getContent().equals("강원도")) {
+		} else if (req_msg.getContent().equals("경상도") && choice == 1) {
+			msg = discoutCouponLogic("경상도", msg);
+		}else if (req_msg.getContent().equals("강원도") && choice == 0) {
 			msg = regionRecommendLogic("강원도", msg);
-		} else if (req_msg.getContent().equals("충청도")) {
+		} else if (req_msg.getContent().equals("강원도") && choice == 1) {
+			msg = discoutCouponLogic("강원도", msg);
+		} else if (req_msg.getContent().equals("충청도") && choice == 0) {
 			msg = regionRecommendLogic("충청도", msg);
+		} else if (req_msg.getContent().equals("충청도") && choice == 1) {
+			msg = discoutCouponLogic("충청도", msg);
 		} else if (req_msg.getContent().equals("여행지정보")) {
 			msg.setText("여행지 정보를 얻으세요! \n" + "알고자하는 도시의 이름을 입력하세요. \n" + "EX ) 부산");
 		} else if (req_msg.getContent().equals("부산")) {
@@ -77,7 +95,7 @@ public class ChatbotController {
 			String text = "내일로 오픈채팅방에 오신 것을 환영합니다!\n" + "아래 링크를 클릭하세요.";
 			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "https://open.kakao.com/o/gUUCJQx");
 		} else if (req_msg.getContent().equals("할인혜택")) {
-
+			choice = 1;
 		} else {
 			msg.setText("해당 단어에 대한 정보가 없습니다.\n");
 			keyboard = new Keyboard(new String[] { "처음으로" });
@@ -109,6 +127,17 @@ public class ChatbotController {
 		ResRecommendRegion res_region = context.getBean("resRecommendRegion", ResRecommendRegion.class);
 		res_region.setRegion("강원도");
 		msg.setText(res_region.getRecommendRegion());
+		return msg;
+	}
+	
+	/*
+		할인쿠폰 검색 호출 method
+	*/
+	private Message discoutCouponLogic(String region, Message msg){
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		ResDiscountCoupon res_discount = 
+context.getBean("resDiscountCoupon", ResDiscountCoupon.class);	//현재 DB에 연동하진 않은상태이며, applicationContext.xml에 임의로 정의해놓은 bean을 사용하였습니다.
+		msg.setText(region + " 지역의 쿠폰\n" + res_discount.getDiscountCoupon().getSerialNum());
 		return msg;
 	}
 
