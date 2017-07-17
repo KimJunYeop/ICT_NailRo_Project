@@ -3,66 +3,66 @@ Using CATALINA_HOME:   /goormService/tomcat7
 Using CATALINA_TMPDIR: /goormService/tomcat7/temp
 Using JRE_HOME:        /usr/lib/jvm/java-8-openjdk-amd64
 Using CLASSPATH:       /goormService/tomcat7/bin/bootstrap.jar:/goormService/tomcat7/bin/tomcat-juli.jar
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Server version:        Apache Tomcat/7.0.77
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Server built:          Mar 28 2017 16:01:48 UTC
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Server number:         7.0.77.0
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: OS Name:               Linux
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: OS Version:            4.4.0-81-generic
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Architecture:          amd64
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Java Home:             /usr/lib/jvm/java-8-openjdk-amd64/jre
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: JVM Version:           1.8.0_111-8u111-b14-3~14.04.1-b14
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: JVM Vendor:            Oracle Corporation
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: CATALINA_BASE:         /goormService/tomcat7
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: CATALINA_HOME:         /goormService/tomcat7
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Command line argument: -Djava.util.logging.config.file=/goormService/tomcat7/conf/logging.properties
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Command line argument: -Djava.endorsed.dirs=/goormService/tomcat7/endorsed
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Command line argument: -Dcatalina.base=/goormService/tomcat7
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Command line argument: -Dcatalina.home=/goormService/tomcat7
-7월 16, 2017 5:39:18 오후 org.apache.catalina.startup.VersionLoggerListener log
+7월 17, 2017 12:03:44 오후 org.apache.catalina.startup.VersionLoggerListener log
 정보: Command line argument: -Djava.io.tmpdir=/goormService/tomcat7/temp
-7월 16, 2017 5:39:18 오후 org.apache.catalina.core.AprLifecycleListener lifecycleEvent
+7월 17, 2017 12:03:44 오후 org.apache.catalina.core.AprLifecycleListener lifecycleEvent
 정보: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib
-7월 16, 2017 5:39:19 오후 org.apache.coyote.AbstractProtocol init
+7월 17, 2017 12:03:47 오후 org.apache.coyote.AbstractProtocol init
 정보: Initializing ProtocolHandler ["http-bio-8080"]
-7월 16, 2017 5:39:19 오후 org.apache.coyote.AbstractProtocol init
+7월 17, 2017 12:03:47 오후 org.apache.coyote.AbstractProtocol init
 정보: Initializing ProtocolHandler ["ajp-bio-8009"]
-7월 16, 2017 5:39:19 오후 org.apache.catalina.startup.Catalina load
-정보: Initialization processed in 4802 ms
-7월 16, 2017 5:39:19 오후 org.apache.catalina.core.StandardService startInternal
+7월 17, 2017 12:03:47 오후 org.apache.catalina.startup.Catalina load
+정보: Initialization processed in 13299 ms
+7월 17, 2017 12:03:48 오후 org.apache.catalina.core.StandardService startInternal
 정보: Starting service Catalina
-7월 16, 2017 5:39:19 오후 org.apache.catalina.core.StandardEngine startInternal
+7월 17, 2017 12:03:48 오후 org.apache.catalina.core.StandardEngine startInternal
 정보: Starting Servlet Engine: Apache Tomcat/7.0.77
-7월 16, 2017 5:39:19 오후 org.apache.catalina.startup.HostConfig deployWAR
+7월 17, 2017 12:03:49 오후 org.apache.catalina.startup.HostConfig deployWAR
 정보: Deploying web application archive /goormService/tomcat7/webapps/nailrobot.war
-7월 16, 2017 5:39:58 오후 org.apache.catalina.startup.TldConfig execute
+7월 17, 2017 12:05:36 오후 org.apache.catalina.startup.TldConfig execute
 정보: At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
 INFO : org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization started
-INFO : org.springframework.web.context.support.XmlWebApplicationContext - Refreshing Root WebApplicationContext: startup date [Sun Jul 16 17:40:03 UTC 2017]; root of context hierarchy
+INFO : org.springframework.web.context.support.XmlWebApplicationContext - Refreshing Root WebApplicationContext: startup date [Mon Jul 17 12:05:41 UTC 2017]; root of context hierarchy
 INFO : org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from ServletContext resource [/WEB-INF/spring/root-context.xml]
-INFO : org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 5007 ms
-7월 16, 2017 5:40:06 오후 org.apache.catalina.util.SessionIdGeneratorBase createSecureRandom
-정보: Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [102] milliseconds.
+INFO : org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 8537 ms
+7월 17, 2017 12:05:49 오후 org.apache.catalina.util.SessionIdGeneratorBase createSecureRandom
+정보: Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [640] milliseconds.
 INFO : org.springframework.web.servlet.DispatcherServlet - FrameworkServlet 'appServlet': initialization started
-INFO : org.springframework.web.context.support.XmlWebApplicationContext - Refreshing WebApplicationContext for namespace 'appServlet-servlet': startup date [Sun Jul 16 17:40:07 UTC 2017]; parent: Root WebApplicationContext
+INFO : org.springframework.web.context.support.XmlWebApplicationContext - Refreshing WebApplicationContext for namespace 'appServlet-servlet': startup date [Mon Jul 17 12:05:50 UTC 2017]; parent: Root WebApplicationContext
 INFO : org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from ServletContext resource [/WEB-INF/spring/appServlet/servlet-context.xml]
 INFO : org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
 INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/awsTest],methods=[GET]}" onto public java.lang.String com.javalec.spring_ex_pjt.ChatbotController.awsTest(java.util.Locale,org.springframework.ui.Model)
@@ -71,48 +71,67 @@ INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/keyboard],methods=[GET]}" onto public com.javalec.message.Keyboard com.javalec.spring_ex_pjt.ChatbotController.keyboard()
 INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/busan],methods=[GET]}" onto public java.lang.String com.javalec.spring_ex_pjt.ChatbotController.home(java.util.Locale,org.springframework.ui.Model) throws java.sql.SQLException
 INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/message],methods=[POST]}" onto public com.javalec.message.ResponseMessageVO com.javalec.spring_ex_pjt.ChatbotController.message(com.javalec.message.RequestMessage) throws java.sql.SQLException
-INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: WebApplicationContext for namespace 'appServlet-servlet': startup date [Sun Jul 16 17:40:07 UTC 2017]; parent: Root WebApplicationContext
-INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: WebApplicationContext for namespace 'appServlet-servlet': startup date [Sun Jul 16 17:40:07 UTC 2017]; parent: Root WebApplicationContext
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: WebApplicationContext for namespace 'appServlet-servlet': startup date [Mon Jul 17 12:05:50 UTC 2017]; parent: Root WebApplicationContext
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: WebApplicationContext for namespace 'appServlet-servlet': startup date [Mon Jul 17 12:05:50 UTC 2017]; parent: Root WebApplicationContext
 INFO : org.springframework.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/image/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
 INFO : org.springframework.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/resources/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
-INFO : org.springframework.web.servlet.DispatcherServlet - FrameworkServlet 'appServlet': initialization completed in 19620 ms
-7월 16, 2017 5:40:27 오후 org.apache.catalina.startup.HostConfig deployWAR
-정보: Deployment of web application archive /goormService/tomcat7/webapps/nailrobot.war has finished in 67,409 ms
-7월 16, 2017 5:40:27 오후 org.apache.catalina.startup.HostConfig deployDirectory
+INFO : org.springframework.web.servlet.DispatcherServlet - FrameworkServlet 'appServlet': initialization completed in 32865 ms
+7월 17, 2017 12:06:24 오후 org.apache.catalina.startup.HostConfig deployWAR
+정보: Deployment of web application archive /goormService/tomcat7/webapps/nailrobot.war has finished in 155,424 ms
+7월 17, 2017 12:06:24 오후 org.apache.catalina.startup.HostConfig deployDirectory
 정보: Deploying web application directory /goormService/tomcat7/webapps/host-manager
-7월 16, 2017 5:40:29 오후 org.apache.catalina.startup.HostConfig deployDirectory
-정보: Deployment of web application directory /goormService/tomcat7/webapps/host-manager has finished in 1,799 ms
-7월 16, 2017 5:40:29 오후 org.apache.catalina.startup.HostConfig deployDirectory
+7월 17, 2017 12:06:26 오후 org.apache.catalina.startup.HostConfig deployDirectory
+정보: Deployment of web application directory /goormService/tomcat7/webapps/host-manager has finished in 1,396 ms
+7월 17, 2017 12:06:26 오후 org.apache.catalina.startup.HostConfig deployDirectory
 정보: Deploying web application directory /goormService/tomcat7/webapps/examples
-7월 16, 2017 5:40:32 오후 org.apache.catalina.startup.HostConfig deployDirectory
-정보: Deployment of web application directory /goormService/tomcat7/webapps/examples has finished in 3,783 ms
-7월 16, 2017 5:40:32 오후 org.apache.catalina.startup.HostConfig deployDirectory
+7월 17, 2017 12:06:28 오후 org.apache.catalina.startup.HostConfig deployDirectory
+정보: Deployment of web application directory /goormService/tomcat7/webapps/examples has finished in 2,449 ms
+7월 17, 2017 12:06:28 오후 org.apache.catalina.startup.HostConfig deployDirectory
 정보: Deploying web application directory /goormService/tomcat7/webapps/ROOT
-7월 16, 2017 5:40:33 오후 org.apache.catalina.startup.HostConfig deployDirectory
-정보: Deployment of web application directory /goormService/tomcat7/webapps/ROOT has finished in 699 ms
-7월 16, 2017 5:40:33 오후 org.apache.catalina.startup.HostConfig deployDirectory
+7월 17, 2017 12:06:29 오후 org.apache.catalina.startup.HostConfig deployDirectory
+정보: Deployment of web application directory /goormService/tomcat7/webapps/ROOT has finished in 321 ms
+7월 17, 2017 12:06:29 오후 org.apache.catalina.startup.HostConfig deployDirectory
 정보: Deploying web application directory /goormService/tomcat7/webapps/docs
-7월 16, 2017 5:40:34 오후 org.apache.catalina.startup.HostConfig deployDirectory
-정보: Deployment of web application directory /goormService/tomcat7/webapps/docs has finished in 803 ms
-7월 16, 2017 5:40:34 오후 org.apache.catalina.startup.HostConfig deployDirectory
+7월 17, 2017 12:06:29 오후 org.apache.catalina.startup.HostConfig deployDirectory
+정보: Deployment of web application directory /goormService/tomcat7/webapps/docs has finished in 187 ms
+7월 17, 2017 12:06:29 오후 org.apache.catalina.startup.HostConfig deployDirectory
 정보: Deploying web application directory /goormService/tomcat7/webapps/manager
-7월 16, 2017 5:40:35 오후 org.apache.catalina.startup.HostConfig deployDirectory
-정보: Deployment of web application directory /goormService/tomcat7/webapps/manager has finished in 1,301 ms
-7월 16, 2017 5:40:35 오후 org.apache.coyote.AbstractProtocol start
+7월 17, 2017 12:06:29 오후 org.apache.catalina.startup.HostConfig deployDirectory
+정보: Deployment of web application directory /goormService/tomcat7/webapps/manager has finished in 245 ms
+7월 17, 2017 12:06:29 오후 org.apache.coyote.AbstractProtocol start
 정보: Starting ProtocolHandler ["http-bio-8080"]
-7월 16, 2017 5:40:35 오후 org.apache.coyote.AbstractProtocol start
+7월 17, 2017 12:06:29 오후 org.apache.coyote.AbstractProtocol start
 정보: Starting ProtocolHandler ["ajp-bio-8009"]
-7월 16, 2017 5:40:35 오후 org.apache.catalina.startup.Catalina start
-정보: Server startup in 76616 ms
+7월 17, 2017 12:06:29 오후 org.apache.catalina.startup.Catalina start
+정보: Server startup in 162343 ms
 WARN : org.springframework.web.servlet.PageNotFound - No mapping found for HTTP request with URI [/nailrobot/] in DispatcherServlet with name 'appServlet'
-INFO : org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [applicationContext.xml]
-INFO : org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [applicationContext.xml]
-INFO : org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [applicationContext.xml]
-INFO : org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [applicationContext.xml]
-WARN : org.springframework.web.servlet.PageNotFound - No mapping found for HTTP request with URI [/nailrobot/chat_room/U8-SaR1DCBsm] in DispatcherServlet with name 'appServlet'
-7월 16, 2017 5:42:06 오후 org.apache.catalina.startup.HostConfig undeploy
+WARN : org.springframework.web.servlet.PageNotFound - No mapping found for HTTP request with URI [/nailrobot/] in DispatcherServlet with name 'appServlet'
+7월 17, 2017 12:06:39 오후 org.apache.catalina.startup.HostConfig undeploy
 정보: Undeploying context [/nailrobot]
-INFO : org.springframework.web.context.support.XmlWebApplicationContext - Closing WebApplicationContext for namespace 'appServlet-servlet': startup date [Sun Jul 16 17:40:07 UTC 2017]; parent: Root WebApplicationContext
-INFO : org.springframework.web.context.support.XmlWebApplicationContext - Closing Root WebApplicationContext: startup date [Sun Jul 16 17:40:03 UTC 2017]; root of context hierarchy
-7월 16, 2017 5:42:09 오후 org.apache.catalina.startup.HostConfig deployWAR
+INFO : org.springframework.web.context.support.XmlWebApplicationContext - Closing WebApplicationContext for namespace 'appServlet-servlet': startup date [Mon Jul 17 12:05:50 UTC 2017]; parent: Root WebApplicationContext
+INFO : org.springframework.web.context.support.XmlWebApplicationContext - Closing Root WebApplicationContext: startup date [Mon Jul 17 12:05:41 UTC 2017]; root of context hierarchy
+7월 17, 2017 12:06:40 오후 org.apache.catalina.startup.HostConfig deployWAR
 정보: Deploying web application archive /goormService/tomcat7/webapps/nailrobot.war
+7월 17, 2017 12:07:07 오후 org.apache.catalina.startup.TldConfig execute
+정보: At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+INFO : org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization started
+INFO : org.springframework.web.context.support.XmlWebApplicationContext - Refreshing Root WebApplicationContext: startup date [Mon Jul 17 12:07:30 UTC 2017]; root of context hierarchy
+INFO : org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from ServletContext resource [/WEB-INF/spring/root-context.xml]
+INFO : org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 24240 ms
+INFO : org.springframework.web.servlet.DispatcherServlet - FrameworkServlet 'appServlet': initialization started
+INFO : org.springframework.web.context.support.XmlWebApplicationContext - Refreshing WebApplicationContext for namespace 'appServlet-servlet': startup date [Mon Jul 17 12:07:33 UTC 2017]; parent: Root WebApplicationContext
+INFO : org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from ServletContext resource [/WEB-INF/spring/appServlet/servlet-context.xml]
+INFO : org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/awsTest],methods=[GET]}" onto public java.lang.String com.javalec.spring_ex_pjt.ChatbotController.awsTest(java.util.Locale,org.springframework.ui.Model)
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/s3upload],methods=[POST]}" onto public void com.javalec.spring_ex_pjt.ChatbotController.submitReport(org.springframework.web.multipart.MultipartHttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.lang.IllegalStateException,java.io.IOException
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/s3list],methods=[POST]}" onto public void com.javalec.spring_ex_pjt.ChatbotController.getS3List(javax.servlet.http.HttpServletResponse) throws java.io.IOException
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/keyboard],methods=[GET]}" onto public com.javalec.message.Keyboard com.javalec.spring_ex_pjt.ChatbotController.keyboard()
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/busan],methods=[GET]}" onto public java.lang.String com.javalec.spring_ex_pjt.ChatbotController.home(java.util.Locale,org.springframework.ui.Model) throws java.sql.SQLException
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping - Mapped "{[/message],methods=[POST]}" onto public com.javalec.message.ResponseMessageVO com.javalec.spring_ex_pjt.ChatbotController.message(com.javalec.message.RequestMessage) throws java.sql.SQLException
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: WebApplicationContext for namespace 'appServlet-servlet': startup date [Mon Jul 17 12:07:33 UTC 2017]; parent: Root WebApplicationContext
+INFO : org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter - Looking for @ControllerAdvice: WebApplicationContext for namespace 'appServlet-servlet': startup date [Mon Jul 17 12:07:33 UTC 2017]; parent: Root WebApplicationContext
+INFO : org.springframework.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/image/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+INFO : org.springframework.web.servlet.handler.SimpleUrlHandlerMapping - Mapped URL path [/resources/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+INFO : org.springframework.web.servlet.DispatcherServlet - FrameworkServlet 'appServlet': initialization completed in 15354 ms
+7월 17, 2017 12:07:48 오후 org.apache.catalina.startup.HostConfig deployWAR
+정보: Deployment of web application archive /goormService/tomcat7/webapps/nailrobot.war has finished in 68,253 ms
