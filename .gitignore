@@ -1,1 +1,3 @@
 src/main/java/com/javalec/dbTest/
+*.manifest
+server.log

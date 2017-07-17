@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.javalec.Response.ResRecommendRegion;
 import com.javalec.Response.ResDiscountCoupon;
+import com.javalec.message.Photo;
+import com.javalec.object.DiscountCoupon;
 import com.javalec.message.Keyboard;
 import com.javalec.message.Message;
 import com.javalec.message.MessageButton;
@@ -85,11 +87,13 @@ public class ChatbotController {
 			msg.setText("내일로 봇의 할인 혜택입니다");
 			keyboard = new Keyboard(new String[]{"전라도의 혜택", "강원도의 혜택", "경상도의 혜택", "처음으로"});
 		} else if (req_msg.getContent().equals("전라도의 혜택")){
-			msg.setText("전라도의 혜택을 선택하셨습니다.");
+			msg = discountCouponLogic("전라도", msg);
 		} else if (req_msg.getContent().equals("강원도의 혜택")){
 			msg = discountCouponLogic("강원도", msg);
 		} else if (req_msg.getContent().equals("경상도의 혜택")){
 			msg = discountCouponLogic("경상도", msg);
+		} else if (req_msg.getContent().equals("충청도의 혜택")){
+			msg = discountCouponLogic("충청도", msg);
 		} else {
 			msg.setText("해당 단어에 대한 정보가 없습니다.\n");
 			keyboard = new Keyboard(new String[] { "처음으로" });
@@ -128,11 +132,10 @@ public class ChatbotController {
 		할인쿠폰 검색 호출 method
 	*/
 	private Message discountCouponLogic(String region, Message msg){
-		/*ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		ResDiscountCoupon res_discount = 
-context.getBean("resDiscountCoupon", ResDiscountCoupon.class);	//현재 DB에 연동하진 않은상태이며, applicationContext.xml에 임의로 정의해놓은 bean을 사용하였습니다.*/
 		ResDiscountCoupon resDiscountCoupon = new ResDiscountCoupon();
-		msg.setText(region + " 지역의 쿠폰\n" + resDiscountCoupon.getDiscountCoupon().getSerialNum());
+		resDiscountCoupon.setDiscountCoupon(new DiscountCoupon());
+		//message 객체 초기화 부분
+		msg.setText(region + " 지역의 쿠폰\n" + resDiscountCoupon.getDiscountCoupon().getSerialNum() + "\n메인메뉴로 돌아가고 싶으시면 \"처음으로\"를 입력해주세요");
 		return msg;
 	}
 

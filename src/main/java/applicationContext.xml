@@ -16,14 +16,4 @@
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
-	<!-- 2017-07-16 임시로 객체를 아무 값이나 초기화한 상태입니다.
- 	후에 DB와 연동하여 데이터를 가져와야 합니다.-->
-	<bean id = "discountCoupon" class = "com.javalec.object.DiscountCoupon">
-		<property name = "serialNum" value = "123-456-789"/>
-		<property name = "area" value = 8/>
-	</bean>
-	<bean id = "resDiscountCoupon"
-		  class = "com.javalec.Response.ResDiscountCoupon">
-			<property name = "discountCoupon" ref = "discountCoupon"/>
-	</bean>
 </beans>
