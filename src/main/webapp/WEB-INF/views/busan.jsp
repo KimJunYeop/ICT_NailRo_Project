@@ -46,7 +46,7 @@ body {
 		<!-- Image header -->
 		<header class="w3-display-container w3-wide w3-margin-bottom" id="home">
 			<img class="w3-image w3-col"
-				src="https://s3.ap-northeast-2.amazonaws.com/ictnailro/busan_logo.jpg">
+				src="CmRaAAAAg_n2JbTzeZSSEE2OWjP88DwJH6u6QyVQQlzSpa-v0m0OT1YRbr2LF_AwWtxdjeEs50bUtIYAN2CPB07kgCo4nI2_H2a9DssyU66OwqilVksTkKEWnKJJoSbcMBLNpZ4REhCEnid8B3AAvneHFIRcL5imGhQkhwGcPrX0LOrkfl2HkU_efYjVqQ">
 		</header>
 	
 		
