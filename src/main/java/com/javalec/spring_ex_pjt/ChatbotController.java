@@ -26,6 +26,9 @@ import com.javalec.Response.ResRecommendRegion;
 import com.javalec.gapi.Descending;
 import com.javalec.gapi.GooglePlace;
 import com.javalec.gapi.JPlace;
+import com.javalec.Response.ResDiscountCoupon;
+import com.javalec.message.Photo;
+import com.javalec.object.DiscountCoupon;
 import com.javalec.message.Keyboard;
 import com.javalec.message.Message;
 import com.javalec.message.MessageButton;
@@ -35,7 +38,6 @@ import com.javalec.s3.S3UploadAndList;
 
 @Controller
 public class ChatbotController {
-
 	/*
 	 * keyboard api
 	 */
@@ -55,10 +57,15 @@ public class ChatbotController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
+	//처음 홈화면에서 버튼을 누른 뒤 사용자가 행하는 모든 행위들이 다 /message 라우트로 들어옴으로써 분기별로 나눕니다.
+	//Kakao api에서는 이를 post방식으로 request합니다.
+	
 	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException {
+		
 		ResponseMessageVO res_vo = new ResponseMessageVO();
 		Message msg = new Message();
 		Keyboard keyboard = new Keyboard();
+		
 
 		if (req_msg.getContent().equals("처음으로")) {
 			msg.setText("내일로 봇에 오신것을 환영합니다!\n" + "내일로 봇으로 여행정보를 얻으세요!\n " + "추천코스, 여행지정보 또한 할인혜택까지!(하트뿅)");
@@ -80,7 +87,16 @@ public class ChatbotController {
 			String text = "내일로 오픈채팅방에 오신 것을 환영합니다!\n" + "아래 링크를 클릭하세요.";
 			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "https://open.kakao.com/o/gUUCJQx");
 		} else if (req_msg.getContent().equals("할인혜택")) {
-
+			msg.setText("내일로 봇의 할인 혜택입니다");
+			keyboard = new Keyboard(new String[]{"전라도의 혜택", "강원도의 혜택", "경상도의 혜택", "처음으로"});
+		} else if (req_msg.getContent().equals("전라도의 혜택")){
+			msg = discountCouponLogic("전라도", msg);
+		} else if (req_msg.getContent().equals("강원도의 혜택")){
+			msg = discountCouponLogic("강원도", msg);
+		} else if (req_msg.getContent().equals("경상도의 혜택")){
+			msg = discountCouponLogic("경상도", msg);
+		} else if (req_msg.getContent().equals("충청도의 혜택")){
+			msg = discountCouponLogic("충청도", msg);
 		}
 		else {
 			String text = req_msg.getContent() + "에 대한 자세한 관광지 정보는 아래 url을 클릭하세요!\n";
@@ -113,6 +129,17 @@ public class ChatbotController {
 		ResRecommendRegion res_region = context.getBean("resRecommendRegion", ResRecommendRegion.class);
 		res_region.setRegion("강원도");
 		msg.setText(res_region.getRecommendRegion());
+		return msg;
+	}
+	
+	/*
+		할인쿠폰 검색 호출 method
+	*/
+	private Message discountCouponLogic(String region, Message msg){
+		ResDiscountCoupon resDiscountCoupon = new ResDiscountCoupon();
+		resDiscountCoupon.setDiscountCoupon(new DiscountCoupon());
+		//message 객체 초기화 부분
+		msg.setText(region + " 지역의 쿠폰\n" + resDiscountCoupon.getDiscountCoupon().getSerialNum() + "\n메인메뉴로 돌아가고 싶으시면 \"처음으로\"를 입력해주세요");
 		return msg;
 	}
 

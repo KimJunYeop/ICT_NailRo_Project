@@ -15,4 +15,5 @@
 	<bean id = "resRecommendRegion" class="com.javalec.Response.ResRecommendRegion">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
+	
 </beans>

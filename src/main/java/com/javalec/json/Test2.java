@@ -2,7 +2,6 @@ package com.javalec.json;
 
 import java.sql.SQLException;
 
-import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -11,7 +10,6 @@ import com.javalec.object.Course;
 
 public class Test2 {
 
-	@Test
 	public void test() throws SQLException{
 //		JSONObject obj1 = new JSONObject();
 //		obj1.put("1", "2");

@@ -6,14 +6,14 @@ import java.util.Collections;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Test;
+//import org.junit.Test;
 
 import com.google.maps.errors.ApiException;
 
 public class JunitTest {
 	
 	
-	@Test
+	//@Test
 	public void test() throws ApiException, InterruptedException, IOException{
 		GooglePlace test = new GooglePlace();
 //		test.gTest();
