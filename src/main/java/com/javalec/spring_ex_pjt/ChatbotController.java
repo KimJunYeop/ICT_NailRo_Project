@@ -8,7 +8,11 @@ import java.util.Collections;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.xml.sax.SAXException;
 
 import com.javalec.Response.ResRecommendRegion;
 import com.javalec.gapi.Descending;
@@ -32,6 +37,7 @@ import com.javalec.message.MessageButton;
 import com.javalec.message.RequestMessage;
 import com.javalec.message.ResponseMessageVO;
 import com.javalec.s3.S3UploadAndList;
+import com.javalec.tourAPI.TourAPI;
 
 @Controller
 public class ChatbotController {
@@ -150,11 +156,16 @@ public class ChatbotController {
 	 * 여행지 검색시 route
 	 */
 	@RequestMapping(value = "/region/{str}", method = RequestMethod.GET)
-	public String home(@PathVariable("str") String name, Locale locale, Model model) throws SQLException {
+	public String home(@PathVariable("str") String name, Locale locale, Model model) throws SQLException, XPathExpressionException, IOException, SAXException, ParserConfigurationException {
+		Logger logger = Logger.getLogger(ChatbotController.class);
+		
 		GooglePlace test = new GooglePlace();
 		String city_name = name;
 		ArrayList<JPlace> place = new ArrayList<JPlace>();
 		place = test.search(name);	
+		
+		TourAPI tour = new TourAPI();
+		ArrayList<JSONObject> details = new ArrayList<JSONObject>();
 		
 		//JPlace list 정렬
 		try{
@@ -164,9 +175,17 @@ public class ChatbotController {
 			System.out.println(e);
 		}
 		
+		for (int i = 0; i < place.size(); i++) {
+			String keyword = place.get(i).getName();
+			JSONObject tours = tour.Search(name, keyword);
+			details.add(tours);	
+		}
 		
 		model.addAttribute("city_name",city_name);
 		model.addAttribute("place",place);
+		model.addAttribute("detail", details);
+		
+		logger.info(details);
 		
 		return "region_infomation";
 	}

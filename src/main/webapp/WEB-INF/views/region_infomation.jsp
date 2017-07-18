@@ -4,6 +4,7 @@
 <%@ page import="org.json.JSONArray"%>
 <%@ page import="org.json.JSONObject"%>
 <%
+	ArrayList<JSONObject> details= (ArrayList<JSONObject>) request.getAttribute("detail");
 	ArrayList<JPlace> jplace = (ArrayList<JPlace>) request.getAttribute("place");
 	String name = (String) request.getAttribute("city_name");
 	String API_KEY = "AIzaSyDC2VbtwngPu8iC0mla2B2EM3MonDYSeFQ";
@@ -64,6 +65,7 @@ body {
 					for (int i = 0; i < jplace.size(); i++) {
 						JPlace place = jplace.get(i);
 						String review_id = "review_modal" + i;
+						JSONObject detail = details.get(i);
 				%>
 				<!-- Blog entry -->
 				<div class="w3-container w3-white w3-margin w3-padding-large">
@@ -91,9 +93,7 @@ body {
 							<a class="w3-center"><span class="w3-tag w3-blue">상세정보를
 									보려면 클릭하세요!</span></a>
 							<div class="description">
-								<p>감천문화마을은 1950년대 6.25 피난민의 힘겨운 삶의 터전으로 시작되어 현재에 이르기까지 부산의
-									역사를 그대로 간직하고 있는 곳이다. 산자락을 따라 질서정연하게 늘어선 계단식 집단 주거형태와 모든 길이 통하는
-									미로같은 골목길의 경관은 감천만의 독특함을 보여준다.</p>
+								<p><%=detail.get("overview") %></p>
 							</div>
 						</div>
 						<p class="w3-left">
