@@ -4,7 +4,7 @@
 <%@ page import="org.json.JSONArray"%>
 <%@ page import="org.json.JSONObject"%>
 <%
-	ArrayList<JSONObject> details= (ArrayList<JSONObject>) request.getAttribute("detail");
+	ArrayList<JSONObject> details = (ArrayList<JSONObject>) request.getAttribute("detail");
 	ArrayList<JPlace> jplace = (ArrayList<JPlace>) request.getAttribute("place");
 	String name = (String) request.getAttribute("city_name");
 	String API_KEY = "AIzaSyDC2VbtwngPu8iC0mla2B2EM3MonDYSeFQ";
@@ -93,7 +93,7 @@ body {
 							<a class="w3-center"><span class="w3-tag w3-blue">상세정보를
 									보려면 클릭하세요!</span></a>
 							<div class="description">
-								<p><%=detail.get("overview") %></p>
+								<p><%=detail.get("overview")%></p>
 							</div>
 						</div>
 						<p class="w3-left">
@@ -106,7 +106,7 @@ body {
 							<button class="w3-button w3-black"
 								onclick="document.getElementById('<%=review_id%>').style.display='block'"
 								id="myBtn">
-								<b>Review</b> <span class="w3-tag w3-white">1</span>
+								<b>Review</b> <span class="w3-tag w3-white"></span>
 							</button>
 						</p>
 					</div>
@@ -120,23 +120,24 @@ body {
 								class="w3-button w3-display-topright w3-large">&times;</span>
 							<h2>사용자 리뷰 목록</h2>
 						</header>
-						<div
-							class="w3-container">
+						<div class="w3-container">
 							<%
 								JSONArray review_array = jplace.get(i).getReviews();
 									for (int j = 0; j < review_array.length(); j++) {
 										JSONObject review_obj = (JSONObject) review_array.get(j);
 							%>
 							<div class="w3-row w3-section w3-card ">
-								<div class="w3-col" style="width: 50px;margin-left: 30px;">
+								<div class="w3-col" style="width: 50px; margin-left: 30px;">
 									<i class="w3-xxlarge fa fa-user"></i>
 								</div>
 								<div class="w3-rest">
 									<p><%=review_obj.getString("author_name")%></p>
 								</div>
-								
+
 								<div class="w3-rest">
-									<p class="w3-right">평점 : <%=review_obj.getDouble("rating")%></p>
+									<p class="w3-right">
+										평점 :
+										<%=review_obj.getDouble("rating")%></p>
 								</div>
 								<p><%=review_obj.getString("text")%></p>
 							</div>
@@ -152,9 +153,7 @@ body {
 				</div>
 
 				<script>
-					var modal = document.getElementById(
-				<%=review_id%>
-					);
+					var modal = document.getElementById(<%=review_id%>);
 					// When the user clicks anywhere outside of the modal, close it
 					window.onclick = function(event) {
 						if (event.target == modal) {

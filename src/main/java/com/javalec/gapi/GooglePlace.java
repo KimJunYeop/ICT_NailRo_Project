@@ -21,45 +21,43 @@ public class GooglePlace {
 	public GooglePlace() {
 
 	}
+	
+	/*
+	 * Make Url for Google Place API
+	 */
+	public StringBuilder urlMake(String[] str) {
+		HttpURLConnection conn = null;
+		StringBuilder jsonResults = new StringBuilder();
+		try {
+			StringBuilder sb = new StringBuilder(PLACES_API_BASE);
+			for (int i = 0; i < str.length; i++) {
+				sb.append(str[i]);
+			}
+			URL url = new URL(sb.toString());
+			conn = (HttpURLConnection) url.openConnection();
+			InputStreamReader in = new InputStreamReader(conn.getInputStream());
+			int read;
+			char[] buff = new char[1024];
+			while ((read = in.read(buff)) != -1) {
+				jsonResults.append(buff, 0, read);
+			}
+		} catch (Exception e) {
+			System.out.println("Url Make Error : " + e);
+		} finally {
+			if (conn != null) {
+				conn.disconnect();
+			}
+		}
+		return jsonResults;
+	}
 
 	/*
 	 * GoogleAPI Place Search str = 지역정보.
 	 */
 	public ArrayList<JPlace> search(String str) {
 		ArrayList<JPlace> resultList = null;
-		HttpURLConnection conn = null;
-		StringBuilder jsonResults = new StringBuilder();
-
-		try {
-			StringBuilder sb = new StringBuilder(PLACES_API_BASE);
-			sb.append(TYPE_SEARCH);
-			sb.append(OUT_JSON);
-			sb.append("?query=" + str + "관광명소");
-			sb.append("&language=" + "ko");
-			sb.append("&key=" + API_KEY);
-			URL url = new URL(sb.toString());
-			conn = (HttpURLConnection) url.openConnection();
-			InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-			int read;
-			char[] buff = new char[1024];
-			while ((read = in.read(buff)) != -1) {
-				jsonResults.append(buff, 0, read);
-			}
-
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("MalformedURLException : " + e);
-
-			return resultList;
-		} catch (IOException e) {
-			System.out.println("IOException" + e);
-			return resultList;
-		} finally {
-			if (conn != null) {
-				conn.disconnect();
-			}
-		}
+		String[] url = {TYPE_SEARCH,OUT_JSON,"?query=" + str + "관광명소","&language=" + "ko","&key=" + API_KEY};
+		StringBuilder jsonResults = urlMake(url);
 		JSONObject jsonObj = new JSONObject(jsonResults.toString());
 		JSONArray predsJsonArray = jsonObj.getJSONArray("results");
 		resultList = parsingPlaceSearch(predsJsonArray, resultList);
@@ -70,86 +68,29 @@ public class GooglePlace {
 	/*
 	 * place ID 로 reviews, rating 알아내는 메소드.
 	 */
-	public static JPlace detailSearch(String place_id) {
-		HttpURLConnection conn = null;
-		StringBuilder jsonResults = new StringBuilder();
+	public JPlace detailSearch(String place_id) {
+		String[] url = new String[]{"/details",OUT_JSON,"?place_id=" + place_id,"&key=" + API_KEY,"&language=" + "ko"};
+		StringBuilder jsonResults = urlMake(url);
 		JPlace place = null;
 
-		try {
-			// https://maps.googleapis.com/maps/api/place
-			StringBuilder sb = new StringBuilder(PLACES_API_BASE);
-			sb.append("/details");
-			// OUT_JSON = "/json";
-			sb.append(OUT_JSON);
-			sb.append("?place_id=" + place_id);
-			sb.append("&key=" + API_KEY);
-			sb.append("&language=" + "ko");
-			URL url = new URL(sb.toString());
-			conn = (HttpURLConnection) url.openConnection();
-			InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-			int read;
-			char[] buff = new char[1024];
-			while ((read = in.read(buff)) != -1) {
-				jsonResults.append(buff, 0, read);
-			}
-
-		} catch (MalformedURLException e) {
-			System.out.println(e);
-		} catch (IOException e) {
-			System.out.println(e);
-		} finally {
-			if (conn != null) {
-				conn.disconnect();
-			}
-		}
-		
 		JSONObject jsonObj = new JSONObject(jsonResults.toString()).getJSONObject("result");
-		
 		JSONArray reviews = new JSONArray();
 		Double rating = 0.0;
-		
-		try{
+
+		try {
 			place = new JPlace();
-			if(jsonObj.has("rating")){
+			if (jsonObj.has("rating")) {
 				rating = jsonObj.getDouble("rating");
 			}
-			if(jsonObj.has("reviews")){
+			if (jsonObj.has("reviews")) {
 				reviews = jsonObj.getJSONArray("reviews");
 			}
-			
+
 			place.setPlace_rating(rating);
 			place.setReviews(reviews);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("detail : " + e);
 		}
-//		JSONObject jsonObj = new JSONObject(jsonResults.toString()).getJSONObject("result");
-//		System.out.println(jsonObj);
-////		if(!jsonObj.isNull("result")){
-////			System.out.println(!jsonObj.isNull("result"));
-////			 predsJsonObj = jsonObj.getJSONObject("result");
-////		
-////		}
-//		
-//		JSONArray reviews = new JSONArray();
-//		Double rating = 0.0;
-//		
-//		try{
-//			
-//			place = new JPlace();
-//			
-//			if(!jsonObj.isNull("rating")){
-//				rating = jsonObj.getDouble("rating");
-//			}
-//			
-//			if(!jsonObj.isNull("reviews")){
-//				reviews = (JSONArray) jsonObj.get("reviews");
-//			}
-//			place.setReviews(reviews);
-//			place.setPlace_rating(rating);
-//		} catch(JSONException e) {
-//			System.out.println("error processing JSON detail results : " + e);
-//		}
 		return place;
 	}
 
@@ -170,9 +111,8 @@ public class GooglePlace {
 				place_detail = detailSearch(place.getPlace_id());
 				place.setPlace_rating(place_detail.getPlace_rating());
 				place.setReviews(place_detail.getReviews());
-//				detailSearch(predsJsonArray.getJSONObject(i).getString("place_id"), place);
-				
-				if(!predsJsonArray.getJSONObject(i).isNull("photos")){
+
+				if (!predsJsonArray.getJSONObject(i).isNull("photos")) {
 					photos = (JSONArray) predsJsonArray.getJSONObject(i).get("photos");
 					photo_reference = (JSONObject) photos.get(0);
 					place.setPhoto_reference(photo_reference.get("photo_reference").toString());
@@ -182,7 +122,7 @@ public class GooglePlace {
 		} catch (JSONException e) {
 			System.out.println("error processing JSON parsingPlaceSearch results : " + e);
 		}
-		
+
 		return resultList;
 	}
 
