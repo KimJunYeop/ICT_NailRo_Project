@@ -1,14 +1,8 @@
 package com.javalec.tourAPI;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
@@ -21,23 +15,29 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import com.javalec.tourAPI.tourURL;
+import com.javalec.tourAPI.TourURL;
 
 public class TourAPI {
 	
 	public TourAPI(){
 	}
 	
-	public JSONObject Search(String areaName, String content) throws XPathExpressionException, IOException, SAXException, ParserConfigurationException{
+	public JSONObject search(String areaName, String content) throws XPathExpressionException, IOException, SAXException, ParserConfigurationException{
 		TourAPI tour = new TourAPI();
 		
-		String contentid = tour.ContentID(areaName, content);
-		JSONObject result =tour.ContentDetail(contentid);
+		String contentid = tour.contentID(areaName, content);
+		JSONObject result =tour.contentDetail(contentid);
 		
 		return result;
 	}
 	
-	public String ContentID(String areaName,String content) throws UnsupportedEncodingException, IOException, XPathExpressionException, SAXException, ParserConfigurationException {
+	public String contentID(String areaName,String content) throws UnsupportedEncodingException, IOException, XPathExpressionException, SAXException, ParserConfigurationException {
+		/*
+		 *  키워드 검색을 위한 method
+		 *  해당 지역이름과 관광지 이름으로 세부검색에 필요한 관좡지 코드를 검색 
+		 * */
+		
+		// 지역코드 검색을 위한 부분: DB에서 코드를 가져올 예정
 		String areaCode = "";
 		if(areaName.equals("서울")){
 			areaCode = "1";
@@ -52,45 +52,20 @@ public class TourAPI {
 			areaCode = "6";
 		}
 		
-		String keyword = URLEncoder.encode(content, "UTF-8");
-		tourURL addr = new tourURL(areaCode, keyword);
-		
-		URL url = new URL(addr.getUrl());
-		
-		//connect openAPI
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-	    conn.setRequestProperty("Content-type", "application/json");
-	    
-	    int RC = conn.getResponseCode();
-	   
-	    //Read XML data
-	    BufferedReader buffer;
-	    if(RC == HttpURLConnection.HTTP_OK) {
-	        buffer = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
-	    }  else {
-	        buffer = new BufferedReader(new InputStreamReader(conn.getErrorStream(),"UTF-8"));
-	    }
-	    
-	    String totalLine = "";
-	    String line;
-	    while ((line = buffer.readLine()) != null) { 
-	    	totalLine += line;
-	    }
-	    buffer.close();
-	    conn.disconnect();
-	    System.out.println(totalLine);
-	   
-//	    JSONObject json = new JSONObject();
+		//TourAPI에서 관관지 검색
+		TourURL addr = new TourURL(areaCode, content);
+		String totalLine = addr.request(addr.getUrl());
 	    
 	    //xml Parsing
 	    InputSource is = new InputSource(new StringReader(totalLine));
 	    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
 	    XPath xpath = XPathFactory.newInstance().newXPath();
 
+	    // XML에서 <contentid>에 해당하는 값을 찾음
 	    NodeList contentid = (NodeList)xpath.evaluate("/response/body/items/item/contentid", document, XPathConstants.NODESET);
 
-	    if(contentid.item(0) != null){
+	    if(contentid.item(0) != null){ //결과값 존재 유무 확인
+	    	// contentID를 String 형식으로 반환
 	    	return contentid.item(0).getTextContent();
 	    }
 	    else{
@@ -98,37 +73,11 @@ public class TourAPI {
 	    }
 	}
 	
-	public JSONObject ContentDetail(String ContentID) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
-		tourURL addr = new tourURL(ContentID);
+	public JSONObject contentDetail(String ContentID) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
+		TourURL addr = new TourURL(ContentID);
 		
-		URL url = new URL(addr.getUrl());
-		
-		//connect openAPI
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-	    conn.setRequestProperty("Content-type", "application/json");
-//	    System.out.println("\n" + ContentID);
-	    
-	    int RC = conn.getResponseCode();
-//	    System.out.println("Response code: " + RC);
-	   
-	    //Read XML data
-	    BufferedReader buffer;
-	    if(RC == HttpURLConnection.HTTP_OK) {
-	        buffer = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
-	    }  else {
-	        buffer = new BufferedReader(new InputStreamReader(conn.getErrorStream(),"UTF-8"));
-	    }
-	    
-	    String totalLine = "";
-	    String line;
-	    while ((line = buffer.readLine()) != null) { 
-	    	totalLine += line;
-	    }
-	    buffer.close();
-	    conn.disconnect();
-//	    System.out.println(totalLine);
-	   
+		//TourAPI에서 관관지 검색
+		String totalLine = addr.request(addr.getUrl());
 	    JSONObject detail = new JSONObject();
 	    
 	    //xml Parsing
@@ -142,8 +91,8 @@ public class TourAPI {
 //	    NodeList tel = (NodeList)xpath.evaluate("/response/body/items/item/tel", document, XPathConstants.NODESET);
 //	    NodeList telname = (NodeList)xpath.evaluate("/response/body/items/item/telname", document, XPathConstants.NODESET);
 	    
-//	    System.out.println(totalCount.item(0).getTextContent());
-	    if(totalCount.item(0).getTextContent().equals("0")){
+	    if(totalCount.item(0).getTextContent().equals("0")){// 결과값 존재 유무 확인
+	    	//json 형식으로 저장
 	    	detail.put("title", ContentID);
 		    detail.put("overview", "해당 관광지에 대한 정보가 없습니다.");
 //		    detail.put("tel", "");
@@ -156,6 +105,7 @@ public class TourAPI {
 //	    	detail.put("telname", telname.item(0).getTextContent());
 	    }
 	    
+	    //결과값을 json형식으로 반환
 	    return detail;
 	}
 }

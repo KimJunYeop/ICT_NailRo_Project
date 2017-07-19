@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -85,10 +86,10 @@ public class ChatbotController {
 			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "https://open.kakao.com/o/gUUCJQx");
 		} else if (req_msg.getContent().equals("할인혜택")) {
 
-		} else {
+		}
+		else {
 			String text = req_msg.getContent() + "에 대한 자세한 관광지 정보는 아래 url을 클릭하세요!\n";
-			msg = messageWithMessageButton(msg, text, "URL",
-					"http://13.124.143.250:8080/ICT_Nailro_Project/region/" + req_msg.getContent());
+			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/"+req_msg.getContent());
 		}
 
 		res_vo.setKeyboard(keyboard);
@@ -154,33 +155,36 @@ public class ChatbotController {
 	 * 여행지 검색시 route
 	 */
 	@RequestMapping(value = "/region/{str}", method = RequestMethod.GET)
-	public String home(@PathVariable("str") String name, Locale locale, Model model)
-			throws SQLException, XPathExpressionException, IOException, SAXException, ParserConfigurationException {
+	public String home(@PathVariable("str") String name, Locale locale, Model model) throws SQLException, XPathExpressionException, IOException, SAXException, ParserConfigurationException {
+		Logger logger = Logger.getLogger(ChatbotController.class);
+		
 		GooglePlace test = new GooglePlace();
 		String city_name = name;
 		ArrayList<JPlace> place = new ArrayList<JPlace>();
-		place = test.search(name);
-
+		place = test.search(name);	
+		
 		TourAPI tour = new TourAPI();
 		ArrayList<JSONObject> details = new ArrayList<JSONObject>();
-
-		// JPlace list 정렬
-		try {
+		
+		//JPlace list 정렬
+		try{
 			Descending descending = new Descending();
-			Collections.sort(place, descending);
-		} catch (Exception e) {
+			Collections.sort(place,descending);
+		}catch(Exception e){
 			System.out.println(e);
 		}
-
+		
 		for (int i = 0; i < place.size(); i++) {
 			String keyword = place.get(i).getName();
-			JSONObject tours = tour.Search(name, keyword);
-			details.add(tours);
+			JSONObject tours = tour.search(name, keyword);
+			details.add(tours);	
 		}
-
-		model.addAttribute("city_name", city_name);
-		model.addAttribute("place", place);
+		
+		model.addAttribute("city_name",city_name);
+		model.addAttribute("place",place);
 		model.addAttribute("detail", details);
+		
+		logger.info(details);
 		
 		return "region_infomation";
 	}
@@ -189,5 +193,4 @@ public class ChatbotController {
 	public String google(Locale locale, Model model) throws SQLException {
 		return "google";
 	}
-	
 }
