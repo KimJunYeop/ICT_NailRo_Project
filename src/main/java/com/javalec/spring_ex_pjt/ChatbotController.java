@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
@@ -72,6 +71,23 @@ public class ChatbotController {
 			msg.setText("내일로 봇에 오신것을 환영합니다!\n" + "내일로 봇으로 여행정보를 얻으세요!\n " + "추천코스, 여행지정보 또한 할인혜택까지!(하트뿅)");
 			keyboard = new Keyboard(new String[] { "메뉴얼", "할인혜택", "추천코스검색", "여행지정보", "오픈채팅방입장" });
 		} else if (req_msg.getContent().equals("추천코스검색")) {
+			Photo photo = new Photo();
+			photo.setUrl("https://s3.ap-northeast-2.amazonaws.com/ictnailro/s3/nailro_recommend_course.png");
+			photo.setWidth(200);
+			photo.setHeight(100);
+
+			msg.setPhoto(photo);
+			msg.setText("당신에게 딱 맞는 추천코스!\n 바로 여기에!(하트)\n 맞줌형 추천코스, 도별 추천코스 중 선택하세요.");
+
+			keyboard = new Keyboard(new String[] { "맞춤형 추천코스", "도별 추천코스" });
+		} else if (req_msg.getContent().equals("맞춤형 추천코스")) {
+			msg.setText("추천 받으실 도시의 이름을 코스와 함께 입력해주세요! \n ex ) 코스서울");
+			keyboard = new Keyboard();
+		} else if (req_msg.getContent().matches("코스.*.*")) {
+			//코스 추천. 코스서울 입력시 서울에 대한 관광코스 제공
+			msg.setText(req_msg.getContent());
+			keyboard = new Keyboard();
+		} else if (req_msg.getContent().equals("도별 추천코스")) {
 			msg.setText("지역 추천코스");
 			keyboard = new Keyboard(new String[] { "전라도", "경상도", "강원도", "충청도" });
 		} else if (req_msg.getContent().equals("전라도")) {
@@ -101,7 +117,8 @@ public class ChatbotController {
 		}
 		else {
 			String text = req_msg.getContent() + "에 대한 자세한 관광지 정보는 아래 url을 클릭하세요!\n";
-			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/"+req_msg.getContent());
+			msg = messageWithMessageButton(msg, text, "URL",
+					"http://13.124.143.250:8080/ICT_Nailro_Project/region/" + req_msg.getContent());
 		}
 
 		res_vo.setKeyboard(keyboard);
@@ -179,37 +196,34 @@ public class ChatbotController {
 	 * 여행지 검색시 route
 	 */
 	@RequestMapping(value = "/region/{str}", method = RequestMethod.GET)
-	public String home(@PathVariable("str") String name, Locale locale, Model model) throws SQLException, XPathExpressionException, IOException, SAXException, ParserConfigurationException {
-		Logger logger = Logger.getLogger(ChatbotController.class);
-		
+	public String home(@PathVariable("str") String name, Locale locale, Model model)
+			throws SQLException, XPathExpressionException, IOException, SAXException, ParserConfigurationException {
 		GooglePlace test = new GooglePlace();
 		String city_name = name;
 		ArrayList<JPlace> place = new ArrayList<JPlace>();
-		place = test.search(name);	
-		
+		place = test.search(name);
+
 		TourAPI tour = new TourAPI();
 		ArrayList<JSONObject> details = new ArrayList<JSONObject>();
-		
-		//JPlace list 정렬
-		try{
+
+		// JPlace list 정렬
+		try {
 			Descending descending = new Descending();
-			Collections.sort(place,descending);
-		}catch(Exception e){
+			Collections.sort(place, descending);
+		} catch (Exception e) {
 			System.out.println(e);
 		}
-		
+
 		for (int i = 0; i < place.size(); i++) {
 			String keyword = place.get(i).getName();
 			JSONObject tours = tour.search(name, keyword);
-			details.add(tours);	
+			details.add(tours);
 		}
-		
-		model.addAttribute("city_name",city_name);
-		model.addAttribute("place",place);
+
+		model.addAttribute("city_name", city_name);
+		model.addAttribute("place", place);
 		model.addAttribute("detail", details);
-		
-		logger.info(details);
-		
+
 		return "region_infomation";
 	}
 
