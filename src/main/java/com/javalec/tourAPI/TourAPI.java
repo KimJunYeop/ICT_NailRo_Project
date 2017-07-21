@@ -35,7 +35,8 @@ public class TourAPI {
 		/*
 		 *  키워드 검색을 위한 method
 		 *  해당 지역이름과 관광지 이름으로 세부검색에 필요한 관좡지 코드를 검색 
-		 * */
+		 * 
+		 */
 		
 		// 지역코드 검색을 위한 부분: DB에서 코드를 가져올 예정
 		String areaCode = "";
@@ -88,21 +89,15 @@ public class TourAPI {
 	    NodeList totalCount = (NodeList)xpath.evaluate("/response/body/totalCount", document, XPathConstants.NODESET);
 	    NodeList title = (NodeList)xpath.evaluate("/response/body/items/item/title", document, XPathConstants.NODESET);
 	    NodeList overview = (NodeList)xpath.evaluate("/response/body/items/item/overview", document, XPathConstants.NODESET);
-//	    NodeList tel = (NodeList)xpath.evaluate("/response/body/items/item/tel", document, XPathConstants.NODESET);
-//	    NodeList telname = (NodeList)xpath.evaluate("/response/body/items/item/telname", document, XPathConstants.NODESET);
 	    
 	    if(totalCount.item(0).getTextContent().equals("0")){// 결과값 존재 유무 확인
 	    	//json 형식으로 저장
 	    	detail.put("title", ContentID);
 		    detail.put("overview", "해당 관광지에 대한 정보가 없습니다.");
-//		    detail.put("tel", "");
-//		    detail.put("telname", "");
 	    }
 	    else {
 	    	detail.put("title", title.item(0).getTextContent());
 	    	detail.put("overview", overview.item(0).getTextContent());
-//	    	detail.put("tel", tel.item(0).getTextContent());
-//	    	detail.put("telname", telname.item(0).getTextContent());
 	    }
 	    
 	    //결과값을 json형식으로 반환
