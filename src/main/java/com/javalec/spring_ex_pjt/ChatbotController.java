@@ -84,7 +84,7 @@ public class ChatbotController {
 			msg.setText("추천 받으실 도시의 이름을 코스와 함께 입력해주세요! \n ex ) 코스서울");
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().matches("코스.*.*")) {
-			//코스 추천. 코스서울 입력시 서울에 대한 관광코스 제공
+			// 코스 추천. 코스서울 입력시 서울에 대한 관광코스 제공
 			msg.setText(req_msg.getContent());
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().equals("도별 추천코스")) {
@@ -105,7 +105,7 @@ public class ChatbotController {
 			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "https://open.kakao.com/o/gUUCJQx");
 		} else if (req_msg.getContent().equals("할인혜택")) {
 			msg.setText("내일로 봇의 다양한 할인 혜택을 만나보세요!");
-			keyboard = new Keyboard(new String[] {"전라도의 혜택", "경상도의 혜택", "강원도의 혜택", "충청도의 혜택"});
+			keyboard = new Keyboard(new String[] { "전라도의 혜택", "경상도의 혜택", "강원도의 혜택", "충청도의 혜택" });
 		} else if (req_msg.getContent().equals("전라도의 혜택")) {
 			msg = responseDiscountCoupon("전라도", msg);
 		} else if (req_msg.getContent().equals("경상도의 혜택")) {
@@ -114,8 +114,7 @@ public class ChatbotController {
 			msg = responseDiscountCoupon("강원도", msg);
 		} else if (req_msg.getContent().equals("충청도의 혜택")) {
 			msg = responseDiscountCoupon("충청도", msg);
-		}
-		else {
+		} else {
 			String text = req_msg.getContent() + "에 대한 자세한 관광지 정보는 아래 url을 클릭하세요!\n";
 			msg = messageWithMessageButton(msg, text, "URL",
 					"http://13.124.143.250:8080/ICT_Nailro_Project/region/" + req_msg.getContent());
@@ -149,15 +148,16 @@ public class ChatbotController {
 		msg.setText(res_region.getRecommendRegion());
 		return msg;
 	}
-	//할인쿠폰을 발급해주는 method, DB에서 쿠폰에 대한 정보를 가져온다.
-	private Message responseDiscountCoupon(String region, Message msg) throws SQLException{
+
+	// 할인쿠폰을 발급해주는 method, DB에서 쿠폰에 대한 정보를 가져온다.
+	private Message responseDiscountCoupon(String region, Message msg) throws SQLException {
 		@SuppressWarnings("resource")
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		//할인쿠폰 컨테이너 클래스를 가져오는 로직
+		// 할인쿠폰 컨테이너 클래스를 가져오는 로직
 		ResDiscountCoupon resDiscountCoupon = context.getBean("resDiscountCoupon", ResDiscountCoupon.class);
-		//컨테이너 클래스에 입력받은 파라미터의 지역을 기록하는 로직
+		// 컨테이너 클래스에 입력받은 파라미터의 지역을 기록하는 로직
 		resDiscountCoupon.setRegion(region);
-		//Message 객체에 담는 로직
+		// Message 객체에 담는 로직
 		msg.setText(resDiscountCoupon.getText());
 		msg.setPhoto(resDiscountCoupon.getPhoto());
 		return msg;

@@ -27,6 +27,7 @@ public class S3UploadAndList {
 	private static final String SECRET_KEY = "/5s+YBKRUrMpS7UbfJlOVswCBgv5QI+cwqMSzWnW";
 	private AmazonS3 amazonS3;
 
+	@SuppressWarnings("deprecation")
 	public S3UploadAndList() {
 		AWSCredentials awsCredentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
 		amazonS3 = new AmazonS3Client(awsCredentials);
