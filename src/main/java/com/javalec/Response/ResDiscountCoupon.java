@@ -19,6 +19,7 @@ public class ResDiscountCoupon {
 	String region;
 	DiscountCoupon discountCoupon;
 	Photo photo;
+	
 	public Photo getPhoto() {	//쿠폰의 사진을 출력하는 메소드
 		this.photo = new Photo();
 		photo.setUrl(this.discountCoupon.getPhotoURL());

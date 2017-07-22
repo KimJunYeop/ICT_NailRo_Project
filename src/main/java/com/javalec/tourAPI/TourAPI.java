@@ -15,6 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import com.javalec.tourAPI.TourURL;
 
 public class TourAPI {
 	

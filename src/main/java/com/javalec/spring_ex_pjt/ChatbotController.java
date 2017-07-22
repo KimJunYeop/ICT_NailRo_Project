@@ -151,6 +151,7 @@ public class ChatbotController {
 	}
 	//할인쿠폰을 발급해주는 method, DB에서 쿠폰에 대한 정보를 가져온다.
 	private Message responseDiscountCoupon(String region, Message msg) throws SQLException{
+		@SuppressWarnings("resource")
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 		//할인쿠폰 컨테이너 클래스를 가져오는 로직
 		ResDiscountCoupon resDiscountCoupon = context.getBean("resDiscountCoupon", ResDiscountCoupon.class);
