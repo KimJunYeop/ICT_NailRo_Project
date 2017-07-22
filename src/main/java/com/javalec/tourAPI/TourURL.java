@@ -3,6 +3,7 @@ package com.javalec.tourAPI;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -13,6 +14,7 @@ public class TourURL {
 	private String type;
 	private String option;
 	private String areaCode;
+	private String sigunguCode;
 	private String keyword;
 	private String contentID;
 	
@@ -20,6 +22,14 @@ public class TourURL {
 		this.type = "searchKeyword";
 		this.option = "&MobileOS=ETC&MobileApp=nailrochat&numOfRows=100";
 		this.areaCode = areaCode;
+		this.keyword = URLEncoder.encode(content, "UTF-8");
+	}
+	
+	public TourURL(String areaCode, String sigunguCode, String content) throws IOException {
+		this.type = "searchKeyword?";
+		this.option = "&MobileOS=ETC&MobileApp=nailrochat&numOfRows=100";
+		this.areaCode = areaCode;
+		this.sigunguCode = sigunguCode;
 		this.keyword = URLEncoder.encode(content, "UTF-8");
 	}
 	
@@ -61,7 +71,10 @@ public class TourURL {
 		if(this.type.equals("searchKeyword")){
 			return this.url + this.type + "?ServiceKey=" + this.serviceKey + this.option +"&areaCode=" + this.areaCode + "&keyword=" + this.keyword;
 		}
-		else{
+		else if(this.type.equals("searchKeyword?")){
+			return this.url + this.type + "ServiceKey=" + this.serviceKey + this.option +"&areaCode=" + this.areaCode + "&sigunguCode=" + this.sigunguCode +"&keyword=" + this.keyword;
+		}
+		else {
 			return this.url + this.type + "?ServiceKey=" + this.serviceKey + this.option +"&contentId=" + this.contentID;
 		}
 	}

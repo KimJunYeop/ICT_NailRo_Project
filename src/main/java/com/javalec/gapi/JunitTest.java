@@ -1,6 +1,13 @@
 package com.javalec.gapi;
 
+import java.sql.SQLException;
+
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+
+import com.javalec.Response.ResRecommendRegion;
+import com.javalec.object.Course;
 
 public class JunitTest {
 	
@@ -30,17 +37,25 @@ public class JunitTest {
 //		}
 //	}
 	
+//	@Test
+//	public void chatTest(){
+//		String str = "코스부산";
+//		
+//		if(str.matches("코스.*.*")){
+//			System.out.println("success");
+//			System.out.println(str);
+//		}else{
+//			System.out.println("fail");
+//		}
+//		
+//	}
+	
 	@Test
-	public void chatTest(){
-		String str = "코스부산";
-		
-		if(str.matches("코스.*.*")){
-			System.out.println("success");
-			System.out.println(str);
-		}else{
-			System.out.println("fail");
-		}
-		
+	public void jdbctest() throws SQLException{
+		Course course = new Course();
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		ResRecommendRegion res_region = context.getBean("resRecommendRegion", ResRecommendRegion.class);
+		System.out.println(res_region.getCourse("경상도").getPath());
 	}
 	
 }
