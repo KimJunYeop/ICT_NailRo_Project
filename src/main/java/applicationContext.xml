@@ -23,4 +23,6 @@
 	<bean id = "searchAreaCode" class = "com.javalec.tourAPI.SearchAreaCode">
 		<property name="dataSource" ref = "dataSource"/>
 	</bean>
+	
+	
 </beans>

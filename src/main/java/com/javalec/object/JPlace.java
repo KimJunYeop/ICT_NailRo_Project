@@ -1,4 +1,4 @@
-package com.javalec.gapi;
+package com.javalec.object;
 
 import org.json.JSONArray;
 

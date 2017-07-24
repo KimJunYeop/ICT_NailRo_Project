@@ -11,53 +11,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.javalec.object.JPlace;
+
 public class GooglePlace {
 
 	private static final String API_KEY = "AIzaSyDC2VbtwngPu8iC0mla2B2EM3MonDYSeFQ";
 	private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
 	private static final String TYPE_SEARCH = "/textsearch";
 	private static final String OUT_JSON = "/json";
+	UrlMake url_make = new UrlMake();
 
 	public GooglePlace() {
 
 	}
 	
-	/*
-	 * Make Url for Google Place API
-	 */
-	public StringBuilder urlMake(String[] str) {
-		HttpURLConnection conn = null;
-		StringBuilder jsonResults = new StringBuilder();
-		try {
-			StringBuilder sb = new StringBuilder(PLACES_API_BASE);
-			for (int i = 0; i < str.length; i++) {
-				sb.append(str[i]);
-			}
-			URL url = new URL(sb.toString());
-			conn = (HttpURLConnection) url.openConnection();
-			InputStreamReader in = new InputStreamReader(conn.getInputStream());
-			int read;
-			char[] buff = new char[1024];
-			while ((read = in.read(buff)) != -1) {
-				jsonResults.append(buff, 0, read);
-			}
-		} catch (Exception e) {
-			System.out.println("Url Make Error : " + e);
-		} finally {
-			if (conn != null) {
-				conn.disconnect();
-			}
-		}
-		return jsonResults;
-	}
-
+	
 	/*
 	 * GoogleAPI Place Search str = 지역정보.
 	 */
 	public ArrayList<JPlace> search(String str) {
 		ArrayList<JPlace> resultList = null;
-		String[] url = {TYPE_SEARCH,OUT_JSON,"?query=" + str + "관광명소","&language=" + "ko","&key=" + API_KEY};
-		StringBuilder jsonResults = urlMake(url);
+		String[] url = {PLACES_API_BASE,TYPE_SEARCH,OUT_JSON,"?query=" + str + "관광명소","&language=" + "ko","&key=" + API_KEY};
+		StringBuilder jsonResults = url_make.urlMake(url);
 		JSONObject jsonObj = new JSONObject(jsonResults.toString());
 		JSONArray predsJsonArray = jsonObj.getJSONArray("results");
 		resultList = parsingPlaceSearch(predsJsonArray, resultList);
@@ -69,8 +44,8 @@ public class GooglePlace {
 	 * place ID 로 reviews, rating 알아내는 메소드.
 	 */
 	public JPlace detailSearch(String place_id) {
-		String[] url = new String[]{"/details",OUT_JSON,"?place_id=" + place_id,"&key=" + API_KEY,"&language=" + "ko"};
-		StringBuilder jsonResults = urlMake(url);
+		String[] url = new String[]{PLACES_API_BASE,"/details",OUT_JSON,"?place_id=" + place_id,"&key=" + API_KEY,"&language=" + "ko"};
+		StringBuilder jsonResults = url_make.urlMake(url);
 		JPlace place = null;
 
 		JSONObject jsonObj = new JSONObject(jsonResults.toString()).getJSONObject("result");

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="com.javalec.gapi.JPlace"%>
+<%@ page import="com.javalec.object.JPlace"%>
 <%@ page import="org.json.JSONArray"%>
 <%@ page import="org.json.JSONObject"%>
 <%

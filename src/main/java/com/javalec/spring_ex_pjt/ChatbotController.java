@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -30,13 +29,13 @@ import com.javalec.Response.ResRecommendRegion;
 import com.javalec.Response.ResDiscountCoupon;
 import com.javalec.gapi.Descending;
 import com.javalec.gapi.GooglePlace;
-import com.javalec.gapi.JPlace;
 import com.javalec.message.Keyboard;
 import com.javalec.message.Message;
 import com.javalec.message.MessageButton;
 import com.javalec.message.Photo;
 import com.javalec.message.RequestMessage;
 import com.javalec.message.ResponseMessageVO;
+import com.javalec.object.JPlace;
 import com.javalec.s3.S3UploadAndList;
 import com.javalec.tourAPI.TourAPI;
 
@@ -57,7 +56,6 @@ public class ChatbotController {
 
 	/*
 	 * message api
-	 * 
 	 * @RequestBody 는 html을 java 객체로 변환해준다.
 	 */
 	@ResponseBody
@@ -81,9 +79,10 @@ public class ChatbotController {
 
 			keyboard = new Keyboard(new String[] { "맞춤형 추천코스", "도별 추천코스" });
 		} else if (req_msg.getContent().equals("맞춤형 추천코스")) {
+			//추천 코스로 들어가기 위한 안내문.
 			msg.setText("추천 받으실 도시의 이름을 코스와 함께 입력해주세요! \n ex ) 코스서울");
 			keyboard = new Keyboard();
-		} else if (req_msg.getContent().matches("코스.*.*")) {
+		} else if (req_msg.getContent().matches("코스.*.*.*.*")) {
 			// 코스 추천. 코스서울 입력시 서울에 대한 관광코스 제공
 			msg.setText(req_msg.getContent());
 			keyboard = new Keyboard();
@@ -199,10 +198,10 @@ public class ChatbotController {
 	@RequestMapping(value = "/region/{str}", method = RequestMethod.GET)
 	public String home(@PathVariable("str") String name, Locale locale, Model model)
 			throws SQLException, XPathExpressionException, IOException, SAXException, ParserConfigurationException {
-		GooglePlace test = new GooglePlace();
+		GooglePlace g_place = new GooglePlace();
 		String city_name = name;
 		ArrayList<JPlace> place = new ArrayList<JPlace>();
-		place = test.search(name);
+		place = g_place.search(name);
 
 		TourAPI tour = new TourAPI();
 		ArrayList<JSONObject> details = new ArrayList<JSONObject>();

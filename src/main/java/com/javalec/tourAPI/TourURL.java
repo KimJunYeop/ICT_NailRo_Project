@@ -38,7 +38,7 @@ public class TourURL {
 		this.option = "&MobileOS=ETC&MobileApp=nailrochat&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y";
 		this.contentID = contentID;
 	}
-	
+		
 	public String request(String addr) throws IOException{
 		URL url = new URL(addr);
 		
