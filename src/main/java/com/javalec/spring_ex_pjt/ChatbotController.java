@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.xml.sax.SAXException;
 
 import com.javalec.Response.ResRecommendRegion;
+import com.javalec.Response.ResWeather;
 import com.javalec.Response.ResDiscountCoupon;
 import com.javalec.gapi.Descending;
 import com.javalec.gapi.GooglePlace;
@@ -62,7 +63,7 @@ public class ChatbotController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
-	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException {
+	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException, IOException {
 		ResponseMessageVO res_vo = new ResponseMessageVO();
 		Message msg = new Message();
 		Keyboard keyboard = new Keyboard();
@@ -115,9 +116,10 @@ public class ChatbotController {
 		} else if (req_msg.getContent().equals("충청도의 혜택")) {
 			msg = responseDiscountCoupon("충청도", msg);
 		} else {
-			String text = req_msg.getContent() + "에 대한 자세한 관광지 정보는 아래 url을 클릭하세요!\n";
-			msg = messageWithMessageButton(msg, text, "URL",
-					"http://13.124.143.250:8080/ICT_Nailro_Project/region/" + req_msg.getContent());
+			ResWeather weather = new ResWeather();
+			weather.response(req_msg.getContent());
+			String text = weather.getText();
+			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/" + req_msg.getContent());
 		}
 
 		res_vo.setKeyboard(keyboard);

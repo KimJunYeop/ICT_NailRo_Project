@@ -3,6 +3,7 @@ package com.javalec.tourAPI;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -20,11 +21,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import com.javalec.tourAPI.TourURL;
+
+import com.javalec.object.OpenAPI;
+import com.javalec.object.AreaCode;
 
 public class TourAPI {
+	private static final String KEYWORD_URI = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey=";
+	private static final String DETAIL_URI = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=";
+	private static final String API_KEY = "9%2FgsanrvJGqg3eF9InVtlFrz2SOHea2S3MOgQE%2BwO0PPiHgPf2jIdgxy1vvpUhV%2BWlZ0httNIoeTJKmhZjgE7g%3D%3D";
+	private static final String KEYWORD_OPT = "&MobileOS=ETC&MobileApp=nailrochat&numOfRows=100";
+	private static final String DETAIL_OPT= "&MobileOS=ETC&MobileApp=nailrochat&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y";
 	
 	public TourAPI(){
+		
 	}
 	
 	public JSONObject search(String areaName, String content) throws XPathExpressionException, IOException, SAXException, ParserConfigurationException, SQLException{
@@ -43,22 +52,24 @@ public class TourAPI {
 		 * 
 		 */
 		
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		SearchAreaCode area = context.getBean("searchAreaCode", SearchAreaCode.class);
-		
 		// DB에서 해당 지역이름에 해당하는 코드정보를 받아옴
-		ArrayList<String> areaCode = area.get(areaName);
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		AreaCode area = context.getBean("AreaCode", AreaCode.class);
+		ArrayList<String> areaCode = area.search(areaName);
 		
-		//TourAPI에서 검색
-		String totalLine = "";
+		//API 주소 설정
+		OpenAPI tour = new OpenAPI(KEYWORD_URI, API_KEY, KEYWORD_OPT);
 		if(areaCode.get(0).length() == 1){ 	// 광역시와 특별시의 경우, sigunguCode를 사용하지 않음
-			TourURL addr = new TourURL(areaCode.get(0), content);
-			totalLine = addr.request(addr.getUrl());
+			tour.addUrl("areaCode", areaCode.get(0));
+			tour.addUrl("keyword", URLEncoder.encode(content, "UTF-8"));
 		}
 		else { //일반 시,군을 위한 검색
-			TourURL addr = new TourURL(areaCode.get(0), areaCode.get(1), content);
-			totalLine = addr.request(addr.getUrl());
+			tour.addUrl("areaCode", areaCode.get(0));
+			tour.addUrl("sigunguCode", areaCode.get(1));
+			tour.addUrl("keyword", URLEncoder.encode(content, "UTF-8"));
 		}
+		//TourAPI에서 검색
+		String totalLine = tour.request();
 		
 	    //xml Parsing
 	    InputSource is = new InputSource(new StringReader(totalLine));
@@ -78,10 +89,12 @@ public class TourAPI {
 	}
 	
 	public JSONObject contentDetail(String ContentID) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
-		TourURL addr = new TourURL(ContentID);
+		//API 주소 설정
+		OpenAPI addr = new OpenAPI(DETAIL_URI, API_KEY, DETAIL_OPT);
+		addr.addUrl("contentId", ContentID);
 		
 		//TourAPI에서 관관지 검색
-		String totalLine = addr.request(addr.getUrl());
+		String totalLine = addr.request();
 	    JSONObject detail = new JSONObject();
 	    
 	    //xml Parsing
