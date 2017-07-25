@@ -21,6 +21,18 @@ public class OpenAPI {
 		this.url = url + "&" + key + "=" + value;
 	}
 	
+	public void setUrl(String uri, String serviceKey){
+		this.url = uri + serviceKey;
+	}
+	
+	public void setUrl(String uri, String serviceKey, String option){
+		this.url = uri + serviceKey + option;
+	}
+	
+	public String getUrl(){
+		return this.url;
+	}
+	
 	public String request() throws IOException{
 //		System.out.println(url);
 		URL url = new URL(this.url);

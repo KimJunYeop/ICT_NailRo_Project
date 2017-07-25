@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
@@ -201,31 +202,12 @@ public class ChatbotController {
 	@RequestMapping(value = "/region/{str}", method = RequestMethod.GET)
 	public String home(@PathVariable("str") String name, Locale locale, Model model)
 			throws SQLException, XPathExpressionException, IOException, SAXException, ParserConfigurationException {
-		GooglePlace test = new GooglePlace();
-		String city_name = name;
-		ArrayList<JPlace> place = new ArrayList<JPlace>();
-		place = test.search(name);
 
 		TourAPI tour = new TourAPI();
-		ArrayList<JSONObject> details = new ArrayList<JSONObject>();
-
-		// JPlace list 정렬
-		try {
-			Descending descending = new Descending();
-			Collections.sort(place, descending);
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-
-		for (int i = 0; i < place.size(); i++) {
-			String keyword = place.get(i).getName();
-			JSONObject tours = tour.search(name, keyword);
-			details.add(tours);
-		}
-
-		model.addAttribute("city_name", city_name);
-		model.addAttribute("place", place);
-		model.addAttribute("detail", details);
+		JSONArray details = tour.search(name);
+		
+		model.addAttribute("city_name", name);
+		model.addAttribute("details", details);
 
 		return "region_infomation";
 	}

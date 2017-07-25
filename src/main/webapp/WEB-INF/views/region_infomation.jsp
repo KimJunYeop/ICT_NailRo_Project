@@ -1,13 +1,10 @@
 <%@ page contentType="text/html;charset=utf-8"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="com.javalec.gapi.JPlace"%>
 <%@ page import="org.json.JSONArray"%>
 <%@ page import="org.json.JSONObject"%>
 <%
-	ArrayList<JSONObject> details = (ArrayList<JSONObject>) request.getAttribute("detail");
-	ArrayList<JPlace> jplace = (ArrayList<JPlace>) request.getAttribute("place");
+	JSONArray details = (JSONArray) request.getAttribute("details");
 	String name = (String) request.getAttribute("city_name");
-	String API_KEY = "AIzaSyDC2VbtwngPu8iC0mla2B2EM3MonDYSeFQ";
 %>
 <!DOCTYPE html>
 <html>
@@ -47,14 +44,6 @@ body {
 			</h1>
 		</header>
 
-
-		<!-- Image header -->
-		<!-- <header class="w3-display-container w3-wide w3-margin-bottom" id="home">
-			<img class="w3-image w3-col"
-				src="CmRaAAAAg_n2JbTzeZSSEE2OWjP88DwJH6u6QyVQQlzSpa-v0m0OT1YRbr2LF_AwWtxdjeEs50bUtIYAN2CPB07kgCo4nI2_H2a9DssyU66OwqilVksTkKEWnKJJoSbcMBLNpZ4REhCEnid8B3AAvneHFIRcL5imGhQkhwGcPrX0LOrkfl2HkU_efYjVqQ">
-		</header> -->
-
-
 		<!-- Grid -->
 		<div class="w3-row w3-padding w3-border">
 
@@ -62,31 +51,25 @@ body {
 			<div class="w3-col">
 				<!-- google place api Jplace Array List 가져오기. -->
 				<%
-					for (int i = 0; i < jplace.size(); i++) {
-						JPlace place = jplace.get(i);
+					for (int i = 0; i < details.length(); i++) {
 						String review_id = "review_modal" + i;
-						JSONObject detail = details.get(i);
+						JSONObject detail = details.getJSONObject(i);
 				%>
 				<!-- Blog entry -->
 				<div class="w3-container w3-white w3-margin w3-padding-large">
 					<div class="w3-center">
 						<!-- place의 이름 , 주소, 평점-->
-						<h3><%=place.getName()%></h3>
+						<h3><%=detail.get("title").toString() %></h3>
 						<p>
-							주소 : <span class="w3-opacity"><%=place.getFormatted_address()%></span>
+							주소 : <span class="w3-opacity"><%=detail.get("addr1") %></span>
 						</p>
 						<p class="w3-right">
-							평점 :
-							<%=place.getPlace_rating()%>
+							TEL. <%=detail.get("tel") %>
 						</p>
 					</div>
 
 					<div class="w3-justify">
-						<%
-							String img_url = "https://maps.googleapis.com/maps/api/place/photo?" + "maxwidth=400"
-										+ "&photoreference=" + place.getPhoto_reference() + "&key=" + API_KEY;
-						%>
-						<img src="<%=img_url%>" alt="이미지가 없습니다." style="width: 100%"
+						<img src="<%=detail.get("firstimage")%>" alt="이미지가 없습니다." style="width: 100%"
 							class="w3-padding-16">
 
 						<div class="show">
@@ -121,30 +104,22 @@ body {
 							<h2>사용자 리뷰 목록</h2>
 						</header>
 						<div class="w3-container">
-							<%
-								JSONArray review_array = jplace.get(i).getReviews();
-									for (int j = 0; j < review_array.length(); j++) {
-										JSONObject review_obj = (JSONObject) review_array.get(j);
-							%>
 							<div class="w3-row w3-section w3-card ">
 								<div class="w3-col" style="width: 50px; margin-left: 30px;">
 									<i class="w3-xxlarge fa fa-user"></i>
 								</div>
 								<div class="w3-rest">
-									<p><%=review_obj.getString("author_name")%></p>
+									<p></p>
 								</div>
 
 								<div class="w3-rest">
 									<p class="w3-right">
 										평점 :
-										<%=review_obj.getDouble("rating")%></p>
+										</p>
 								</div>
-								<p><%=review_obj.getString("text")%></p>
+								<p></p>
 							</div>
 
-							<%
-								}
-							%>
 						</div>
 						<footer class="w3-container w3-teal w3-grey">
 							<p>닫으시려면 우측 상단의 x를 클릭하세요.</p>
