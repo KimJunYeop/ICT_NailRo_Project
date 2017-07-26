@@ -2,6 +2,8 @@ package com.javalec.spring_ex_pjt;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
@@ -26,18 +29,23 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.xml.sax.SAXException;
 
-import com.javalec.Response.ResRecommendRegion;
 import com.javalec.Response.ResDiscountCoupon;
+import com.javalec.Response.ResRecommendRegion;
+import com.javalec.Response.ResWeather;
 import com.javalec.gapi.Descending;
 import com.javalec.gapi.GooglePlace;
-import com.javalec.gapi.JPlace;
 import com.javalec.message.Keyboard;
 import com.javalec.message.Message;
 import com.javalec.message.MessageButton;
 import com.javalec.message.Photo;
 import com.javalec.message.RequestMessage;
 import com.javalec.message.ResponseMessageVO;
+import com.javalec.object.JPlace;
+import com.javalec.object.JTourCourse;
+import com.javalec.object.JTourCourseContent;
+import com.javalec.object.JTourCourseOverview;
 import com.javalec.s3.S3UploadAndList;
+import com.javalec.tourAPI.JTourApi;
 import com.javalec.tourAPI.TourAPI;
 
 @Controller
@@ -57,12 +65,11 @@ public class ChatbotController {
 
 	/*
 	 * message api
-	 * 
 	 * @RequestBody 는 html을 java 객체로 변환해준다.
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
-	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException {
+	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException, IOException, UnsupportedEncodingException  {
 		ResponseMessageVO res_vo = new ResponseMessageVO();
 		Message msg = new Message();
 		Keyboard keyboard = new Keyboard();
@@ -81,11 +88,29 @@ public class ChatbotController {
 
 			keyboard = new Keyboard(new String[] { "맞춤형 추천코스", "도별 추천코스" });
 		} else if (req_msg.getContent().equals("맞춤형 추천코스")) {
+			//추천 코스로 들어가기 위한 안내문.
 			msg.setText("추천 받으실 도시의 이름을 코스와 함께 입력해주세요! \n ex ) 코스서울");
 			keyboard = new Keyboard();
-		} else if (req_msg.getContent().matches("코스.*.*")) {
-			//코스 추천. 코스서울 입력시 서울에 대한 관광코스 제공
-			msg.setText(req_msg.getContent());
+		} else if (req_msg.getContent().matches("코스.*.*.*.*")) {
+			// 코스 추천. 코스서울 입력시 서울에 대한 관광코스 제공
+			String request = req_msg.getContent().replaceFirst("코스","");
+			String request_encoder =  URLEncoder.encode(request, "UTF-8");
+			
+			JTourApi j_tour = new JTourApi();
+			StringBuilder result = j_tour.tourKeywordSearch(request_encoder);
+			
+			String response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
+			
+			ArrayList<JTourCourse> j_tour_list = j_tour.tourKeywordSearchResult(result);
+			
+			for(int i = 0 ; i < j_tour_list.size() ; i ++){
+				response_message += ((i+1) + " " + j_tour_list.get(i).getTitle());
+				response_message += "\n";
+				response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?"+"id="+j_tour_list.get(i).getContentid()+"&type="+j_tour_list.get(i).getContenttypeid();
+				response_message += "\n\n";
+			}
+			
+			msg.setText(response_message);
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().equals("도별 추천코스")) {
 			msg.setText("지역 추천코스");
@@ -105,7 +130,7 @@ public class ChatbotController {
 			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "https://open.kakao.com/o/gUUCJQx");
 		} else if (req_msg.getContent().equals("할인혜택")) {
 			msg.setText("내일로 봇의 다양한 할인 혜택을 만나보세요!");
-			keyboard = new Keyboard(new String[] {"전라도의 혜택", "경상도의 혜택", "강원도의 혜택", "충청도의 혜택"});
+			keyboard = new Keyboard(new String[] { "전라도의 혜택", "경상도의 혜택", "강원도의 혜택", "충청도의 혜택" });
 		} else if (req_msg.getContent().equals("전라도의 혜택")) {
 			msg = responseDiscountCoupon("전라도", msg);
 		} else if (req_msg.getContent().equals("경상도의 혜택")) {
@@ -114,11 +139,11 @@ public class ChatbotController {
 			msg = responseDiscountCoupon("강원도", msg);
 		} else if (req_msg.getContent().equals("충청도의 혜택")) {
 			msg = responseDiscountCoupon("충청도", msg);
-		}
-		else {
-			String text = req_msg.getContent() + "에 대한 자세한 관광지 정보는 아래 url을 클릭하세요!\n";
-			msg = messageWithMessageButton(msg, text, "URL",
-					"http://13.124.143.250:8080/ICT_Nailro_Project/region/" + req_msg.getContent());
+		} else {
+			ResWeather weather = new ResWeather();
+			weather.response(req_msg.getContent());
+			String text = weather.getText();
+			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/" + req_msg.getContent());
 		}
 
 		res_vo.setKeyboard(keyboard);
@@ -149,15 +174,16 @@ public class ChatbotController {
 		msg.setText(res_region.getRecommendRegion());
 		return msg;
 	}
-	//할인쿠폰을 발급해주는 method, DB에서 쿠폰에 대한 정보를 가져온다.
-	private Message responseDiscountCoupon(String region, Message msg) throws SQLException{
+
+	// 할인쿠폰을 발급해주는 method, DB에서 쿠폰에 대한 정보를 가져온다.
+	private Message responseDiscountCoupon(String region, Message msg) throws SQLException {
 		@SuppressWarnings("resource")
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		//할인쿠폰 컨테이너 클래스를 가져오는 로직
+		// 할인쿠폰 컨테이너 클래스를 가져오는 로직
 		ResDiscountCoupon resDiscountCoupon = context.getBean("resDiscountCoupon", ResDiscountCoupon.class);
-		//컨테이너 클래스에 입력받은 파라미터의 지역을 기록하는 로직
+		// 컨테이너 클래스에 입력받은 파라미터의 지역을 기록하는 로직
 		resDiscountCoupon.setRegion(region);
-		//Message 객체에 담는 로직
+		// Message 객체에 담는 로직
 		msg.setText(resDiscountCoupon.getText());
 		msg.setPhoto(resDiscountCoupon.getPhoto());
 		return msg;
@@ -199,33 +225,36 @@ public class ChatbotController {
 	@RequestMapping(value = "/region/{str}", method = RequestMethod.GET)
 	public String home(@PathVariable("str") String name, Locale locale, Model model)
 			throws SQLException, XPathExpressionException, IOException, SAXException, ParserConfigurationException {
-		GooglePlace test = new GooglePlace();
-		String city_name = name;
-		ArrayList<JPlace> place = new ArrayList<JPlace>();
-		place = test.search(name);
 
 		TourAPI tour = new TourAPI();
-		ArrayList<JSONObject> details = new ArrayList<JSONObject>();
-
-		// JPlace list 정렬
-		try {
-			Descending descending = new Descending();
-			Collections.sort(place, descending);
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-
-		for (int i = 0; i < place.size(); i++) {
-			String keyword = place.get(i).getName();
-			JSONObject tours = tour.search(name, keyword);
-			details.add(tours);
-		}
-
-		model.addAttribute("city_name", city_name);
-		model.addAttribute("place", place);
-		model.addAttribute("detail", details);
+		JSONArray details = tour.search(name);
+		
+		model.addAttribute("city_name", name);
+		model.addAttribute("details", details);
 
 		return "region_infomation";
+	}
+	
+	/*
+	 *	코스 정보 url 
+	 */
+	
+	@RequestMapping(value = "/course", method = RequestMethod.GET)
+	public String course(@RequestParam(value="id") int content_id, 
+			@RequestParam(value="type") int content_type_id,Locale locale, Model model){
+		JTourApi j_tour = new JTourApi();
+		JTourCourseOverview overview = new JTourCourseOverview();
+		
+		
+		overview = j_tour.tourCourseOverviewGet(j_tour.tourCourseOverviewSearch(content_id, content_type_id));
+		
+		
+		ArrayList<JTourCourseContent> jtour_course_content_list = j_tour.tourGetCourseResult(j_tour.tourCourseSearch(content_id, content_type_id));
+		model.addAttribute("jtour_course", jtour_course_content_list);
+		model.addAttribute("jtour_overview", overview);
+		
+		
+		return "course";
 	}
 
 	@RequestMapping(value = "/google", method = RequestMethod.GET)

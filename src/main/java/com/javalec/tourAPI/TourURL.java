@@ -3,7 +3,6 @@ package com.javalec.tourAPI;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -38,7 +37,7 @@ public class TourURL {
 		this.option = "&MobileOS=ETC&MobileApp=nailrochat&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y";
 		this.contentID = contentID;
 	}
-	
+		
 	public String request(String addr) throws IOException{
 		URL url = new URL(addr);
 		

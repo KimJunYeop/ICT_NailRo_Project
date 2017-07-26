@@ -1,1 +1,4 @@
 src/main/java/com/javalec/dbTest/
+
+# Java class files
+*.class
