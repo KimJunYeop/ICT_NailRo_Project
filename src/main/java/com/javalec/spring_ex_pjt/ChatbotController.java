@@ -2,6 +2,8 @@ package com.javalec.spring_ex_pjt;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,13 +22,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.xml.sax.SAXException;
 
-import com.javalec.Response.ResRecommendRegion;
 import com.javalec.Response.ResDiscountCoupon;
+import com.javalec.Response.ResRecommendRegion;
 import com.javalec.gapi.Descending;
 import com.javalec.gapi.GooglePlace;
 import com.javalec.message.Keyboard;
@@ -36,7 +39,9 @@ import com.javalec.message.Photo;
 import com.javalec.message.RequestMessage;
 import com.javalec.message.ResponseMessageVO;
 import com.javalec.object.JPlace;
+import com.javalec.object.JTourCourse;
 import com.javalec.s3.S3UploadAndList;
+import com.javalec.tourAPI.JTourApi;
 import com.javalec.tourAPI.TourAPI;
 
 @Controller
@@ -60,7 +65,7 @@ public class ChatbotController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
-	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException {
+	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException, UnsupportedEncodingException {
 		ResponseMessageVO res_vo = new ResponseMessageVO();
 		Message msg = new Message();
 		Keyboard keyboard = new Keyboard();
@@ -84,7 +89,18 @@ public class ChatbotController {
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().matches("코스.*.*.*.*")) {
 			// 코스 추천. 코스서울 입력시 서울에 대한 관광코스 제공
-			msg.setText(req_msg.getContent());
+			String request = req_msg.getContent().replaceFirst("코스","");
+			request =  URLEncoder.encode(request, "UTF-8");
+			JTourApi j_tour = new JTourApi(request);
+			String response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
+			ArrayList<JTourCourse> j_tour_list = j_tour.getCourseList();
+			for(int i = 0 ; i < j_tour_list.size() ; i ++){
+				response_message += j_tour_list.get(i).getTitle();
+				response_message += "\n";
+				response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course/"+request;
+				response_message += "\n";
+			}
+			msg.setText(response_message);
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().equals("도별 추천코스")) {
 			msg.setText("지역 추천코스");
@@ -225,6 +241,20 @@ public class ChatbotController {
 		model.addAttribute("detail", details);
 
 		return "region_infomation";
+	}
+	
+	/*
+	 *	코스 정보 url 
+	 */
+	
+	@RequestMapping(value = "/course",params = {"content_id,content_type_id"}, method = RequestMethod.GET)
+	public @ResponseBody String course(@RequestParam(value="content_id") int content_id, 
+			@RequestParam(value="content_type_id") int content_type_id,Locale locale, Model model){
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("content_type_id : " + content_type_id + "content_id : " + content_id);
+		
+		
+		return "course";
 	}
 
 	@RequestMapping(value = "/google", method = RequestMethod.GET)

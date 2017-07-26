@@ -94,26 +94,52 @@ public class JunitTest {
 
 	@Test
 	public void tourTest2() throws UnsupportedEncodingException {
+		String request = "코스부산";
+		String real_request = request.replaceFirst("코스", "");
 		
-		JTourApi j_tour = new JTourApi("부산");
+		JTourApi j_tour = new JTourApi(real_request);
+		String response_message = "";
 		ArrayList<JTourCourse> j_tour_list = j_tour.getCourseList();
-		for(int i = 0; i < j_tour_list.size(); i++) {
-			System.out.println("--------------------" + i + "-----------------------------");
-			System.out.print("get title : ");
-			System.out.println(j_tour_list.get(i).getTitle());
-			System.out.print("get Content : ");
-			System.out.println(j_tour_list.get(i).getContentid());
-			System.out.print("get ContentTypeId : ");
-			System.out.println(j_tour_list.get(i).getContenttypeid());
-			
-			for(int j = 0; j < j_tour_list.get(i).getCourse().size(); j++){
-				System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-				System.out.println("content_subname : " + j_tour_list.get(i).getCourse().get(j).getSubname());
-				System.out.println("content_subdetailoverview : " + j_tour_list.get(i).getCourse().get(j).getSubdetailoverview());
-				System.out.println("content_subdetailimg : " + j_tour_list.get(i).getCourse().get(j).getSubdetailimg());
-			}
 		
+		
+		for(int i = 0 ; i < j_tour_list.size() ; i ++){
+			response_message += j_tour_list.get(i).getTitle();
+			response_message += "\n";
+			response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course/"+j_tour_list.get(i).getContentid()+"&"+j_tour_list.get(i).getContenttypeid();
+			response_message += "\n";
 		}
+		System.out.println(response_message);
+//		System.out.println(real_request);
+//		String response_message = "";
+//		ArrayList<JTourCourse> j_tour_list = j_tour.getCourseList();
+//		for(int i = 0 ; i < j_tour_list.size() ; i ++){
+//			response_message = j_tour_list.get(i).getTitle();
+//			response_message += "\n";
+//			response_message += "url";
+//			response_message += "\n";
+//		}
+//		
+//		JTourApi j_tour = new JTourApi("부산");
+//		ArrayList<JTourCourse> j_tour_list = j_tour.getCourseList();
+//		
+//		
+//		for(int i = 0; i < j_tour_list.size(); i++) {
+//			System.out.println("--------------------" + i + "-----------------------------");
+//			System.out.print("get title : ");
+//			System.out.println(j_tour_list.get(i).getTitle());
+//			System.out.print("get Content : ");
+//			System.out.println(j_tour_list.get(i).getContentid());
+//			System.out.print("get ContentTypeId : ");
+//			System.out.println(j_tour_list.get(i).getContenttypeid());
+//			
+//			for(int j = 0; j < j_tour_list.get(i).getCourse().size(); j++){
+//				System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+//				System.out.println("content_subname : " + j_tour_list.get(i).getCourse().get(j).getSubname());
+//				System.out.println("content_subdetailoverview : " + j_tour_list.get(i).getCourse().get(j).getSubdetailoverview());
+//				System.out.println("content_subdetailimg : " + j_tour_list.get(i).getCourse().get(j).getSubdetailimg());
+//			}
+//		
+//		}
 		
 		
 	
