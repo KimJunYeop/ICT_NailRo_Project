@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
@@ -30,6 +31,7 @@ import org.xml.sax.SAXException;
 
 import com.javalec.Response.ResDiscountCoupon;
 import com.javalec.Response.ResRecommendRegion;
+import com.javalec.Response.ResWeather;
 import com.javalec.gapi.Descending;
 import com.javalec.gapi.GooglePlace;
 import com.javalec.message.Keyboard;
@@ -65,7 +67,7 @@ public class ChatbotController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
-	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException, UnsupportedEncodingException {
+	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException, IOException, UnsupportedEncodingException  {
 		ResponseMessageVO res_vo = new ResponseMessageVO();
 		Message msg = new Message();
 		Keyboard keyboard = new Keyboard();
@@ -130,9 +132,10 @@ public class ChatbotController {
 		} else if (req_msg.getContent().equals("충청도의 혜택")) {
 			msg = responseDiscountCoupon("충청도", msg);
 		} else {
-			String text = req_msg.getContent() + "에 대한 자세한 관광지 정보는 아래 url을 클릭하세요!\n";
-			msg = messageWithMessageButton(msg, text, "URL",
-					"http://13.124.143.250:8080/ICT_Nailro_Project/region/" + req_msg.getContent());
+			ResWeather weather = new ResWeather();
+			weather.response(req_msg.getContent());
+			String text = weather.getText();
+			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/" + req_msg.getContent());
 		}
 
 		res_vo.setKeyboard(keyboard);
@@ -214,31 +217,12 @@ public class ChatbotController {
 	@RequestMapping(value = "/region/{str}", method = RequestMethod.GET)
 	public String home(@PathVariable("str") String name, Locale locale, Model model)
 			throws SQLException, XPathExpressionException, IOException, SAXException, ParserConfigurationException {
-		GooglePlace g_place = new GooglePlace();
-		String city_name = name;
-		ArrayList<JPlace> place = new ArrayList<JPlace>();
-		place = g_place.search(name);
 
 		TourAPI tour = new TourAPI();
-		ArrayList<JSONObject> details = new ArrayList<JSONObject>();
-
-		// JPlace list 정렬
-		try {
-			Descending descending = new Descending();
-			Collections.sort(place, descending);
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-
-		for (int i = 0; i < place.size(); i++) {
-			String keyword = place.get(i).getName();
-			JSONObject tours = tour.search(name, keyword);
-			details.add(tours);
-		}
-
-		model.addAttribute("city_name", city_name);
-		model.addAttribute("place", place);
-		model.addAttribute("detail", details);
+		JSONArray details = tour.search(name);
+		
+		model.addAttribute("city_name", name);
+		model.addAttribute("details", details);
 
 		return "region_infomation";
 	}

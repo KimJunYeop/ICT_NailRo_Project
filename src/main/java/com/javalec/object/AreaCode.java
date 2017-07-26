@@ -1,4 +1,4 @@
-package com.javalec.tourAPI;
+package com.javalec.object;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,14 +8,14 @@ import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
-public class SearchAreaCode {
+public class AreaCode {
 	DataSource dataSource;
 	
-	public SearchAreaCode(){
+	public AreaCode(){
 		
 	}
 	
-	public ArrayList<String> get(String areaName) throws SQLException{
+	public ArrayList<String> search(String areaName) throws SQLException{
 		/*
 		 *  DB에 접속해서 AREACODE 테이블에서 코드정보를 가져옴
 		 * */
@@ -31,6 +31,7 @@ public class SearchAreaCode {
 		//tourAPI에 요청할 때 필요한 areaCode와 sigunguCode를 저장
 		result.add(rs.getString("areacode"));
 		result.add(rs.getString("sigungucode"));
+		result.add(rs.getString("stnid"));
 		
 		rs.close();
 		ps.close();
