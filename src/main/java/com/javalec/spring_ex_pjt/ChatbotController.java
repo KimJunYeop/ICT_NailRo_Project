@@ -42,6 +42,8 @@ import com.javalec.message.RequestMessage;
 import com.javalec.message.ResponseMessageVO;
 import com.javalec.object.JPlace;
 import com.javalec.object.JTourCourse;
+import com.javalec.object.JTourCourseContent;
+import com.javalec.object.JTourCourseOverview;
 import com.javalec.s3.S3UploadAndList;
 import com.javalec.tourAPI.JTourApi;
 import com.javalec.tourAPI.TourAPI;
@@ -92,16 +94,22 @@ public class ChatbotController {
 		} else if (req_msg.getContent().matches("코스.*.*.*.*")) {
 			// 코스 추천. 코스서울 입력시 서울에 대한 관광코스 제공
 			String request = req_msg.getContent().replaceFirst("코스","");
-			request =  URLEncoder.encode(request, "UTF-8");
-			JTourApi j_tour = new JTourApi(request);
+			String request_encoder =  URLEncoder.encode(request, "UTF-8");
+			
+			JTourApi j_tour = new JTourApi();
+			StringBuilder result = j_tour.tourKeywordSearch(request_encoder);
+			
 			String response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
-			ArrayList<JTourCourse> j_tour_list = j_tour.getCourseList();
+			
+			ArrayList<JTourCourse> j_tour_list = j_tour.tourKeywordSearchResult(result);
+			
 			for(int i = 0 ; i < j_tour_list.size() ; i ++){
-				response_message += j_tour_list.get(i).getTitle();
+				response_message += ((i+1) + " " + j_tour_list.get(i).getTitle());
 				response_message += "\n";
-				response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course/"+request;
-				response_message += "\n";
+				response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?"+"id="+j_tour_list.get(i).getContentid()+"&type="+j_tour_list.get(i).getContenttypeid();
+				response_message += "\n\n";
 			}
+			
 			msg.setText(response_message);
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().equals("도별 추천코스")) {
@@ -231,11 +239,19 @@ public class ChatbotController {
 	 *	코스 정보 url 
 	 */
 	
-	@RequestMapping(value = "/course",params = {"content_id,content_type_id"}, method = RequestMethod.GET)
-	public @ResponseBody String course(@RequestParam(value="content_id") int content_id, 
-			@RequestParam(value="content_type_id") int content_type_id,Locale locale, Model model){
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		System.out.println("content_type_id : " + content_type_id + "content_id : " + content_id);
+	@RequestMapping(value = "/course", method = RequestMethod.GET)
+	public String course(@RequestParam(value="id") int content_id, 
+			@RequestParam(value="type") int content_type_id,Locale locale, Model model){
+		JTourApi j_tour = new JTourApi();
+		JTourCourseOverview overview = new JTourCourseOverview();
+		
+		
+		overview = j_tour.tourCourseOverviewGet(j_tour.tourCourseOverviewSearch(content_id, content_type_id));
+		
+		
+		ArrayList<JTourCourseContent> jtour_course_content_list = j_tour.tourGetCourseResult(j_tour.tourCourseSearch(content_id, content_type_id));
+		model.addAttribute("jtour_course", jtour_course_content_list);
+		model.addAttribute("jtour_overview", overview);
 		
 		
 		return "course";

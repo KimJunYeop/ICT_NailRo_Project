@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="com.javalec.object.JTourCourseContent"%>
+<%@ page import="com.javalec.object.JTourCourseOverview"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+	ArrayList<JTourCourseContent> jtour_course_list = (ArrayList<JTourCourseContent>) request
+			.getAttribute("jtour_course");
+
+	JTourCourseOverview jtour_overview = (JTourCourseOverview) request.getAttribute("jtour_overview");
+%>
 <html lang="en">
 
 <head>
@@ -14,13 +24,18 @@
 <title>코스추천Page</title>
 
 <!-- Bootstrap Core CSS -->
-<link href="${pageContext.request.contextPath}/resources/course_template/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/resources/course_template/vendor/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet">
 
 <!-- Theme CSS -->
-<link href="${pageContext.request.contextPath}/resources/course_template/css/freelancer.min.css" rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/resources/course_template/css/freelancer.min.css"
+	rel="stylesheet">
 
 <!-- Custom Fonts -->
-<link href="${pageContext.request.contextPath}/resources/course_template/vendor/font-awesome/css/font-awesome.min.css"
+<link
+	href="${pageContext.request.contextPath}/resources/course_template/vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
 	rel="stylesheet" type="text/css">
@@ -34,6 +49,13 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+<style>
+  #map {
+        height: 400px;
+        width: 100%;
+       }
+</style>
 
 </head>
 
@@ -41,7 +63,6 @@
 	<div id="skipnav">
 		<a href="#maincontent">Skip to main content</a>
 	</div>
-
 	<!-- Navigation -->
 	<nav id="mainNav"
 		class="navbar navbar-default navbar-fixed-top navbar-custom">
@@ -53,7 +74,7 @@
 				<span class="sr-only">Toggle navigation</span> Menu <i
 					class="fa fa-bars"></i>
 			</button>
-			<a class="navbar-brand" href="#page-top">Start Bootstrap</a>
+			<a class="navbar-brand" href="#page-top">코스추천</a>
 		</div>
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
@@ -61,7 +82,7 @@
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="hidden"><a href="#page-top"></a></li>
-				<li class="page-scroll"><a href="#portfolio">Portfolio</a></li>
+				<li class="page-scroll"><a href="#portfolio">코스추천</a></li>
 				<li class="page-scroll"><a href="#about">About</a></li>
 				<li class="page-scroll"><a href="#contact">Contact</a></li>
 			</ul>
@@ -72,15 +93,31 @@
 
 	<!-- Header -->
 	<header>
+
+
 	<div class="container" id="maincontent" tabindex="-1">
 		<div class="row">
 			<div class="col-lg-12">
 				<!-- <img class="img-responsive" src="${pageContext.request.contextPath}/resources/busan_logo.jpg" alt=""> -->
-				<img class="img-responsive" src="${pageContext.request.contextPath}/resources/busan_logo.jpg" alt="">
+				<%
+					if (jtour_overview.getFirstimage() == "") {
+				%>
+				<img class="img-responsive"
+					src="https://s3.ap-northeast-2.amazonaws.com/ictnailro/s3/nailro.png"
+					alt="">
+				<%
+					} else {
+				%>
+				<img class="img-responsive"
+					src="<%=jtour_overview.getFirstimage()%>" alt="">
+				<%
+					}
+				%>
+
 				<div class="intro-text">
-					<h1 class="name">하이여!</h1>
-					<hr class="star-light">
-					<span class="skills">zzzzz!</span>
+					<h2 class="name"><%=jtour_overview.getTitle()%></h1>
+						<hr class="star-light">
+						<span class="skills"><%=jtour_overview.getOverview()%></span>
 				</div>
 			</div>
 		</div>
@@ -91,104 +128,60 @@
 	<section id="portfolio">
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-12 text-center">
-				<h2>Portfolio</h2>
+			<div class="col-lg-12 text-center page-header">
+				<h2>코스추천 <br> <small> 자세한 정보는 사진을 터치하세요.</small></h2>
 				<hr class="star-primary">
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-4 portfolio-item">
-				<a href="#portfolioModal1" class="portfolio-link"
+			<%
+				for (int i = 0; i < jtour_course_list.size(); i++) {
+			%>
+			<div style="margin-left: 10px;">
+				<h3><%=i + 1%>
+					<%=jtour_course_list.get(i).getSubname()%>
+				</h3>
+			</div>
+
+			<div class="portfolio-item">
+				<a href="#portfolioModal<%=i%>" class="portfolio-link"
 					data-toggle="modal">
 					<div class="caption">
 						<div class="caption-content">
 							<i class="fa fa-search-plus fa-3x"></i>
 						</div>
-					</div> <img src="${pageContext.request.contextPath}/resources/course_template/img/portfolio/cabin.png" class="img-responsive"
-					alt="Cabin">
+					</div> 
+				<% if (jtour_course_list.get(i).getSubdetailimg() == null) { %> 
+				<img src="https://s3.ap-northeast-2.amazonaws.com/ictnailro/s3/noimage.png" class="img-responsive center-block"> 
+				<%	} else { %> 
+					<img src="<%=jtour_course_list.get(i).getSubdetailimg()%>" class="img-responsive"> 
+			 	<% } %>
+				
 				</a>
 			</div>
-			<div class="col-sm-4 portfolio-item">
-				<a href="#portfolioModal2" class="portfolio-link"
-					data-toggle="modal">
-					<div class="caption">
-						<div class="caption-content">
-							<i class="fa fa-search-plus fa-3x"></i>
-						</div>
-					</div> <img src="${pageContext.request.contextPath}/resources/course_template/img/portfolio/cake.png" class="img-responsive"
-					alt="Slice of cake">
-				</a>
-			</div>
-			<div class="col-sm-4 portfolio-item">
-				<a href="#portfolioModal3" class="portfolio-link"
-					data-toggle="modal">
-					<div class="caption">
-						<div class="caption-content">
-							<i class="fa fa-search-plus fa-3x"></i>
-						</div>
-					</div> <img src="${pageContext.request.contextPath}/resources/course_template/img/portfolio/circus.png" class="img-responsive"
-					alt="Circus tent">
-				</a>
-			</div>
-			<div class="col-sm-4 portfolio-item">
-				<a href="#portfolioModal4" class="portfolio-link"
-					data-toggle="modal">
-					<div class="caption">
-						<div class="caption-content">
-							<i class="fa fa-search-plus fa-3x"></i>
-						</div>
-					</div> <img src="${pageContext.request.contextPath}/resources/course_template/img/portfolio/game.png" class="img-responsive"
-					alt="Game controller">
-				</a>
-			</div>
-			<div class="col-sm-4 portfolio-item">
-				<a href="#portfolioModal5" class="portfolio-link"
-					data-toggle="modal">
-					<div class="caption">
-						<div class="caption-content">
-							<i class="fa fa-search-plus fa-3x"></i>
-						</div>
-					</div> <img src="${pageContext.request.contextPath}/resources/course_template/img/portfolio/safe.png" class="img-responsive"
-					alt="Safe">
-				</a>
-			</div>
-			<div class="col-sm-4 portfolio-item">
-				<a href="#portfolioModal6" class="portfolio-link"
-					data-toggle="modal">
-					<div class="caption">
-						<div class="caption-content">
-							<i class="fa fa-search-plus fa-3x"></i>
-						</div>
-					</div> <img src="${pageContext.request.contextPath}/resources/course_template/img/portfolio/submarine.png" class="img-responsive"
-					alt="Submarine">
-				</a>
-			</div>
+			</br>
+			<%
+				}
+			%>
 		</div>
 	</div>
 	</section>
+
 
 	<!-- About Section -->
 	<section class="success" id="about">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-				<h2>About</h2>
+				<h2>위치</h2>
 				<hr class="star-light">
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-4 col-lg-offset-2">
-				<p>Freelancer is a free bootstrap theme created by Start
-					Bootstrap. The download includes the complete source files
-					including HTML, CSS, and JavaScript as well as optional LESS
-					stylesheets for easy customization.</p>
+		
+			<div id="map">
 			</div>
-			<div class="col-lg-4">
-				<p>Whether you're a student looking to showcase your work, a
-					professional looking to attract clients, or a graphic artist
-					looking to share your projects, this template is the perfect
-					starting point!</p>
-			</div>
+			
 			<div class="col-lg-8 col-lg-offset-2 text-center">
 				<a href="#" class="btn btn-lg btn-outline"> <i
 					class="fa fa-download"></i> Download Theme
@@ -199,6 +192,7 @@
 	</section>
 
 	<!-- Contact Section -->
+	<!-- 
 	<section id="contact">
 	<div class="container">
 		<div class="row">
@@ -209,8 +203,6 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-8 col-lg-offset-2">
-				<!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
-				<!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
 				<form name="sentMessage" id="contactForm" novalidate>
 					<div class="row control-group">
 						<div
@@ -263,48 +255,17 @@
 		</div>
 	</div>
 	</section>
-
+ 	-->
 	<!-- Footer -->
 	<footer class="text-center">
 	<div class="footer-above">
 		<div class="container">
 			<div class="row">
-				<div class="footer-col col-md-4">
-					<h3>Location</h3>
-					<p>
-						3481 Melrose Place <br>Beverly Hills, CA 90210
-					</p>
-				</div>
-				<div class="footer-col col-md-4">
-					<h3>Around the Web</h3>
-					<ul class="list-inline">
-						<li><a href="#" class="btn-social btn-outline"><span
-								class="sr-only">Facebook</span><i class="fa fa-fw fa-facebook"></i></a>
-						</li>
-						<li><a href="#" class="btn-social btn-outline"><span
-								class="sr-only">Google Plus</span><i
-								class="fa fa-fw fa-google-plus"></i></a></li>
-						<li><a href="#" class="btn-social btn-outline"><span
-								class="sr-only">Twitter</span><i class="fa fa-fw fa-twitter"></i></a>
-						</li>
-						<li><a href="#" class="btn-social btn-outline"><span
-								class="sr-only">Linked In</span><i class="fa fa-fw fa-linkedin"></i></a>
-						</li>
-						<li><a href="#" class="btn-social btn-outline"><span
-								class="sr-only">Dribble</span><i class="fa fa-fw fa-dribbble"></i></a>
-						</li>
-					</ul>
-				</div>
-				<div class="footer-col col-md-4">
-					<h3>About Freelancer</h3>
-					<p>
-						Freelance is a free to use, open source Bootstrap theme created by
-						<a href="http://startbootstrap.com">Start Bootstrap</a>.
-					</p>
-				</div>
+				
 			</div>
 		</div>
 	</div>
+	
 	<div class="footer-below">
 		<div class="container">
 			<div class="row">
@@ -313,6 +274,7 @@
 		</div>
 	</div>
 	</footer>
+	
 
 	<!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
 	<div
@@ -323,7 +285,10 @@
 	</div>
 
 	<!-- Portfolio Modals -->
-	<div class="portfolio-modal modal fade" id="portfolioModal1"
+	<%
+		for (int i = 0; i < jtour_course_list.size(); i++) {
+	%>
+	<div class="portfolio-modal modal fade" id="portfolioModal<%=i%>"
 		tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-content">
 			<div class="close-modal" data-dismiss="modal">
@@ -335,28 +300,27 @@
 				<div class="row">
 					<div class="col-lg-8 col-lg-offset-2">
 						<div class="modal-body">
-							<h2>Project Title</h2>
+							<h2><%=jtour_course_list.get(i).getSubname()%></h2>
 							<hr class="star-primary">
-							<img src="img/portfolio/cabin.png"
-								class="img-responsive img-centered" alt="">
-							<p>
-								Use this area of the page to describe your project. The icon
-								above is part of a free icon set by <a
-									href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On
-								their website, you can download their free set with 16 icons, or
-								you can purchase the entire set with 146 icons for only $12!
+							<%
+								if (jtour_course_list.get(i).getSubdetailimg() == null) {
+							%>
+							<img
+								src="https://s3.ap-northeast-2.amazonaws.com/ictnailro/s3/noimage.png"
+								class="img-responsive center-block">
+
+							<%
+								} else {
+							%>
+							<img src="<%=jtour_course_list.get(i).getSubdetailimg()%>"
+								class="img-responsive">
+							<%
+								}
+							%>
+							<p class="text-left">
+								<%=jtour_course_list.get(i).getSubdetailoverview()%>
 							</p>
-							<ul class="list-inline item-details">
-								<li>Client: <strong><a
-										href="http://startbootstrap.com">Start Bootstrap</a> </strong>
-								</li>
-								<li>Date: <strong><a
-										href="http://startbootstrap.com">April 2014</a> </strong>
-								</li>
-								<li>Service: <strong><a
-										href="http://startbootstrap.com">Web Development</a> </strong>
-								</li>
-							</ul>
+							</br>
 							<button type="button" class="btn btn-default"
 								data-dismiss="modal">
 								<i class="fa fa-times"></i> Close
@@ -367,243 +331,61 @@
 			</div>
 		</div>
 	</div>
-	<div class="portfolio-modal modal fade" id="portfolioModal2"
-		tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-content">
-			<div class="close-modal" data-dismiss="modal">
-				<div class="lr">
-					<div class="rl"></div>
-				</div>
-			</div>
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8 col-lg-offset-2">
-						<div class="modal-body">
-							<h2>Project Title</h2>
-							<hr class="star-primary">
-							<img src="img/portfolio/cake.png"
-								class="img-responsive img-centered" alt="">
-							<p>
-								Use this area of the page to describe your project. The icon
-								above is part of a free icon set by <a
-									href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On
-								their website, you can download their free set with 16 icons, or
-								you can purchase the entire set with 146 icons for only $12!
-							</p>
-							<ul class="list-inline item-details">
-								<li>Client: <strong><a
-										href="http://startbootstrap.com">Start Bootstrap</a> </strong>
-								</li>
-								<li>Date: <strong><a
-										href="http://startbootstrap.com">April 2014</a> </strong>
-								</li>
-								<li>Service: <strong><a
-										href="http://startbootstrap.com">Web Development</a> </strong>
-								</li>
-							</ul>
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">
-								<i class="fa fa-times"></i> Close
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="portfolio-modal modal fade" id="portfolioModal3"
-		tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-content">
-			<div class="close-modal" data-dismiss="modal">
-				<div class="lr">
-					<div class="rl"></div>
-				</div>
-			</div>
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8 col-lg-offset-2">
-						<div class="modal-body">
-							<h2>Project Title</h2>
-							<hr class="star-primary">
-							<img src="img/portfolio/circus.png"
-								class="img-responsive img-centered" alt="">
-							<p>
-								Use this area of the page to describe your project. The icon
-								above is part of a free icon set by <a
-									href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On
-								their website, you can download their free set with 16 icons, or
-								you can purchase the entire set with 146 icons for only $12!
-							</p>
-							<ul class="list-inline item-details">
-								<li>Client: <strong><a
-										href="http://startbootstrap.com">Start Bootstrap</a> </strong>
-								</li>
-								<li>Date: <strong><a
-										href="http://startbootstrap.com">April 2014</a> </strong>
-								</li>
-								<li>Service: <strong><a
-										href="http://startbootstrap.com">Web Development</a> </strong>
-								</li>
-							</ul>
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">
-								<i class="fa fa-times"></i> Close
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="portfolio-modal modal fade" id="portfolioModal4"
-		tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-content">
-			<div class="close-modal" data-dismiss="modal">
-				<div class="lr">
-					<div class="rl"></div>
-				</div>
-			</div>
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8 col-lg-offset-2">
-						<div class="modal-body">
-							<h2>Project Title</h2>
-							<hr class="star-primary">
-							<img src="img/portfolio/game.png"
-								class="img-responsive img-centered" alt="">
-							<p>
-								Use this area of the page to describe your project. The icon
-								above is part of a free icon set by <a
-									href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On
-								their website, you can download their free set with 16 icons, or
-								you can purchase the entire set with 146 icons for only $12!
-							</p>
-							<ul class="list-inline item-details">
-								<li>Client: <strong><a
-										href="http://startbootstrap.com">Start Bootstrap</a> </strong>
-								</li>
-								<li>Date: <strong><a
-										href="http://startbootstrap.com">April 2014</a> </strong>
-								</li>
-								<li>Service: <strong><a
-										href="http://startbootstrap.com">Web Development</a> </strong>
-								</li>
-							</ul>
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">
-								<i class="fa fa-times"></i> Close
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="portfolio-modal modal fade" id="portfolioModal5"
-		tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-content">
-			<div class="close-modal" data-dismiss="modal">
-				<div class="lr">
-					<div class="rl"></div>
-				</div>
-			</div>
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8 col-lg-offset-2">
-						<div class="modal-body">
-							<h2>Project Title</h2>
-							<hr class="star-primary">
-							<img src="img/portfolio/safe.png"
-								class="img-responsive img-centered" alt="">
-							<p>
-								Use this area of the page to describe your project. The icon
-								above is part of a free icon set by <a
-									href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On
-								their website, you can download their free set with 16 icons, or
-								you can purchase the entire set with 146 icons for only $12!
-							</p>
-							<ul class="list-inline item-details">
-								<li>Client: <strong><a
-										href="http://startbootstrap.com">Start Bootstrap</a> </strong>
-								</li>
-								<li>Date: <strong><a
-										href="http://startbootstrap.com">April 2014</a> </strong>
-								</li>
-								<li>Service: <strong><a
-										href="http://startbootstrap.com">Web Development</a> </strong>
-								</li>
-							</ul>
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">
-								<i class="fa fa-times"></i> Close
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="portfolio-modal modal fade" id="portfolioModal6"
-		tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-content">
-			<div class="close-modal" data-dismiss="modal">
-				<div class="lr">
-					<div class="rl"></div>
-				</div>
-			</div>
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8 col-lg-offset-2">
-						<div class="modal-body">
-							<h2>Project Title</h2>
-							<hr class="star-primary">
-							<img src="img/portfolio/submarine.png"
-								class="img-responsive img-centered" alt="">
-							<p>
-								Use this area of the page to describe your project. The icon
-								above is part of a free icon set by <a
-									href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On
-								their website, you can download their free set with 16 icons, or
-								you can purchase the entire set with 146 icons for only $12!
-							</p>
-							<ul class="list-inline item-details">
-								<li>Client: <strong><a
-										href="http://startbootstrap.com">Start Bootstrap</a> </strong>
-								</li>
-								<li>Date: <strong><a
-										href="http://startbootstrap.com">April 2014</a> </strong>
-								</li>
-								<li>Service: <strong><a
-										href="http://startbootstrap.com">Web Development</a> </strong>
-								</li>
-							</ul>
-							<button id="btnSubmit" type="button" class="btn btn-default"
-								data-dismiss="modal">
-								<i class="fa fa-times"></i> Close
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<%
+		}
+	%>
+	
+	<!-- google map 사용 webpage -->
+	<script>
+	 function initMap() {
+		 	var mapX= <%= jtour_overview.getMapx() %>
+		 	var mapY= <%= jtour_overview.getMapy() %>
+		 	var map;
+			var marker; 
+			var latlng = new google.maps.LatLng(mapY,mapX);
+			
+			var myOptions = {
+			zoom: 15,
+			center: latlng,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			map = new google.maps.Map(document.getElementById("map"), myOptions);
+			marker = new google.maps.Marker({
+				position:map.getCenter(),
+				map:map,
+				draggable:true   
+			    }); 
+		 	
+	      }
+	</script>
+
 
 	<!-- jQuery -->
-	<script src="${pageContext.request.contextPath}/resources/course_template/vendor/jquery/jquery.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/course_template/vendor/jquery/jquery.min.js"></script>
 
 	<!-- Bootstrap Core JavaScript -->
-	<script src="${pageContext.request.contextPath}/resources/course_template/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/course_template/vendor/bootstrap/js/bootstrap.min.js"></script>
 
 	<!-- Plugin JavaScript -->
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 
 	<!-- Contact Form JavaScript -->
-	<script src="${pageContext.request.contextPath}/resources/course_template/js/jqBootstrapValidation.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/course_template/js/contact_me.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/course_template/js/jqBootstrapValidation.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/course_template/js/contact_me.js"></script>
 
 	<!-- Theme JavaScript -->
-	<script src="${pageContext.request.contextPath}/resources/course_template/js/freelancer.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/course_template/js/freelancer.min.js"></script>
+		
+	<!-- Google Map -->
+	<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAORoQxE7xFn2X2t53D8iLF29VR5J9ChI&callback=initMap">
+    </script>
 
 </body>
 

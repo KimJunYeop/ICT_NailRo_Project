@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class UrlMake {
+	URL url;
 	
 	public StringBuilder urlMake(String[] str) {
 		HttpURLConnection conn = null;
@@ -14,7 +15,7 @@ public class UrlMake {
 			for (int i = 0; i < str.length; i++) {
 				sb.append(str[i]);
 			}
-			URL url = new URL(sb.toString());
+			url = new URL(sb.toString());
 			conn = (HttpURLConnection) url.openConnection();
 			InputStreamReader in = new InputStreamReader(conn.getInputStream());
 			int read;
@@ -30,6 +31,11 @@ public class UrlMake {
 			}
 		}
 		return jsonResults;
+	}
+	
+	public String getUrl(){
+		
+		return url.toString();
 	}
 	
 }

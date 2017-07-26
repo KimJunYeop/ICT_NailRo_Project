@@ -1,9 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8"%>
 <%@ page import="java.util.ArrayList"%>
-<<<<<<< HEAD
-<%@ page import="com.javalec.object.JPlace"%>
-=======
->>>>>>> 8747b0258a36338b46295b24d59ea8b7925cea2a
 <%@ page import="org.json.JSONArray"%>
 <%@ page import="org.json.JSONObject"%>
 <%

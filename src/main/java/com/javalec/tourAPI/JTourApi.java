@@ -1,4 +1,4 @@
-package com.javalec.tourAPI;
+	package com.javalec.tourAPI;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import com.javalec.gapi.UrlMake;
 import com.javalec.object.JTourCourse;
 import com.javalec.object.JTourCourseContent;
+import com.javalec.object.JTourCourseOverview;
 
 /*
  * 관광정보 API 과련 코스 정보 얻어오는 Class
@@ -31,22 +32,23 @@ public class JTourApi {
 	public JTourApi() {
 
 	}
-	
-	public JTourApi(String keyword) throws UnsupportedEncodingException{
-		String request = URLEncoder.encode(keyword, "UTF-8");
-		
-		jtourcourse_list = new ArrayList<JTourCourse>();
-		
-		StringBuilder keyword_search = tourKeywordSearch(request);
-		jtourcourse_list = tourKeywordSearchResult(keyword_search);
-		for(int i = 0 ; i < jtourcourse_list.size(); i++){
-			StringBuilder content_search = tourCourseSearch(jtourcourse_list.get(i).getContentid(),jtourcourse_list.get(i).getContenttypeid());
-			tourCourseResult(content_search, jtourcourse_list.get(i));
-		}
-		
+
+	public JTourApi(String keyword) throws UnsupportedEncodingException {
+//		String request = URLEncoder.encode(keyword, "UTF-8");
+//
+//		jtourcourse_list = new ArrayList<JTourCourse>();
+//
+//		StringBuilder keyword_search = tourKeywordSearch(request);
+//		System.out.println(keyword_search);
+//		jtourcourse_list = tourKeywordSearchResult(keyword_search);
+//		for (int i = 0; i < jtourcourse_list.size(); i++) {
+//			StringBuilder content_search = tourCourseSearch(jtourcourse_list.get(i).getContentid(),
+//					jtourcourse_list.get(i).getContenttypeid());
+//			tourSetCourseResult(content_search, jtourcourse_list.get(i));
+//		}
 	}
-	
-	public ArrayList<JTourCourse> getCourseList(){
+
+	public ArrayList<JTourCourse> getCourseList() {
 		return jtourcourse_list;
 	}
 
@@ -61,6 +63,7 @@ public class JTourApi {
 		String[] url = { tour_url, "&keyword=" + str, tour_url_2, MOBILE, tour_url_3, TYPE };
 		url_make = new UrlMake();
 		StringBuilder jsonResults = url_make.urlMake(url);
+		System.out.println(url_make.getUrl());
 		return jsonResults;
 	}
 
@@ -77,9 +80,24 @@ public class JTourApi {
 		StringBuilder jsonResults = url_make.urlMake(url);
 		return jsonResults;
 	}
+	
+	/*
+	 * Course overview 가져오기! 
+	 */
+	
+	public StringBuilder tourCourseOverviewSearch(int contentid, int contenttypeid) {
+		String service = "/detailCommon?ServiceKey=";
+		String tour_url = TOUR_API_BASE + service + API_KEY;
+		String tour_url_2 = "&contentTypeId=" + contenttypeid + "&contentId=" + contentid;
+		String tour_url_3 = "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y";
+		String[] url = { tour_url, tour_url_2, tour_url_3, MOBILE, TYPE };
+		url_make = new UrlMake();
+		StringBuilder jsonResults = url_make.urlMake(url);
+		return jsonResults;
+	}
 
 	/*
-	 *	keyword를 이용한 search 결과물. 
+	 * keyword를 이용한 search 결과물.
 	 */
 	public ArrayList<JTourCourse> tourKeywordSearchResult(StringBuilder jsonResults) {
 		JSONObject tour_obj = new JSONObject(jsonResults.toString()).getJSONObject("response").getJSONObject("body")
@@ -92,13 +110,11 @@ public class JTourApi {
 			JTourCourse jtour_recommend_obj = new JTourCourse();
 			String title = tour_array.getJSONObject(i).getString("title");
 			jtour_recommend_obj.setTitle(title);
-			if(tour_array.getJSONObject(i).has("firstimage")){
+			if (tour_array.getJSONObject(i).has("firstimage")) {
 				String image = tour_array.getJSONObject(i).getString("firstimage");
 				jtour_recommend_obj.setImage(image);
 			}
-			
-			
-			
+
 			int contenttypeid = tour_array.getJSONObject(i).getInt("contenttypeid");
 			jtour_recommend_obj.setContenttypeid(contenttypeid);
 			int contentid = tour_array.getJSONObject(i).getInt("contentid");
@@ -109,11 +125,11 @@ public class JTourApi {
 
 		return jtour_recommend_list;
 	}
-	
+
 	/*
-	 *	Conetne를 이용한 Course 결과물. 
+	 * Conetne를 이용한 Course 결과물.
 	 */
-	public void tourCourseResult(StringBuilder jsonResults, JTourCourse jtour_course) {
+	public void tourSetCourseResult(StringBuilder jsonResults, JTourCourse jtour_course) {
 		JSONObject tour_course_obj = new JSONObject(jsonResults.toString()).getJSONObject("response")
 				.getJSONObject("body").getJSONObject("items");
 		JSONArray tour_course_array = tour_course_obj.getJSONArray("item");
@@ -124,12 +140,12 @@ public class JTourApi {
 			JTourCourseContent jtour_content = new JTourCourseContent();
 			String subdetailoverview = tour_course_array.getJSONObject(i).getString("subdetailoverview");
 			jtour_content.setSubdetailoverview(subdetailoverview);
-			
-			if( tour_course_array.getJSONObject(i).has("subdetailimg")){
+
+			if (tour_course_array.getJSONObject(i).has("subdetailimg")) {
 				String subdetailimg = tour_course_array.getJSONObject(i).getString("subdetailimg");
 				jtour_content.setSubdetailimg(subdetailimg);
 			}
-			
+
 			String subname = tour_course_array.getJSONObject(i).getString("subname");
 			jtour_content.setSubname(subname);
 
@@ -138,7 +154,70 @@ public class JTourApi {
 
 		jtour_course.setCourse(jtour_course_list);
 	}
-	
-	
 
+	/*
+	 * Course 상세정보만 가져오는 method
+	 */
+	public ArrayList<JTourCourseContent> tourGetCourseResult(StringBuilder jsonResults) {
+		JSONObject tour_course_obj = new JSONObject(jsonResults.toString()).getJSONObject("response")
+				.getJSONObject("body").getJSONObject("items");
+		JSONArray tour_course_array = tour_course_obj.getJSONArray("item");
+
+		ArrayList<JTourCourseContent> jtour_course_content_list = new ArrayList<JTourCourseContent>();
+		for (int i = 0; i < tour_course_array.length(); i++) {
+			JTourCourseContent content = new JTourCourseContent();
+
+			String subdetailoverview = tour_course_array.getJSONObject(i).getString("subdetailoverview");
+			content.setSubdetailoverview(subdetailoverview);
+
+			if (tour_course_array.getJSONObject(i).has("subdetailimg")) {
+				String subdetailimg = tour_course_array.getJSONObject(i).getString("subdetailimg");
+				content.setSubdetailimg(subdetailimg);
+			}
+
+			String subname = tour_course_array.getJSONObject(i).getString("subname");
+			content.setSubname(subname);
+			
+			jtour_course_content_list.add(content);
+		}
+
+		return jtour_course_content_list;
+	}
+	
+	/*
+	 *	OverView 를 가져오는 메소드 
+	 *	tourGetCourseResult 의 결과물을 이용.
+	 */
+	public JTourCourseOverview tourCourseOverviewGet(StringBuilder jsonResults){
+		JSONObject tour_overview_obj = new JSONObject(jsonResults.toString()).getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
+		JTourCourseOverview jtour_course_overview = new JTourCourseOverview();
+		
+		Double mapx = null;
+		Double mapy = null;
+		
+		if(tour_overview_obj.has("mapx")) {
+			mapx = tour_overview_obj.getDouble("mapx");
+		}
+		
+		if(tour_overview_obj.has("mapy")) {
+			mapy = tour_overview_obj.getDouble("mapy");
+		}
+		
+		String overview = tour_overview_obj.getString("overview");
+		String title = tour_overview_obj.getString("title");
+		String image = "";
+		
+		
+		if(tour_overview_obj.has("firstimage")){
+			image = tour_overview_obj.getString("firstimage");
+		}
+		
+		jtour_course_overview.setTitle(title);
+		jtour_course_overview.setOverview(overview);
+		jtour_course_overview.setFirstimage(image);
+		jtour_course_overview.setMapx(mapx);
+		jtour_course_overview.setMapy(mapy);
+		
+		return jtour_course_overview;
+	}
 }
