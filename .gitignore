@@ -1,4 +1,8 @@
-src/main/java/com/javalec/dbTest/
-
-# Java class files
+# Compiled source #
+###################
+*.com
 *.class
+*.dll
+*.exe
+*.o
+*.so
