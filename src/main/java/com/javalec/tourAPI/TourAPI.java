@@ -27,7 +27,7 @@ import com.javalec.object.AreaCode;
 
 public class TourAPI {
 	private static final String AREABASED_URI="http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=";
-	private static final String AREABASED_OPT = "&MobileOS=ETC&MobileApp=nailrochat&numOfRows=10&arrange=B";
+	private static final String AREABASED_OPT = "&MobileOS=ETC&MobileApp=nailrochat&arrange=B";
 	private static final String DETAIL_URI = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=";
 	private static final String DETAIL_OPT= "&MobileOS=ETC&MobileApp=nailrochat&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y&_type=json";
 	private static final String API_KEY = "9%2FgsanrvJGqg3eF9InVtlFrz2SOHea2S3MOgQE%2BwO0PPiHgPf2jIdgxy1vvpUhV%2BWlZ0httNIoeTJKmhZjgE7g%3D%3D";
@@ -36,19 +36,11 @@ public class TourAPI {
 		
 	}
 	
-	public JSONArray search(String areaName) throws XPathExpressionException, IOException, SAXException, ParserConfigurationException, SQLException{
-		TourAPI tour = new TourAPI();
-		
-		ArrayList<String> contentid = tour.areaBased(areaName);
-		JSONArray result =tour.contentDetail(contentid);
-		
-		return result;
-	}
-	
-	public ArrayList<String> areaBased(String areaName) throws UnsupportedEncodingException, IOException, XPathExpressionException, SAXException, ParserConfigurationException, SQLException {
+	public ArrayList<String> areaBased(String areaName, String contentTypeId, String numOfRows) throws UnsupportedEncodingException, IOException, XPathExpressionException, SAXException, ParserConfigurationException, SQLException {
 		/*
-		 *  지역기반으로 해당 지역의 관광지 정보를 요청해서
-		 *   ArrayList로 10개의 관광지 ID를 리턴
+		 *  지역기반으로 해당 지역의 관광지 정보를 요청
+		 *  지역명과, 검색타입(관광지, 숙소 등), 요청할 정보 갯수를 입력받음
+		 *   ArrayList로 관광지 정보를 리턴
 		 * 
 		 */
 		
@@ -61,10 +53,14 @@ public class TourAPI {
 		OpenAPI tour = new OpenAPI(AREABASED_URI, API_KEY, AREABASED_OPT);
 		if(areaCode.get(0).length() == 1){ 	// 광역시와 특별시의 경우, sigunguCode를 사용하지 않음
 			tour.addUrl("areaCode", areaCode.get(0));
+			tour.addUrl("contentTypeId", contentTypeId);
+			tour.addUrl("numOfRows", numOfRows);
 		}
 		else { //일반 시,군을 위한 검색
 			tour.addUrl("areaCode", areaCode.get(0));
 			tour.addUrl("sigunguCode", areaCode.get(1));
+			tour.addUrl("contentTypeId", contentTypeId);
+			tour.addUrl("numOfRows", numOfRows);
 		}
 		//TourAPI에서 검색
 		String totalLine = tour.request();
