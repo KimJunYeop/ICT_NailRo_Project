@@ -251,6 +251,7 @@ public class ChatbotController {
 
 		TourAPI tour = new TourAPI();
 		JSONArray details = new JSONArray();
+		JSONArray intros = new JSONArray();	
 		String type = new String();
 		String region = new String();
 		
@@ -260,36 +261,70 @@ public class ChatbotController {
 		if(type.equals("관광")){
 			ArrayList<String> contentid = tour.areaBased(region, "12", "2");
 			details =tour.contentDetail(contentid);
+			
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+			
+			return "region_infomation";
 		}
 		else if(type.equals("문화")){
 			ArrayList<String> contentid = tour.areaBased(region, "14", "2");
 			details =tour.contentDetail(contentid);
+
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+			
+			return "region_infomation";
 		}
 		else if(type.equals("축제")){
 			ArrayList<String> contentid = tour.areaBased(region, "15", "2");
 			details =tour.contentDetail(contentid);
-		}
-		else if(type.equals("숙박")){
-			ArrayList<String> contentid = tour.areaBased(region, "32", "2");
-			details =tour.contentDetail(contentid);
+
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+			
+			return "region_infomation";
 		}
 		else if(type.equals("쇼핑")){
 			ArrayList<String> contentid = tour.areaBased(region, "38", "2");
 			details =tour.contentDetail(contentid);
+
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+			
+			return "region_infomation";
+		}
+		else if(type.equals("숙박")){
+			ArrayList<String> contentid = tour.areaBased(region, "32", "2");
+			details =tour.contentDetail(contentid);
+			intros = tour.introInn(contentid);
+
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+			model.addAttribute("intros", intros);
+			
+			return "intro_inn";
 		}
 		else if(type.equals("음식")){
 			ArrayList<String> contentid = tour.areaBased(region, "39", "2");
 			details =tour.contentDetail(contentid);
+			intros = tour.introFood(contentid);
+			
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+			model.addAttribute("intros", intros);
+			
+			return "intro_food";
 		}
 		else{
 			ArrayList<String> contentid = tour.areaBased(region, "", "2");
 			details =tour.contentDetail(contentid);
-		}
-		
-		model.addAttribute("city_name", region);
-		model.addAttribute("details", details);
 
-		return "region_infomation";
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+			
+			return "region_infomation";
+		}
 	}
 	
 	/*
