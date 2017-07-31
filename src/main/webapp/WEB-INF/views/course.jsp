@@ -182,11 +182,6 @@
 			<div id="map">
 			</div>
 			
-			<div class="col-lg-8 col-lg-offset-2 text-center">
-				<a href="#" class="btn btn-lg btn-outline"> <i
-					class="fa fa-download"></i> Download Theme
-				</a>
-			</div>
 		</div>
 	</div>
 	</section>

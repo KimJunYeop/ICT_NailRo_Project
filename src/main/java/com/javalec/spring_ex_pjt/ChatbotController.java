@@ -104,18 +104,22 @@ public class ChatbotController {
 			JTourApi j_tour = new JTourApi();
 			StringBuilder result = j_tour.tourKeywordSearch(request_encoder);
 			
-			String response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
+			String response_message = null;
 			
 			ArrayList<JTourCourse> j_tour_list = j_tour.tourKeywordSearchResult(result);
-			
-			for(int i = 0 ; i < j_tour_list.size() ; i ++){
-				response_message += ((i+1) + " " + j_tour_list.get(i).getTitle());
-				response_message += "\n";
-				response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?"+"id="+j_tour_list.get(i).getContentid()+"&type="+j_tour_list.get(i).getContenttypeid();
-				response_message += "\n\n";
+			if(j_tour_list.size() > 0){
+				response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
+				for(int i = 0 ; i < j_tour_list.size() ; i ++){
+					response_message += ((i+1) + " " + j_tour_list.get(i).getTitle());
+					response_message += "\n";
+					response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?"+"id="+j_tour_list.get(i).getContentid()+"&type="+j_tour_list.get(i).getContenttypeid();
+					response_message += "\n\n";
+				}
+				
+				msg.setText(response_message);
+			} else {
+				response_message = request + "에 대한 관광정보가 없습니다. 죄송합니다. \n 처음을 돌아가시려면 \"처음으로\" 를 입력하세요";
 			}
-			
-			msg.setText(response_message);
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().equals("도별 추천코스")) {
 			msg.setText("지역 추천코스");
