@@ -4,6 +4,7 @@
 <%@ page import="org.json.JSONObject"%>
 <%
 	JSONArray details = (JSONArray) request.getAttribute("details");
+	JSONArray intros = (JSONArray) request.getAttribute("intros");
 	String name = (String) request.getAttribute("city_name");
 %>
 <!DOCTYPE html>
@@ -54,6 +55,7 @@ body {
 					for (int i = 0; i < details.length(); i++) {
 						String review_id = "review_modal" + i;
 						JSONObject detail = details.getJSONObject(i);
+						JSONObject intro = intros.getJSONObject(i);
 				%>
 				<!-- Blog entry -->
 				<div class="w3-container w3-white w3-margin w3-padding-large">
@@ -75,7 +77,18 @@ body {
 						<div class="show">
 							<a class="w3-center"><span class="w3-tag">상세정보 보기</span></a>
 							<div class="description">
-								<p><%=detail.get("overview")%></p>
+								<p style="line-height:2em">
+									<font size="2">
+										<strong>· 영업 시간: </strong><%=intro.get("opentimefood")%><br>
+										<strong>· 쉬는 날: </strong><%=intro.get("restdatefood")%><br>
+										<strong>· 대표 메뉴: </strong><%=intro.get("firstmenu")%><br>
+										<strong>· 취급 메뉴: </strong><%=intro.get("treatmenu")%><br>
+										<strong>· 신용 카드: </strong><%=intro.get("chkcreditcardfood")%><br>
+										<strong>· 포장 가능: </strong><%=intro.get("packing")%><br>	
+										<strong>· 금연/흡연: </strong><%=intro.get("smoking")%><br>
+										<strong>· 예약 안내: </strong><%=intro.get("reservationfood")%><br>
+									</font>
+								</p>
 							</div>
 						</div>
 						<p class="w3-left">

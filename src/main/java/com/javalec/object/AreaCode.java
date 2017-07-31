@@ -18,6 +18,9 @@ public class AreaCode {
 	public ArrayList<String> search(String areaName) throws SQLException{
 		/*
 		 *  DB에 접속해서 AREACODE 테이블에서 코드정보를 가져옴
+		 *  데이터가 존재하는 경우 해당 지역 정보를 받아오고, 
+		 *  데이터가 없는 경우 areaCode=0을 반환함.
+		 *  
 		 * */
 		
 		ArrayList<String> result = new ArrayList<String>();		
@@ -26,12 +29,16 @@ public class AreaCode {
 		ps.setString(1, areaName);
 		
 		ResultSet rs = ps.executeQuery();
-		rs.next();
 		
+		if(rs.next()){
 		//tourAPI에 요청할 때 필요한 areaCode와 sigunguCode를 저장
 		result.add(rs.getString("areacode"));
 		result.add(rs.getString("sigungucode"));
 		result.add(rs.getString("stnid"));
+		}
+		else{
+			result.add("0");
+		}
 		
 		rs.close();
 		ps.close();
