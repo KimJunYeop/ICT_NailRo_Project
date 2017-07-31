@@ -1,9 +1,16 @@
 package com.javalec.object;
 public class DiscountCoupon {
+	String market_name;
 	String serialNum;
 	String photoURL;
 	String issueDate;
 	String area;
+	public String getMarket_name() {
+		return market_name;
+	}
+	public void setMarket_name(String market_name) {
+		this.market_name = market_name;
+	}
 	public String getSerialNum() {
 		return serialNum;
 	}

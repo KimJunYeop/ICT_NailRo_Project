@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -49,6 +50,7 @@ import com.javalec.parse.ParseArea;
 import com.javalec.s3.S3UploadAndList;
 import com.javalec.tourAPI.JTourApi;
 import com.javalec.tourAPI.TourAPI;
+import com.javalec.init.InitDiscountCoupon;
 
 @Controller
 public class ChatbotController {
@@ -211,6 +213,19 @@ public class ChatbotController {
 		msg.setPhoto(resDiscountCoupon.getPhoto());
 		return msg;
 	}
+	@RequestMapping(value = "/init", method = RequestMethod.GET)
+	private String rediInit() {
+		return "init_market";
+	}
+	@RequestMapping(value = "/init", method = RequestMethod.POST)
+	private void init(@RequestParam String market_name, 
+			@RequestParam String area, 
+			@RequestParam String serialNum) throws SQLException {
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		InitDiscountCoupon initDiscountCoupon = context.getBean("InitDiscountCoupon", InitDiscountCoupon.class);
+		initDiscountCoupon.initCouponData(market_name, serialNum, area);
+	}
+	
 
 	@RequestMapping(value = "/awsTest", method = RequestMethod.GET)
 	public String awsTest(Locale local, Model model) {
