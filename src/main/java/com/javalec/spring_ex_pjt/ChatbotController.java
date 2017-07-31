@@ -118,8 +118,6 @@ public class ChatbotController {
 			} else {
 				response_message = request + "에 대한 관광정보가 없습니다. 죄송합니다. \n 처음을 돌아가시려면 \"처음으로\" 를 입력하세요";
 			}
-			
-			
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().equals("도별 추천코스")) {
 			msg.setText("지역 추천코스");
