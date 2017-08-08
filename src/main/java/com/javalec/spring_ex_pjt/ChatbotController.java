@@ -104,22 +104,18 @@ public class ChatbotController {
 			JTourApi j_tour = new JTourApi();
 			StringBuilder result = j_tour.tourKeywordSearch(request_encoder);
 			
-			String response_message = null;
+			String response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
 			
 			ArrayList<JTourCourse> j_tour_list = j_tour.tourKeywordSearchResult(result);
-			if(j_tour_list.size() > 0){
-				response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
-				for(int i = 0 ; i < j_tour_list.size() ; i ++){
-					response_message += ((i+1) + " " + j_tour_list.get(i).getTitle());
-					response_message += "\n";
-					response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?"+"id="+j_tour_list.get(i).getContentid()+"&type="+j_tour_list.get(i).getContenttypeid();
-					response_message += "\n\n";
-				}
-				
-				msg.setText(response_message);
-			} else {
-				response_message = request + "에 대한 관광정보가 없습니다. 죄송합니다. \n 처음을 돌아가시려면 \"처음으로\" 를 입력하세요";
+			
+			for(int i = 0 ; i < j_tour_list.size() ; i ++){
+				response_message += ((i+1) + " " + j_tour_list.get(i).getTitle());
+				response_message += "\n";
+				response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?"+"id="+j_tour_list.get(i).getContentid()+"&type="+j_tour_list.get(i).getContenttypeid();
+				response_message += "\n\n";
 			}
+			
+			msg.setText(response_message);
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().equals("도별 추천코스")) {
 			msg.setText("지역 추천코스");
@@ -224,10 +220,31 @@ public class ChatbotController {
 	@RequestMapping(value = "/init", method = RequestMethod.POST)
 	private void init(@RequestParam String market_name, 
 			@RequestParam String area, 
-			@RequestParam String serialNum) throws SQLException {
+			@RequestParam String serialNum, MultipartHttpServletRequest request) throws SQLException {
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 		InitDiscountCoupon initDiscountCoupon = context.getBean("InitDiscountCoupon", InitDiscountCoupon.class);
 		initDiscountCoupon.initCouponData(market_name, serialNum, area);
+		MultipartFile mr = request.getFile("uploadfile");
+		String savepath = request.getSession().getServletContext().getRealPath("/") + "fileBox/";
+		String filename = mr.getOriginalFilename();
+		System.out.println("filename is " + filename);
+		System.out.println("System absolute path : " + request.getSession().getServletContext().getRealPath("/") + "fileBox");
+		directoryConfirmAndMake(savepath);
+		try {
+		//File = new File(현재 어플리케이션의 디렉토리 위치 + 저장할 디렉토리 + /filename);
+		File file = new File(savepath + filename);
+		mr.transferTo(file);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void directoryConfirmAndMake(String targetDir) {
+		File searchPath = new File(targetDir);
+		if(!searchPath.isDirectory()) {
+			searchPath.mkdirs();
+		}
+		else {
+		}
 	}
 	
 
