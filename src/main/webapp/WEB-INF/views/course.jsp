@@ -83,7 +83,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li class="hidden"><a href="#page-top"></a></li>
 				<li class="page-scroll"><a href="#portfolio">코스추천</a></li>
-				<li class="page-scroll"><a href="#about">About</a></li>
+				<li class="page-scroll"><a href="#about">위치</a></li>
 				<li class="page-scroll"><a href="#contact">Contact</a></li>
 			</ul>
 		</div>

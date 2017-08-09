@@ -67,11 +67,13 @@ public class ChatbotController {
 
 	/*
 	 * message api
+	 * 
 	 * @RequestBody 는 html을 java 객체로 변환해준다.
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
-	public ResponseMessageVO message(@RequestBody RequestMessage req_msg) throws SQLException, IOException, UnsupportedEncodingException  {
+	public ResponseMessageVO message(@RequestBody RequestMessage req_msg)
+			throws SQLException, IOException, UnsupportedEncodingException {
 		ResponseMessageVO res_vo = new ResponseMessageVO();
 		Message msg = new Message();
 		Keyboard keyboard = new Keyboard();
@@ -79,7 +81,7 @@ public class ChatbotController {
 
 		if (req_msg.getContent().equals("처음으로")) {
 			msg.setText("내일로 봇에 오신것을 환영합니다!\n" + "내일로 봇으로 여행정보를 얻으세요!\n " + "추천코스, 여행지정보 또한 할인혜택까지!(하트뿅)");
-			keyboard = new Keyboard(new String[] { "메뉴얼", "할인혜택", "추천코스검색", "여행지정보", "오픈채팅방입장" });
+			keyboard = new Keyboard(new String[] { "축제정보", "할인혜택", "추천코스검색", "여행지정보", "오픈채팅방입장" });
 		} else if (req_msg.getContent().equals("추천코스검색")) {
 			Photo photo = new Photo();
 			photo.setUrl("https://s3.ap-northeast-2.amazonaws.com/ictnailro/s3/nailro_recommend_course.png");
@@ -90,30 +92,34 @@ public class ChatbotController {
 			msg.setText("당신에게 딱 맞는 추천코스!\n 바로 여기에!(하트)\n 맞줌형 추천코스, 도별 추천코스 중 선택하세요.");
 
 			keyboard = new Keyboard(new String[] { "맞춤형 추천코스", "도별 추천코스" });
-		} else if (req_msg.getContent().equals("맞춤형 추천코스")) {
-			//추천 코스로 들어가기 위한 안내문.
+		} else if (req_msg.getContent().equals("축제정보")){ 
+			msg.setText("전국 축제 일정을 확인해보세요! \n 1. 전국 축제를 보시려면 \"전국축제\" 를 입력해주세요"
+					+ "\n ");
+			
+		}
+		else if (req_msg.getContent().equals("맞춤형 추천코스")) {
+			// 추천 코스로 들어가기 위한 안내문.
 			msg.setText("추천 받으실 도시의 이름을 코스와 함께 입력해주세요! \n ex ) 코스서울");
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().matches("코스.*.*.*.*")) {
 			// 코스 추천. 코스서울 입력시 서울에 대한 관광코스 제공
-			String request = req_msg.getContent().replaceFirst("코스","");
-			String request_encoder =  URLEncoder.encode(request, "UTF-8");
-			
+			String request = req_msg.getContent().replaceFirst("코스", "");
+			String request_encoder = URLEncoder.encode(request, "UTF-8");
+
 			JTourApi j_tour = new JTourApi();
 			StringBuilder result = j_tour.tourKeywordSearch(request_encoder);
-			
 			String response_message = null;
-			
+
 			ArrayList<JTourCourse> j_tour_list = j_tour.tourKeywordSearchResult(result);
-			if(j_tour_list.size() > 0){
+			if (j_tour_list.size() > 0) {
 				response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
-				for(int i = 0 ; i < j_tour_list.size() ; i ++){
-					response_message += ((i+1) + " " + j_tour_list.get(i).getTitle());
+				for (int i = 0; i < j_tour_list.size(); i++) {
+					response_message += ((i + 1) + " " + j_tour_list.get(i).getTitle());
 					response_message += "\n";
-					response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?"+"id="+j_tour_list.get(i).getContentid()+"&type="+j_tour_list.get(i).getContenttypeid();
+					response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?" + "id="
+							+ j_tour_list.get(i).getContentid() + "&type=" + j_tour_list.get(i).getContenttypeid();
 					response_message += "\n\n";
 				}
-				
 				msg.setText(response_message);
 			} else {
 				response_message = request + "에 대한 관광정보가 없습니다. 죄송합니다. \n 처음을 돌아가시려면 \"처음으로\" 를 입력하세요";
@@ -130,7 +136,7 @@ public class ChatbotController {
 			msg = regionRecommendLogic("강원도", msg);
 		} else if (req_msg.getContent().equals("충청도")) {
 			msg = regionRecommendLogic("충청도", msg);
-		}  else if (req_msg.getContent().equals("오픈채팅방입장")) {
+		} else if (req_msg.getContent().equals("오픈채팅방입장")) {
 			String text = "내일로 오픈채팅방에 오신 것을 환영합니다!\n" + "아래 링크를 클릭하세요.";
 			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "https://open.kakao.com/o/gUUCJQx");
 		} else if (req_msg.getContent().equals("할인혜택")) {
@@ -144,33 +150,26 @@ public class ChatbotController {
 			msg = responseDiscountCoupon("강원도", msg);
 		} else if (req_msg.getContent().equals("충청도의 혜택")) {
 			msg = responseDiscountCoupon("충청도", msg);
-		} 
-	
-		else if (req_msg.getContent().equals("여행지정보")) {
-			msg.setText("여행지 정보를 얻으세요! \n" 
-								+ "도시와 카테고리를 입력해주세요. \n"
-								+ "도시만 입력한 경우, 통합결과를 제공해요(씨익)\n"
-								+ " ---------------------- \n\n"
-								+ "1. 관광\n"
-								+ "2. 문화\n"
-								+ "3. 축제\n"
-								+ "4. 숙박\n"
-								+ "5. 쇼핑\n"
-								+ "6. 음식\n"
-								+ "\nEX ) 서울, 부산축제, 강릉 관광");
-		} 
-		else if(area.isTrue(req_msg.getContent().toString())){			// 입력받은 값의 앞 두글자가 DB상에 존재하는 지역이름인 경우
-			//여행지의 타입을 설정
+		} else if (req_msg.getContent().equals("여행지정보")) {
+			msg.setText("여행지 정보를 얻으세요! \n" + "도시와 카테고리를 입력해주세요. \n" + "도시만 입력한 경우, 통합결과를 제공해요(씨익)\n"
+					+ " ---------------------- \n\n" + "1. 관광\n" + "2. 문화\n" + "3. 축제\n" + "4. 숙박\n" + "5. 쇼핑\n"
+					+ "6. 음식\n" + "\nEX ) 서울, 부산축제, 강릉 관광");
+		} else if (area.isTrue(req_msg.getContent().toString())) { // 입력받은 값의 앞
+																	// 두글자가 DB상에
+																	// 존재하는
+																	// 지역이름인 경우
+			// 여행지의 타입을 설정
 			area.setContentType(req_msg.getContent().toString());
-			
-			//해당 지역의 날씨 정보를 조회
+
+			// 해당 지역의 날씨 정보를 조회
 			ResWeather weather = new ResWeather();
 			weather.response(area.getAreaName());
 			String text = weather.getText();
-			
-			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/" + area.getAreaName() + area.getContentType());
-		}else {
-			msg.setText("다시 입력해주세요");
+
+			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/"
+					+ area.getAreaName() + area.getContentType());
+		} else {
+			msg.setText("입력하신 문장이 적절하지 않습니다. 다시 입력하시거나 \n 처음 메뉴로 돌아가고 싶으시면 \"처음으로\"를 입력해주세요.");
 		}
 
 		res_vo.setKeyboard(keyboard);
@@ -255,106 +254,107 @@ public class ChatbotController {
 
 		TourAPI tour = new TourAPI();
 		JSONArray details = new JSONArray();
-		JSONArray intros = new JSONArray();	
+		JSONArray intros = new JSONArray();
 		String type = new String();
 		String region = new String();
-		
-		type = name.substring(name.length()-2, name.length());
-		region = name.split(type)[0]; 
-		
-		if(type.equals("관광")){
+
+		type = name.substring(name.length() - 2, name.length());
+		region = name.split(type)[0];
+
+		if (type.equals("관광")) {
 			ArrayList<String> contentid = tour.areaBased(region, "12", "2");
-			details =tour.contentDetail(contentid);
-			
+			details = tour.contentDetail(contentid);
+
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
-			
+
 			return "region_infomation";
-		}
-		else if(type.equals("문화")){
+		} else if (type.equals("문화")) {
 			ArrayList<String> contentid = tour.areaBased(region, "14", "2");
-			details =tour.contentDetail(contentid);
+			details = tour.contentDetail(contentid);
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
-			
+
 			return "region_infomation";
-		}
-		else if(type.equals("축제")){
+		} else if (type.equals("축제")) {
 			ArrayList<String> contentid = tour.areaBased(region, "15", "2");
-			details =tour.contentDetail(contentid);
+			details = tour.contentDetail(contentid);
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
-			
+
 			return "region_infomation";
-		}
-		else if(type.equals("쇼핑")){
+		} else if (type.equals("쇼핑")) {
 			ArrayList<String> contentid = tour.areaBased(region, "38", "2");
-			details =tour.contentDetail(contentid);
+			details = tour.contentDetail(contentid);
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
-			
+
 			return "region_infomation";
-		}
-		else if(type.equals("숙박")){
+		} else if (type.equals("숙박")) {
 			ArrayList<String> contentid = tour.areaBased(region, "32", "2");
-			details =tour.contentDetail(contentid);
+			details = tour.contentDetail(contentid);
 			intros = tour.introInn(contentid);
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
-			
+
 			return "intro_inn";
-		}
-		else if(type.equals("음식")){
+		} else if (type.equals("음식")) {
 			ArrayList<String> contentid = tour.areaBased(region, "39", "2");
-			details =tour.contentDetail(contentid);
+			details = tour.contentDetail(contentid);
 			intros = tour.introFood(contentid);
-			
-			model.addAttribute("city_name", region);
-			model.addAttribute("details", details);
-			model.addAttribute("intros", intros);
-			
-			return "intro_food";
-		}
-		else{
-			ArrayList<String> contentid = tour.areaBased(region, "", "2");
-			details =tour.contentDetail(contentid);
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
-			
+			model.addAttribute("intros", intros);
+
+			return "intro_food";
+		} else {
+			ArrayList<String> contentid = tour.areaBased(region, "", "2");
+			details = tour.contentDetail(contentid);
+
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+
 			return "region_infomation";
 		}
 	}
-	
+
 	/*
-	 *	코스 정보 url 
+	 * 코스 정보 url
 	 */
-	
+
 	@RequestMapping(value = "/course", method = RequestMethod.GET)
-	public String course(@RequestParam(value="id") int content_id, 
-			@RequestParam(value="type") int content_type_id,Locale locale, Model model){
+	public String course(@RequestParam(value = "id") int content_id, @RequestParam(value = "type") int content_type_id,
+			Locale locale, Model model) {
 		JTourApi j_tour = new JTourApi();
 		JTourCourseOverview overview = new JTourCourseOverview();
-		
-		
+
 		overview = j_tour.tourCourseOverviewGet(j_tour.tourCourseOverviewSearch(content_id, content_type_id));
-		
-		
-		ArrayList<JTourCourseContent> jtour_course_content_list = j_tour.tourGetCourseResult(j_tour.tourCourseSearch(content_id, content_type_id));
+
+		ArrayList<JTourCourseContent> jtour_course_content_list = j_tour
+				.tourGetCourseResult(j_tour.tourCourseSearch(content_id, content_type_id));
 		model.addAttribute("jtour_course", jtour_course_content_list);
 		model.addAttribute("jtour_overview", overview);
-		
-		
+
 		return "course";
 	}
 
 	@RequestMapping(value = "/google", method = RequestMethod.GET)
 	public String google(Locale locale, Model model) throws SQLException {
 		return "google";
+	}
+	
+	/*
+	 * 메뉴얼 페이지 
+	 */
+	@RequestMapping(value = "/manual", method = RequestMethod.GET)
+	public String discount(Locale locale, Model model) {
+		
+		return "manual_page";
 	}
 }
