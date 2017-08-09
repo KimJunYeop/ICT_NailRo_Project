@@ -17,7 +17,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Agency - Start Bootstrap Theme</title>
+<title>내일로챗봇</title>
 
 <!--  커스텀 CSS -->
 <link
@@ -326,40 +326,8 @@
 	</div>
 	</section>
 
-	<!-- Clients Aside -->
-	<aside class="clients">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-3 col-sm-6">
-				<a href="#"> <img
-					src="${pageContext.request.contextPath}/resources/manual_template/img/logos/envato.jpg"
-					class="img-responsive img-centered" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 col-sm-6">
-				<a href="#"> <img
-					src="${pageContext.request.contextPath}/resources/manual_template/img/logos/designmodo.jpg"
-					class="img-responsive img-centered" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 col-sm-6">
-				<a href="#"> <img
-					src="${pageContext.request.contextPath}/resources/manual_template/img/logos/themeforest.jpg"
-					class="img-responsive img-centered" alt="">
-				</a>
-			</div>
-			<div class="col-md-3 col-sm-6">
-				<a href="#"> <img
-					src="${pageContext.request.contextPath}/resources/manual_template/img/logos/creative-market.jpg"
-					class="img-responsive img-centered" alt="">
-				</a>
-			</div>
-		</div>
-	</div>
-	</aside>
-
 	<!-- Contact Section -->
-	<section id="contact">
+	<section id="img_contact">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">

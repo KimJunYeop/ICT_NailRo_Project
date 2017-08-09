@@ -62,7 +62,7 @@ public class ChatbotController {
 	@RequestMapping(value = "/keyboard", method = RequestMethod.GET)
 	public Keyboard keyboard() {
 		// 초반에 1번 keyboard 초기화
-		Keyboard keyboard = new Keyboard(new String[] { "메뉴얼", "할인혜택", "추천코스검색", "여행지정보", "오픈채팅방입장" });
+		Keyboard keyboard = new Keyboard(new String[] { "메뉴얼", "할인혜택", "추천코스검색", "여행지정보", "축제정보", "오픈채팅방입장" });
 
 		return keyboard;
 	}
@@ -82,8 +82,8 @@ public class ChatbotController {
 		ParseArea area = new ParseArea();
 
 		if (req_msg.getContent().equals("처음으로")) {
-			msg.setText("내일로 봇에 오신것을 환영합니다!\n" + "내일로 봇으로 여행정보를 얻으세요!\n " + "추천코스, 여행지정보 또한 할인혜택까지!(하트뿅)");
-			keyboard = new Keyboard(new String[] { "축제정보", "할인혜택", "추천코스검색", "여행지정보", "오픈채팅방입장" });
+			msg.setText("내일로 봇에 오신것을 환영합니다!\n" + "내일로 봇으로 여행정보를 얻으세요!\n " + "추천코스, 여행지정보 또한 할인혜택까지!(하트뿅)\n");
+			keyboard = new Keyboard(new String[] { "메뉴얼", "할인혜택", "추천코스검색", "여행지정보", "축제정보", "오픈채팅방입장" });
 		} else if (req_msg.getContent().equals("추천코스검색")) {
 			Photo photo = new Photo();
 			photo.setUrl("https://s3.ap-northeast-2.amazonaws.com/ictnailro/s3/nailro_recommend_course.png");
@@ -94,10 +94,13 @@ public class ChatbotController {
 			msg.setText("당신에게 딱 맞는 추천코스!\n 바로 여기에!(하트)\n 맞줌형 추천코스, 도별 추천코스 중 선택하세요.");
 
 			keyboard = new Keyboard(new String[] { "맞춤형 추천코스", "도별 추천코스" });
-		} else if (req_msg.getContent().equals("축제정보")){ 
+		} else if (req_msg.getContent().equals("메뉴얼")){ 
+			String text = "내일로 챗봇의 홈페이지입니다. 내일로 챗봇 팀원 및 사용방법을 보시려면 url을 클릭하세요!";
+			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "http://13.124.143.250:8080/ICT_Nailro_Project/manual");
+		}
+		else if (req_msg.getContent().equals("축제정보")){ 
 			msg.setText("전국 축제 일정을 확인해보세요! \n 1. 전국 축제를 보시려면 \"전국축제\" 를 입력해주세요"
 					+ "\n ");
-			
 		}
 		else if (req_msg.getContent().equals("맞춤형 추천코스")) {
 			// 추천 코스로 들어가기 위한 안내문.
