@@ -110,7 +110,6 @@ public class ChatbotController {
 
 			JTourApi j_tour = new JTourApi();
 			StringBuilder result = j_tour.tourKeywordSearch(request_encoder);
-<<<<<<< HEAD
 			String response_message = null;
 
 			ArrayList<JTourCourse> j_tour_list = j_tour.tourKeywordSearchResult(result);
@@ -126,18 +125,6 @@ public class ChatbotController {
 				msg.setText(response_message);
 			} else {
 				response_message = request + "에 대한 관광정보가 없습니다. 죄송합니다. \n 처음을 돌아가시려면 \"처음으로\" 를 입력하세요";
-=======
-			
-			String response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
-			
-			ArrayList<JTourCourse> j_tour_list = j_tour.tourKeywordSearchResult(result);
-			
-			for(int i = 0 ; i < j_tour_list.size() ; i ++){
-				response_message += ((i+1) + " " + j_tour_list.get(i).getTitle());
-				response_message += "\n";
-				response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?"+"id="+j_tour_list.get(i).getContentid()+"&type="+j_tour_list.get(i).getContenttypeid();
-				response_message += "\n\n";
->>>>>>> 6b98e9450d20223475368eee95d92f80c3822bf2
 			}
 			
 			msg.setText(response_message);
