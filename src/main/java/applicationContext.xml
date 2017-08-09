@@ -15,6 +15,9 @@
 	<bean id = "resDiscountCoupon" class = "com.javalec.Response.ResDiscountCoupon">
 		<property name="dataSource" ref = "dataSource"/>
 	</bean>
+	<bean id = "InitDiscountCoupon" class = "com.javalec.init.InitDiscountCoupon">
+		<property name = "dataSource" ref = "dataSource"/>
+	</bean>
 		 
 	<bean id = "resRecommendRegion" class="com.javalec.Response.ResRecommendRegion">
 		<property name="dataSource" ref="dataSource"/>

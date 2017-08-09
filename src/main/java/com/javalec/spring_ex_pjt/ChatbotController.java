@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -49,6 +50,7 @@ import com.javalec.parse.ParseArea;
 import com.javalec.s3.S3UploadAndList;
 import com.javalec.tourAPI.JTourApi;
 import com.javalec.tourAPI.TourAPI;
+import com.javalec.init.InitDiscountCoupon;
 
 @Controller
 public class ChatbotController {
@@ -108,6 +110,7 @@ public class ChatbotController {
 
 			JTourApi j_tour = new JTourApi();
 			StringBuilder result = j_tour.tourKeywordSearch(request_encoder);
+<<<<<<< HEAD
 			String response_message = null;
 
 			ArrayList<JTourCourse> j_tour_list = j_tour.tourKeywordSearchResult(result);
@@ -123,7 +126,21 @@ public class ChatbotController {
 				msg.setText(response_message);
 			} else {
 				response_message = request + "에 대한 관광정보가 없습니다. 죄송합니다. \n 처음을 돌아가시려면 \"처음으로\" 를 입력하세요";
+=======
+			
+			String response_message = request + "의 코스 추천 정보입니다!\n 자세한 사항을 알고 싶다면 url을 클릭하세요~! \n\n";
+			
+			ArrayList<JTourCourse> j_tour_list = j_tour.tourKeywordSearchResult(result);
+			
+			for(int i = 0 ; i < j_tour_list.size() ; i ++){
+				response_message += ((i+1) + " " + j_tour_list.get(i).getTitle());
+				response_message += "\n";
+				response_message += "http://13.124.143.250:8080/ICT_Nailro_Project/course?"+"id="+j_tour_list.get(i).getContentid()+"&type="+j_tour_list.get(i).getContenttypeid();
+				response_message += "\n\n";
+>>>>>>> 6b98e9450d20223475368eee95d92f80c3822bf2
 			}
+			
+			msg.setText(response_message);
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().equals("도별 추천코스")) {
 			msg.setText("지역 추천코스");
@@ -214,6 +231,40 @@ public class ChatbotController {
 		msg.setPhoto(resDiscountCoupon.getPhoto());
 		return msg;
 	}
+	@RequestMapping(value = "/init", method = RequestMethod.GET)
+	private String rediInit() {
+		return "init_market";
+	}
+	@RequestMapping(value = "/init", method = RequestMethod.POST)
+	private void init(@RequestParam String market_name, 
+			@RequestParam String area, 
+			@RequestParam String serialNum, MultipartHttpServletRequest request) throws SQLException {
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		InitDiscountCoupon initDiscountCoupon = context.getBean("InitDiscountCoupon", InitDiscountCoupon.class);
+		initDiscountCoupon.initCouponData(market_name, serialNum, area);
+		MultipartFile mr = request.getFile("uploadfile");
+		String savepath = request.getSession().getServletContext().getRealPath("/") + "fileBox/";
+		String filename = mr.getOriginalFilename();
+		System.out.println("filename is " + filename);
+		System.out.println("System absolute path : " + request.getSession().getServletContext().getRealPath("/") + "fileBox");
+		directoryConfirmAndMake(savepath);
+		try {
+		//File = new File(현재 어플리케이션의 디렉토리 위치 + 저장할 디렉토리 + /filename);
+		File file = new File(savepath + filename);
+		mr.transferTo(file);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void directoryConfirmAndMake(String targetDir) {
+		File searchPath = new File(targetDir);
+		if(!searchPath.isDirectory()) {
+			searchPath.mkdirs();
+		}
+		else {
+		}
+	}
+	
 
 	@RequestMapping(value = "/awsTest", method = RequestMethod.GET)
 	public String awsTest(Locale local, Model model) {

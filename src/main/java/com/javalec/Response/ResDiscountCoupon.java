@@ -35,6 +35,7 @@ public class ResDiscountCoupon {
 	
 	public String getText() {	//쿠폰에 대한 정보를 합쳐서 출력하는 메소드
 		text = region + "지역의 쿠폰입니다. 해당 쿠폰을 들고 가맹점에 찾아가시면 할인혜택을 받으실 수 있어요!\n";
+		text = text + "가게 이름: " + this.discountCoupon.getMarket_name() + "\n";
 		text = text + "발급일자 : " + this.discountCoupon.getIssueDate() + "\n";
 		text = text + "쿠폰 번호 : " + this.discountCoupon.getSerialNum() + "\n";
 		return text;
@@ -58,6 +59,7 @@ public class ResDiscountCoupon {
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		
+		discountCoupon.setMarket_name(rs.getString("market_name"));
 		discountCoupon.setArea(rs.getString("area"));
 		discountCoupon.setIssueDate(rs.getString("issuedate"));
 		discountCoupon.setPhotoURL(rs.getString("photourl"));
