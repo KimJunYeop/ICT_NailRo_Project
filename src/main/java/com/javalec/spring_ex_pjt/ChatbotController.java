@@ -159,13 +159,11 @@ public class ChatbotController {
 			msg = responseDiscountCoupon("충청도", msg);
 		} else if (req_msg.getContent().equals("여행지정보")) {
 			msg.setText("여행지 정보를 얻으세요! \n" + "도시와 카테고리를 입력해주세요. \n" + "도시만 입력한 경우, 통합결과를 제공해요(씨익)\n"
-					+ " ---------------------- \n\n" + "1. 관광\n" + "2. 문화\n" + "3. 축제\n" + "4. 숙박\n" + "5. 쇼핑\n"
-					+ "6. 음식\n" + "\nEX ) 서울, 부산축제, 강릉 관광");
-		} else if (area.isTrue(req_msg.getContent().toString())) { // 입력받은 값의 앞
-																	// 두글자가 DB상에
-																	// 존재하는
-																	// 지역이름인 경우
-			// 여행지의 타입을 설정
+					+ " ---------------------- \n\n" + "1. 관광\n" + "2. 문화\n" + "3. 축제\n"
+					+ "4. 음식\n" + "\nEX ) 서울, 부산축제, 강릉 관광");
+		} else if (area.isTrue(req_msg.getContent().toString())) { 
+			// 입력받은 값의 앞 두글자가 DB상에
+			// 존재하는 지역이름인 경우 여행지의 타입을 설정
 			area.setContentType(req_msg.getContent().toString());
 
 			// 해당 지역의 날씨 정보를 조회
@@ -173,8 +171,8 @@ public class ChatbotController {
 			weather.response(area.getAreaName());
 			String text = weather.getText();
 
-			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/"
-					+ area.getAreaName() + area.getContentType());
+			msg = messageWithMessageButton(msg, text, "URL", "http://113.30.24.37:8080/spring_ex_pjt/region/" + area.getAreaName() + area.getContentType());
+//			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/" + area.getAreaName() + area.getContentType());
 		} else {
 			msg.setText("입력하신 문장이 적절하지 않습니다. 다시 입력하시거나 \n 처음 메뉴로 돌아가고 싶으시면 \"처음으로\"를 입력해주세요.");
 		}
@@ -254,7 +252,6 @@ public class ChatbotController {
 		else {
 		}
 	}
-	
 
 	@RequestMapping(value = "/awsTest", method = RequestMethod.GET)
 	public String awsTest(Locale local, Model model) {
@@ -303,49 +300,37 @@ public class ChatbotController {
 		region = name.split(type)[0];
 
 		if (type.equals("관광")) {
-			ArrayList<String> contentid = tour.areaBased(region, "12", "2");
+			ArrayList<String> contentid = tour.areaBased(region, "12", "3");
 			details = tour.contentDetail(contentid);
-
-			model.addAttribute("city_name", region);
-			model.addAttribute("details", details);
-
-			return "region_infomation";
-		} else if (type.equals("문화")) {
-			ArrayList<String> contentid = tour.areaBased(region, "14", "2");
-			details = tour.contentDetail(contentid);
-
-			model.addAttribute("city_name", region);
-			model.addAttribute("details", details);
-
-			return "region_infomation";
-		} else if (type.equals("축제")) {
-			ArrayList<String> contentid = tour.areaBased(region, "15", "2");
-			details = tour.contentDetail(contentid);
-
-			model.addAttribute("city_name", region);
-			model.addAttribute("details", details);
-
-			return "region_infomation";
-		} else if (type.equals("쇼핑")) {
-			ArrayList<String> contentid = tour.areaBased(region, "38", "2");
-			details = tour.contentDetail(contentid);
-
-			model.addAttribute("city_name", region);
-			model.addAttribute("details", details);
-
-			return "region_infomation";
-		} else if (type.equals("숙박")) {
-			ArrayList<String> contentid = tour.areaBased(region, "32", "2");
-			details = tour.contentDetail(contentid);
-			intros = tour.introInn(contentid);
+			intros = tour.introAttraction(contentid);
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
 
-			return "intro_inn";
+			return "attraction";
+		} else if (type.equals("문화")) {
+			ArrayList<String> contentid = tour.areaBased(region, "14", "3");
+			details = tour.contentDetail(contentid);
+			intros = tour.introCulture(contentid);
+			
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+			model.addAttribute("intros", intros);
+
+			return "culture";
+		} else if (type.equals("축제")) {
+			ArrayList<String> contentid = tour.searchFestival(region, "3");
+			details = tour.contentDetail(contentid);
+			intros = tour.introFestival(contentid);
+
+			model.addAttribute("city_name", region);
+			model.addAttribute("details", details);
+			model.addAttribute("intros", intros);
+
+			return "festival";
 		} else if (type.equals("음식")) {
-			ArrayList<String> contentid = tour.areaBased(region, "39", "2");
+			ArrayList<String> contentid = tour.areaBased(region, "39", "3");
 			details = tour.contentDetail(contentid);
 			intros = tour.introFood(contentid);
 
@@ -353,9 +338,9 @@ public class ChatbotController {
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
 
-			return "intro_food";
+			return "food";
 		} else {
-			ArrayList<String> contentid = tour.areaBased(region, "", "2");
+			ArrayList<String> contentid = tour.areaBased(region, "", "3");
 			details = tour.contentDetail(contentid);
 
 			model.addAttribute("city_name", region);

@@ -4,6 +4,7 @@
 <%@ page import="org.json.JSONObject"%>
 <%
 	JSONArray details = (JSONArray) request.getAttribute("details");
+	JSONArray intros = (JSONArray) request.getAttribute("intros");
 	String name = (String) request.getAttribute("city_name");
 %>
 <!DOCTYPE html>
@@ -72,6 +73,7 @@ body, html {
 	<%
 		for (int i = 0; i < details.length(); i++) {
 			JSONObject detail = details.getJSONObject(i);
+			JSONObject intro = intros.getJSONObject(i);
 	%>
   	<div class="w3-display-container mySlides">
   		<div class="w3-col w3-center">
@@ -94,7 +96,16 @@ body, html {
  		</div>
  		
  		<div id="detail<%=i%>" class="w3-container menu" style="display:none">
-    		<p><%=detail.get("addr1").toString() %></p> 
+    		<p style="line-height:2em">
+				<font size="2">
+					<strong>· 문의 및 안내: </strong><%=intro.get("infocenterculture")%><br>
+					<strong>· 이용 요금: </strong><%=intro.get("usefee")%><br>
+					<strong>· 이용 시간: </strong><%=intro.get("usetimeculture")%><br>
+					<strong>· 쉬는 날: </strong><%=intro.get("restdateculture")%><br>
+					<strong>· 주차시설: </strong><%=intro.get("parkingculture")%><br>
+					<strong>· 신용카드 가능 여부: </strong><%=intro.get("chkcreditcardculture")%><br>	
+				</font>
+			</p>
   		</div>
  		
   		<div id="homepage<%=i%>" class="w3-container menu" >
@@ -102,7 +113,7 @@ body, html {
   		</div>
 	</div>
 	<%}%>
-	
+
 	<button class="w3-button w3-display-topleft w3-hover-white w3-padding-32" onclick="plusDivs(-1)">&#10094;</button>
 	<button class="w3-button w3-display-topright w3-hover-white w3-padding-32" onclick="plusDivs(1)">&#10095;</button>
 </div>
