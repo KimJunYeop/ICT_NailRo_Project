@@ -171,8 +171,8 @@ public class ChatbotController {
 			weather.response(area.getAreaName());
 			String text = weather.getText();
 
-			msg = messageWithMessageButton(msg, text, "URL", "http://113.30.24.37:8080/spring_ex_pjt/region/" + area.getAreaName() + area.getContentType());
-//			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/" + area.getAreaName() + area.getContentType());
+//			msg = messageWithMessageButton(msg, text, "URL", "http://113.30.24.37:8080/spring_ex_pjt/region/" + area.getAreaName() + area.getContentType());
+			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/" + area.getAreaName() + area.getContentType());
 		} else {
 			msg.setText("입력하신 문장이 적절하지 않습니다. 다시 입력하시거나 \n 처음 메뉴로 돌아가고 싶으시면 \"처음으로\"를 입력해주세요.");
 		}
