@@ -4,6 +4,7 @@
 <%@ page import="org.json.JSONObject"%>
 <%
 	JSONArray details = (JSONArray) request.getAttribute("details");
+	JSONArray intros = (JSONArray) request.getAttribute("intros");
 	String name = (String) request.getAttribute("city_name");
 %>
 <!DOCTYPE html>
@@ -72,6 +73,7 @@ body, html {
 	<%
 		for (int i = 0; i < details.length(); i++) {
 			JSONObject detail = details.getJSONObject(i);
+			JSONObject intro = intros.getJSONObject(i);
 	%>
   	<div class="w3-display-container mySlides">
   		<div class="w3-col w3-center">
@@ -94,7 +96,21 @@ body, html {
  		</div>
  		
  		<div id="detail<%=i%>" class="w3-container menu" style="display:none">
-    		<p><%=detail.get("addr1").toString() %></p> 
+    		<p style="line-height:2em">
+				<font size="2">
+					<strong>· 주최자 정보: </strong><%=intro.get("sponsor1")%><br>
+					<strong>· 주최자 연락처: </strong><%=intro.get("sponsor1tel")%><br>
+					<strong>· 주관자 정보: </strong><%=intro.get("sponsor2")%><br>
+					<strong>· 주관사 연락처: </strong><%=intro.get("sponsor2tel")%><br>
+					<strong>· 행사시작일: </strong><%=intro.get("eventstartdate")%><br>
+					<strong>· 행사종료일: </strong><%=intro.get("eventenddate")%><br>	
+					<strong>· 공연시간: </strong><%=intro.get("playtime")%><br>
+					<strong>· 행사장소: </strong><%=intro.get("eventplace")%><br>
+					<strong>· 관람소요시간: </strong><%=intro.get("spendtimefestival")%><br>
+					<strong>· 관람가능연령: </strong><%=intro.get("agelimit")%><br>
+					<strong>· 프로그램: </strong><%=intro.get("program")%><br>
+				</font>
+			</p>
   		</div>
  		
   		<div id="homepage<%=i%>" class="w3-container menu" >
@@ -102,7 +118,7 @@ body, html {
   		</div>
 	</div>
 	<%}%>
-	
+
 	<button class="w3-button w3-display-topleft w3-hover-white w3-padding-32" onclick="plusDivs(-1)">&#10094;</button>
 	<button class="w3-button w3-display-topright w3-hover-white w3-padding-32" onclick="plusDivs(1)">&#10095;</button>
 </div>
