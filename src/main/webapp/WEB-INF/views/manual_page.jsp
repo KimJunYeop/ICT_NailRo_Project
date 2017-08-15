@@ -83,7 +83,7 @@
 				<li><a class="page-scroll" href="#portfolio">Portfolio</a></li>
 				<li><a class="page-scroll" href="#about">About</a></li>
 				<li><a class="page-scroll" href="#team">Team</a></li>
-				<li><a class="page-scroll" href="#contact">Contact</a></li>
+				<li><a class="page-scroll" href="#img_contact">Contact</a></li>
 			</ul>
 		</div>
 		<!-- /.navbar-collapse -->
