@@ -83,7 +83,7 @@ public class ChatbotController {
 
 		if (req_msg.getContent().equals("처음으로")) {
 			msg.setText("내일로 봇에 오신것을 환영합니다!\n" + "내일로 봇으로 여행정보를 얻으세요!\n " + "추천코스, 여행지정보 또한 할인혜택까지!(하트뿅)\n");
-			keyboard = new Keyboard(new String[] { "메뉴얼", "할인혜택", "추천코스검색", "여행지정보", "축제정보", "오픈채팅방입장" });
+			keyboard = new Keyboard(new String[] { "메뉴얼", "할인혜택", "추천코스검색", "여행지정보", "오픈채팅방입장" });
 		} else if (req_msg.getContent().equals("추천코스검색")) {
 			Photo photo = new Photo();
 			photo.setUrl("https://s3.ap-northeast-2.amazonaws.com/ictnailro/s3/nailro_recommend_course.png");
@@ -97,10 +97,6 @@ public class ChatbotController {
 		} else if (req_msg.getContent().equals("메뉴얼")){ 
 			String text = "내일로 챗봇의 홈페이지입니다. 내일로 챗봇 팀원 및 사용방법을 보시려면 url을 클릭하세요!";
 			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "http://13.124.143.250:8080/ICT_Nailro_Project/manual");
-		}
-		else if (req_msg.getContent().equals("축제정보")){ 
-			msg.setText("전국 축제 일정을 확인해보세요! \n 1. 전국 축제를 보시려면 \"전국축제\" 를 입력해주세요"
-					+ "\n ");
 		}
 		else if (req_msg.getContent().equals("맞춤형 추천코스")) {
 			// 추천 코스로 들어가기 위한 안내문.
@@ -160,7 +156,7 @@ public class ChatbotController {
 		} else if (req_msg.getContent().equals("여행지정보")) {
 			msg.setText("여행지 정보를 얻으세요! \n" + "도시와 카테고리를 입력해주세요. \n" + "도시만 입력한 경우, 통합결과를 제공해요(씨익)\n"
 					+ " ---------------------- \n\n" + "1. 관광\n" + "2. 문화\n" + "3. 축제\n"
-					+ "4. 음식\n" + "\nEX ) 서울, 부산축제, 강릉 관광");
+					+ "4. 음식\n" + "\nEX ) 서울, 부산축제, 강릉관광");
 		} else if (area.isTrue(req_msg.getContent().toString())) { 
 			// 입력받은 값의 앞 두글자가 DB상에
 			// 존재하는 지역이름인 경우 여행지의 타입을 설정
@@ -382,5 +378,19 @@ public class ChatbotController {
 	public String discount(Locale locale, Model model) {
 		
 		return "manual_page";
+	}
+	
+	/*
+	 * 메뉴얼 Contact
+	 */
+	@RequestMapping(value = "/manual_contact", method = RequestMethod.POST)
+	public void manualContact(HttpServletRequest httpServeletRequest){
+		String manual_name = httpServeletRequest.getParameter("manual_name");
+		String manual_email = httpServeletRequest.getParameter("manual_email");
+		String manaul_phone = httpServeletRequest.getParameter("manual_phone");
+		String manual_message = httpServeletRequest.getParameter("manual_message");
+		
+		System.out.println(manual_name + manual_email + manaul_phone + manual_message);
+		
 	}
 }

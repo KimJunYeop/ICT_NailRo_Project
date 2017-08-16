@@ -80,7 +80,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li class="hidden"><a href="#page-top"></a></li>
 				<li><a class="page-scroll" href="#services">Services</a></li>
-				<li><a class="page-scroll" href="#portfolio">Portfolio</a></li>
+				<li><a class="page-scroll" href="#portfolio">instructions</a></li>
 				<li><a class="page-scroll" href="#about">About</a></li>
 				<li><a class="page-scroll" href="#team">Team</a></li>
 				<li><a class="page-scroll" href="#img_contact">Contact</a></li>
@@ -150,8 +150,8 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-				<h2 class="section-heading">Service Description</h2>
-				<h3 class="section-subheading text-muted">각 서비스 상세정보를 확인하세요.</h3>
+				<h2 class="section-heading">Instructions</h2>
+				<h3 class="section-subheading text-muted">각 서비스 사용법을 확인하세요.</h3>
 			</div>
 		</div>
 		<div class="row">
@@ -329,33 +329,32 @@
 	<!-- Contact Section -->
 	<section id="img_contact">
 	<div class="container">
-		<div class="row">
-			<div class="col-lg-12 text-center">
-				<h2 class="section-heading">Contact Us</h2>
-				<h3 class="section-subheading text-muted">Lorem ipsum dolor sit
-					amet consectetur.</h3>
+		<div class="row" style="margin-bottom : 20px;">
+			<div class="col-lg-12 text-center" style="color : #eee;"}>
+				<h2><span style="background-color :#fed136;">Contact Us</span></h2>
+				<h3><span style="background-color :#fed136;">개선을 바라는 점이 있다면 주저말고 연락주세요!</span></h3>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
-				<form name="sentMessage" id="contactForm" novalidate>
+				<form name="sentMessage" method="post" action="manual_contact" id="contactForm" novalidate>
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
 								<input type="text" class="form-control"
-									placeholder="Your Name *" id="name" required
+									placeholder="Your Name *" id="manual_name" required
 									data-validation-required-message="Please enter your name.">
 								<p class="help-block text-danger"></p>
 							</div>
 							<div class="form-group">
 								<input type="email" class="form-control"
-									placeholder="Your Email *" id="email" required
+									placeholder="Your Email *" id="manual_email" required
 									data-validation-required-message="Please enter your email address.">
 								<p class="help-block text-danger"></p>
 							</div>
 							<div class="form-group">
 								<input type="tel" class="form-control"
-									placeholder="Your Phone *" id="phone" required
+									placeholder="Your Phone *" id="manual_phone" required
 									data-validation-required-message="Please enter your phone number.">
 								<p class="help-block text-danger"></p>
 							</div>
@@ -363,8 +362,8 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<textarea class="form-control" placeholder="Your Message *"
-									id="message" required
-									data-validation-required-message="Please enter a message."></textarea>
+									id="manual_message" required
+									data-validation-required-message="Please enter a message." rows="5"></textarea>
 								<p class="help-block text-danger"></p>
 							</div>
 						</div>
@@ -393,8 +392,7 @@
 			
 			<div class="col-md-4">
 				<ul class="list-inline quicklinks">
-					<li><a href="#">Privacy Policy</a></li>
-					<li><a href="#">Terms of Use</a></li>
+					<li><a href="#">내일로 챗봇</a></li>
 				</ul>
 			</div>
 		</div>
@@ -598,8 +596,6 @@
 	<!-- Contact Form JavaScript -->
 	<script
 		src="${pageContext.request.contextPath}/resources/manual_template/js/jqBootstrapValidation.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/manual_template/js/contact_me.js"></script>
 
 	<!-- Theme JavaScript -->
 	<script
