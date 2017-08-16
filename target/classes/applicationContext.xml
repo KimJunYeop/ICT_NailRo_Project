@@ -27,5 +27,13 @@
 		<property name="dataSource" ref = "dataSource"/>
 	</bean>
 	
+	<bean id = "menualContactMessage" class="com.javalec.manual.ManualContactMessage">
+		<property name="dataSource" ref = "dataSource"/>
+	</bean>
+	
+	<bean id = "MenualContactUser" class="com.javalec.manual.ManualContactMessage">
+		
+	</bean>
+	
 	
 </beans>

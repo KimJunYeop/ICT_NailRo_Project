@@ -337,24 +337,24 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
-				<form name="sentMessage" method="post" action="manual_contact" id="contactForm" novalidate>
+				<form action="manual_contact" method="post">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
 								<input type="text" class="form-control"
-									placeholder="Your Name *" id="manual_name" required
+									placeholder="Your Name *" name="user_name" required
 									data-validation-required-message="Please enter your name.">
 								<p class="help-block text-danger"></p>
 							</div>
 							<div class="form-group">
 								<input type="email" class="form-control"
-									placeholder="Your Email *" id="manual_email" required
+									placeholder="Your Email *" name="user_email" required
 									data-validation-required-message="Please enter your email address.">
 								<p class="help-block text-danger"></p>
 							</div>
 							<div class="form-group">
 								<input type="tel" class="form-control"
-									placeholder="Your Phone *" id="manual_phone" required
+									placeholder="Your Phone *" name="user_phone" required
 									data-validation-required-message="Please enter your phone number.">
 								<p class="help-block text-danger"></p>
 							</div>
@@ -362,8 +362,8 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<textarea class="form-control" placeholder="Your Message *"
-									id="manual_message" required
-									data-validation-required-message="Please enter a message." rows="5"></textarea>
+									name="user_message" required
+									data-validation-required-message="Please enter a message." rows="6"></textarea>
 								<p class="help-block text-danger"></p>
 							</div>
 						</div>

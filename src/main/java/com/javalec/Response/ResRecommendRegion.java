@@ -74,24 +74,6 @@ public class ResRecommendRegion {
 			
 		});
 		
-//		Connection c = dataSource.getConnection();
-//		PreparedStatement ps = c.prepareStatement("SELECT * FROM RECOMMEND_PATH_REGION WHERE REGION = ?");
-//
-//		ps.setString(1, region);
-//
-//		ResultSet rs = ps.executeQuery();
-//		rs.next();
-//
-//		Course course = new Course();
-//		course.setRegion(rs.getString("region"));
-//		course.setPath(rs.getString("path"));
-//		course.setDescription(rs.getString("description"));
-//
-//		rs.close();
-//		ps.close();
-//		c.close();
-//
-//		return course;
 	}
 
 	public String getRecommendRegion() {
