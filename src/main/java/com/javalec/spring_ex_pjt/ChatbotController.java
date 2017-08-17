@@ -20,7 +20,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,13 +46,11 @@ import com.javalec.object.JPlace;
 import com.javalec.object.JTourCourse;
 import com.javalec.object.JTourCourseContent;
 import com.javalec.object.JTourCourseOverview;
-import com.javalec.object.ManualContactUser;
 import com.javalec.parse.ParseArea;
 import com.javalec.s3.S3UploadAndList;
 import com.javalec.tourAPI.JTourApi;
 import com.javalec.tourAPI.TourAPI;
 import com.javalec.init.InitDiscountCoupon;
-import com.javalec.manual.ManualContactMessage;
 
 @Controller
 public class ChatbotController {
@@ -98,7 +95,7 @@ public class ChatbotController {
 
 			keyboard = new Keyboard(new String[] { "맞춤형 추천코스", "도별 추천코스" });
 		} else if (req_msg.getContent().equals("메뉴얼")){ 
-			String text = "내일로 챗봇의 홈페이지입니다. 내일로 챗봇 팀원 및 사용방법을 보시려면 url을 클릭하세요!";
+			String text = "내일로 챗봇의 홈페이지입니다. 내일로 챗봇 팀원 및 사용방법을 보시려면 url을 클릭하세요!";;
 			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "http://13.124.143.250:8080/ICT_Nailro_Project/manual");
 		}
 		else if (req_msg.getContent().equals("맞춤형 추천코스")) {
@@ -170,7 +167,6 @@ public class ChatbotController {
 			weather.response(area.getAreaName());
 			String text = weather.getText();
 
-//			msg = messageWithMessageButton(msg, text, "URL", "http://113.30.24.37:8080/spring_ex_pjt/region/" + area.getAreaName() + area.getContentType());
 			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/" + area.getAreaName() + area.getContentType());
 		} else {
 			msg.setText("입력하신 문장이 적절하지 않습니다. 다시 입력하시거나 \n 처음 메뉴로 돌아가고 싶으시면 \"처음으로\"를 입력해주세요.");
@@ -292,6 +288,7 @@ public class ChatbotController {
 		TourAPI tour = new TourAPI();
 		JSONArray details = new JSONArray();
 		JSONArray intros = new JSONArray();
+		JSONArray images = new JSONArray();
 		String type = new String();
 		String region = new String();
 
@@ -302,48 +299,58 @@ public class ChatbotController {
 			ArrayList<String> contentid = tour.areaBased(region, "12", "3");
 			details = tour.contentDetail(contentid);
 			intros = tour.introAttraction(contentid);
+			images = tour.imageDetail(contentid, "12");
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
+			model.addAttribute("images", images);
 
 			return "attraction";
 		} else if (type.equals("문화")) {
 			ArrayList<String> contentid = tour.areaBased(region, "14", "3");
 			details = tour.contentDetail(contentid);
 			intros = tour.introCulture(contentid);
+			images = tour.imageDetail(contentid, "14");
 			
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
+			model.addAttribute("images", images);
 
 			return "culture";
 		} else if (type.equals("축제")) {
 			ArrayList<String> contentid = tour.searchFestival(region, "3");
 			details = tour.contentDetail(contentid);
 			intros = tour.introFestival(contentid);
+			images = tour.imageDetail(contentid, "15");
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
+			model.addAttribute("images", images);
 
 			return "festival";
 		} else if (type.equals("음식")) {
 			ArrayList<String> contentid = tour.areaBased(region, "39", "3");
 			details = tour.contentDetail(contentid);
 			intros = tour.introFood(contentid);
+			images = tour.imageDetail(contentid, "39");
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
+			model.addAttribute("images", images);
 
 			return "food";
 		} else {
 			ArrayList<String> contentid = tour.areaBased(region, "", "3");
 			details = tour.contentDetail(contentid);
+			images = tour.imageDetail(contentid, "15");
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
+			model.addAttribute("images", images);
 
 			return "region_infomation";
 		}
@@ -387,29 +394,13 @@ public class ChatbotController {
 	 * 메뉴얼 Contact
 	 */
 	@RequestMapping(value = "/manual_contact", method = RequestMethod.POST)
-	public String manualContact(HttpServletRequest httpServeletRequest){
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+	public void manualContact(HttpServletRequest httpServeletRequest){
+		String manual_name = httpServeletRequest.getParameter("manual_name");
+		String manual_email = httpServeletRequest.getParameter("manual_email");
+		String manaul_phone = httpServeletRequest.getParameter("manual_phone");
+		String manual_message = httpServeletRequest.getParameter("manual_message");
 		
+		System.out.println(manual_name + manual_email + manaul_phone + manual_message);
 		
-		String user_name = httpServeletRequest.getParameter("user_name");
-		String user_email = httpServeletRequest.getParameter("user_email");
-		String user_phone = httpServeletRequest.getParameter("user_phone");
-		String user_message = httpServeletRequest.getParameter("user_message");
-		
-		System.out.println(user_name+user_email+user_phone+user_message);
-		
-		
-		
-		ManualContactUser mc_user = new ManualContactUser(user_name,user_email,user_phone,user_message);
-		System.out.println(mc_user.getUser_message());
-		System.out.println(mc_user.getUser_name());
-		System.out.println(mc_user.getUser_email());
-		System.out.println(mc_user.getUser_phone());
-		
-		ManualContactMessage mc_message = context.getBean("menualContactMessage",ManualContactMessage.class);
-		mc_message.insertContactMessage(mc_user);
-//		
-		return "manual_page";
 	}
-
 }

@@ -5,6 +5,7 @@
 <%
 	JSONArray details = (JSONArray) request.getAttribute("details");
 	JSONArray intros = (JSONArray) request.getAttribute("intros");
+	JSONArray images = (JSONArray) request.getAttribute("images");
 	String name = (String) request.getAttribute("city_name");
 %>
 <!DOCTYPE html>
@@ -24,37 +25,41 @@ body, html {
 }
 
 /* Create a Parallax Effect */
-.bgimg-1, .bgimg-2, .bgimg-3 {
+.bgimg{
+	background-image: url("${pageContext.request.contextPath}/resources/image/main_logo.jpg");
+    min-height: 10%;
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-/* First image (Logo. Full height) */
-.bgimg-1 {
-	background-image: url("${pageContext.request.contextPath}/resources/image/main_logo.jpg");
-    min-height: 10%;
-}
-
-/* Second image (Portfolio) */
-.bgimg-2 {
-    background-image: url("/w3images/parallax2.jpg");
-    min-height: 400px;
-}
-
-/* Third image (Contact) */
-.bgimg-3 {
-    background-image: url("/w3images/parallax3.jpg");
-    min-height: 400px;
+#main{
+	padding: 0px 16px 5px 16px;
 }
 
 .w3-wide {letter-spacing: 10px;}
 .w3-hover-opacity {cursor: pointer;}
 
+.firstImages {
+display:none;
+width:100%; 
+max-height: 300px
+}
+
+.secondImages {
+display:none;
+width:100%; 
+max-height: 300px
+}
+.demo {cursor:pointer}
+
+.imageSlide {white-space: nowrap; overflow-x: auto; overflow-y: hidden;}
+.thumbnail {max-height: 11vh ; width: 30%; display: inline-block; overflow-y: hidden;}
+
 /* Turn off parallax scrolling for tablets and phones */
 @media only screen and (max-device-width: 1024px) {
-    .bgimg-1, .bgimg-2, .bgimg-3 {
+    .bgimg {
         background-attachment: scroll;
     }
 }
@@ -62,37 +67,43 @@ body, html {
 <body>
 
 <!-- First Parallax Image with Logo Text -->
-<div class="bgimg-1 w3-display-container" id="home">
+<div class="bgimg w3-opacity-min w3-display-container" id="home">
 	<div class="w3-display-middle" style="white-space:nowrap;">
-   		<span class="w3-xlarge w3-wide"><b><%=name%></b></span>
+   		<span class="w3-xxlarge w3-wide"><b><%=name%></b></span>
 	</div>
 </div>
 	
 <!-- Container (About Section) -->
 <div id="main" class="w3-content  w3-display-container">
 	<%
+		int imageIndex = 1;
 		for (int i = 0; i < details.length(); i++) {
 			JSONObject detail = details.getJSONObject(i);
 			JSONObject intro = intros.getJSONObject(i);
+			JSONObject image = images.getJSONObject(i);
 	%>
   	<div class="w3-display-container mySlides">
   		<div class="w3-col w3-center">
    			<p class= "w3-xlarge"><b><%=detail.get("title").toString()%></b></p>
-   			<img src="<%=detail.get("firstimage")%>" style="width:97%; max-height: 300px">
-   		</div>
+   			<img class="firstImages" src="<%=detail.get("firstimage")%>">
+   			<img class="secondImages" src="<%=detail.get("firstimage")%>">
+   			<% for(int j=0; j<image.length()-1; j++){	%>
+   				<img class="secondImages" src="<%=image.get("img" + j) %>">
+ 			<% 
+ 			}%>
+ 		</div>
    		
    		<div class="w3-bar w3-border-bottom">
-   			<button class="w3-bar-item w3-button w3-small  tablink w3-hover-black" onclick="openMenu(event,'overview<%=i%>')">Overview</button>
+   			<button class="w3-bar-item w3-button w3-small  tablink w3-black w3-hover-black" onclick="openMenu(event,'overview<%=i%>')">Overview</button>
     		<button class="w3-bar-item w3-button w3-small  tablink w3-hover-black" onclick="openMenu(event,'detail<%=i%>')">Detail</button>
-    		<button class="w3-bar-item w3-button w3-small  tablink w3-hover-black" onclick="openMenu(event,'homepage<%=i%>')">Homepage</button>
-			<button class="w3-bar-item w3-button w3-small  tablink w3-hover-black" onclick="openMenu(event,'images<%=i%>')">Images</button>			
+    		<button class="w3-bar-item w3-button w3-small  tablink w3-hover-black" onclick="openMenu(event,'images<%=i%>')">Images</button>			
 			<a class="w3-bar-item w3-button w3-small w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
    				<i class="fa fa-bars"></i>
    			</a>
 		</div>
 		
-		<div id="overview<%=i%>" class="w3-container menu" style="display:none">
-    		<p><%=detail.get("overview").toString() %></p>
+		<div id="overview<%=i%>" class="w3-container menu">
+    		<p><font size="2"><%=detail.get("overview").toString() %></font></p>
  		</div>
  		
  		<div id="detail<%=i%>" class="w3-container menu" style="display:none">
@@ -103,43 +114,81 @@ body, html {
 					<strong>· 이용 시간: </strong><%=intro.get("usetime")%><br>
 					<strong>· 쉬는 날: </strong><%=intro.get("restdate")%><br>
 					<strong>· 주차시설: </strong><%=intro.get("parking")%><br>
-					<strong>· 신용카드 가능 여부: </strong><%=intro.get("chkcreditcard")%><br>	
+					<strong>· 신용카드 가능 여부: </strong><%=intro.get("chkcreditcard")%><br>
+					<strong>· 홈페이지: </strong><%=detail.get("homepage").toString() %><br>	
 				</font>
 			</p>
   		</div>
- 		
-  		<div id="homepage<%=i%>" class="w3-container menu" >
-    		<p><%=detail.get("homepage").toString() %></p>
-  		</div>
   		
-  		<div id="images<%=i%>" class="w3-container menu" >
-    		<p><%=detail.get("homepage").toString() %></p>
+  		<div id="images<%=i%>" class="menu"  style="display:none">
+    		<div class = "imageSlide">
+    			<div class="thumbnail">
+      				<img class="demo w3-opacity w3-hover-opacity-off" src="<%=detail.get("firstimage")%>" style="width:100%" onclick="currentDiv(<%=imageIndex++%>)">
+   				</div>
+    			<%
+    				for(int j=0; j<image.length()-1; j++) {
+    			%>
+    			<div class="thumbnail">
+      				<img class="demo w3-opacity w3-hover-opacity-off" src="<%=image.get("img" + j)%>" style="width:100%" onclick="currentDiv(<%=imageIndex++%>)">
+   				</div>
+    			<%}%>
+    			
+    		</div>
   		</div>
 	</div>
 	<%}%>
 
 	<button class="w3-button w3-display-topleft w3-hover-white w3-padding-32" onclick="plusDivs(-1)">&#10094;</button>
-	<button class="w3-button w3-display-topright w3-hover-white w3-padding-32" onclick="plusDivs(1)">&#10095;</button>
+	<button class="w3-button w3-display-topright w3-hover-white w3-padding-32" onclick="plusDivs(+1)">&#10095;</button>
 </div>
 
 <script>
 
+// change page
 var slideIndex = 1;
 showDivs(slideIndex);
 
 function plusDivs(n) {
-  showDivs(slideIndex += n);
+	showDivs(slideIndex += n);
+}
+
+function currentDiv(n) {
+	showImage(n);
 }
 
 function showDivs(n) {
-  var i;
-  var x = document.getElementsByClassName("mySlides");
-  if (n > x.length) {slideIndex = 1}    
-  if (n < 1) {slideIndex = x.length}
-  for (i = 0; i < x.length; i++) {
-     x[i].style.display = "none";  
-  }
-  x[slideIndex-1].style.display = "block";  
+	var i;
+ 	var x = document.getElementsByClassName("mySlides");
+ 	var y = document.getElementsByClassName("firstImages");
+ 	var z = document.getElementsByClassName("secondImages");
+ 	if (n > x.length) {slideIndex = 1}    
+  	if (n < 1) {slideIndex = x.length}
+  	for (i = 0; i < x.length; i++) {
+    	 x[i].style.display = "none";  
+  	}
+  	x[slideIndex-1].style.display = "block"; 
+	y[slideIndex-1].style.display = "block";
+	for(i=0; i<z.length();i++){
+		z[i].style.dispaly = "none";
+	}
+}
+
+function showImage(n) {
+	  var i;
+	  var x = document.getElementsByClassName("secondImages");
+	  var y = document.getElementsByClassName("firstImages");
+	  var dots = document.getElementsByClassName("demo");
+	  for (i = 0; i < y.length; i++) {
+			 y[i].style.display = "none";
+		  }
+	  for (i = 0; i < x.length; i++) {
+	     x[i].style.display = "none";
+	  }
+	  for (i = 0; i < dots.length; i++) {
+	     dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
+	  }
+	  x[n-1].style.display = "block";
+	  dots[n-1].className += " w3-opacity-off";
 }
 
 // Change style of navbar on scroll
@@ -174,6 +223,7 @@ function openMenu(evt, mainMenu) {
 	      tablinks[i].className = tablinks[i].className.replace(" w3-black", "");
 	  }
 	  document.getElementById(mainMenu).style.display = "block";
+	  evt.currentTarget.className += " w3-black";
 	}
 </script>	
 

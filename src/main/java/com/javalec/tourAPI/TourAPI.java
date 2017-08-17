@@ -17,6 +17,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
@@ -29,14 +30,18 @@ import com.javalec.object.OpenAPI;
 import com.javalec.object.AreaCode;
 
 public class TourAPI {
-	private static final String AREABASED_URI="http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=";
-	private static final String AREABASED_OPT = "&MobileOS=ETC&MobileApp=nailrochat&arrange=B";
-	private static final String FESTIVAL_URI="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=";
-	private static final String FESTIVAL_OPT = "&MobileOS=ETC&MobileApp=nailrochat&arrange=B";
-	private static final String DETAIL_URI = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=";
-	private static final String DETAIL_OPT= "&MobileOS=ETC&MobileApp=nailrochat&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y&_type=json";
-	private static final String INTRO_URI = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=";
-	private static final String INTRO_OPT= "&MobileOS=ETC&MobileApp=nailrochat&_type=json";
+	private static final String AREABASED_URI=	"http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=";
+	private static final String FESTIVAL_URI=		"http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=";
+	private static final String DETAIL_URI = 			"http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=";
+	private static final String IMAGE_URI = 			"http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailImage?ServiceKey=";
+	private static final String INTRO_URI = 			"http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=";
+	
+	private static final String AREABASED_OPT ="&MobileOS=ETC&MobileApp=nailrochat&arrange=B";
+	private static final String FESTIVAL_OPT = 		"&MobileOS=ETC&MobileApp=nailrochat&arrange=B";
+	private static final String DETAIL_OPT= 			"&MobileOS=ETC&MobileApp=nailrochat&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y&_type=json";
+	private static final String IMAGE_OPT= 			"&MobileOS=ETC&MobileApp=nailrochat&_type=json";
+	private static final String INTRO_OPT= 			"&MobileOS=ETC&MobileApp=nailrochat&_type=json";
+	
 	private static final String API_KEY = "9%2FgsanrvJGqg3eF9InVtlFrz2SOHea2S3MOgQE%2BwO0PPiHgPf2jIdgxy1vvpUhV%2BWlZ0httNIoeTJKmhZjgE7g%3D%3D";
 	
 	public TourAPI(){
@@ -131,7 +136,7 @@ public class TourAPI {
 	   return result;
 	}
 	
-	public JSONArray contentDetail(ArrayList<String> ContentID) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
+	public JSONArray contentDetail(ArrayList<String> ContentID) throws IOException {
 		/*
 		 * 입력받은 각각의 관광지ID의 세부정보를 요청해서
 		 * 각 관광지의 세부정보를 JSON형식 정리해서 반환
@@ -189,6 +194,74 @@ public class TourAPI {
 			} else{
 				detail.put("homepage", "홈페이지 정보가 없습니다.");
 			}
+			//분류한 항목을 JSONArray에 추가
+			result.put(detail);
+		}
+	   //JSONArray 반환
+	    return result;
+	}
+	
+	public JSONArray imageDetail(ArrayList<String> ContentID, String contentTypeId) throws IOException{
+		/*
+		 * 	관광지ID와 타입으로 요청해서
+		 * 	해당 세부이미지들을 얻어온다.
+		 * */
+		
+		//OpenAPI에 검색을 요청하는 객체 생성
+		OpenAPI addr = new OpenAPI(IMAGE_URI, API_KEY, IMAGE_OPT);
+		
+		String totalLine = new String();
+		JSONArray result = new JSONArray();
+		JSONObject json = new JSONObject();
+		JSONObject response = new JSONObject();
+	    JSONObject body = new JSONObject();
+	    JSONObject items = new JSONObject();
+		JSONArray item = new JSONArray();
+		JSONObject item1 = new JSONObject();
+		JSONObject detail = new JSONObject();
+		String totalCount = new String();
+	    
+		for(int i=0; i<ContentID.size(); i++){
+			//API 주소 설정
+			addr.setUrl(IMAGE_URI, API_KEY, IMAGE_OPT);
+			addr.addUrl("contentId", ContentID.get(i));
+			addr.addUrl("contentTypeId", contentTypeId);
+			if(contentTypeId.equals("39")){
+				addr.addUrl("imageYN", "N");
+			}
+			System.out.println(addr.getUrl());
+			//TourAPI에서 관광지 json형식으로 요청
+			totalLine = addr.request();
+			
+			//전체 데이터에서 key값이 "item"인 데이터 추출 
+			json = new JSONObject(totalLine);
+			response = json.getJSONObject("response");
+			body = response.getJSONObject("body");
+			totalCount = body.get("totalCount").toString();
+			try{
+				items = body.getJSONObject("items");
+				try{
+					item = items.getJSONArray("item");
+					detail = new JSONObject();
+					
+					//item에서 필요한 항목을 따로 분류해서 json형식으로 저장
+					for(int j=0;j<item.length();j++){
+						detail.put("img" + j, item.getJSONObject(j).get("originimgurl").toString());
+					}
+					detail.put("totalCount", totalCount);
+				}catch(JSONException ex){
+					item1 = items.getJSONObject("item");
+					detail = new JSONObject();
+					
+					//item에서 필요한 항목을 따로 분류해서 json형식으로 저장
+					detail.put("img0", item1.get("originimgurl").toString());
+					detail.put("totalCount", totalCount);
+				}
+			}catch(JSONException ex){
+				detail = new JSONObject();
+				detail.put("totalCount", totalCount);
+			}
+			
 			//분류한 항목을 JSONArray에 추가
 			result.put(detail);
 		}
