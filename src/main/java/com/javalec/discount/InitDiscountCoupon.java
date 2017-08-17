@@ -1,4 +1,4 @@
-package com.javalec.init;
+package com.javalec.discount;
 import com.javalec.object.DiscountCoupon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

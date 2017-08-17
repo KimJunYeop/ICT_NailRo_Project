@@ -33,11 +33,11 @@ public class S3UploadAndList {
 		amazonS3 = new AmazonS3Client(awsCredentials);
 	}
 
-	public void uploadFile(File file) {
+	public void uploadFile(File file,String dirname) {
 		if (amazonS3 != null) {
 			try {
 				PutObjectRequest putObjectRequest = new PutObjectRequest(
-						BUCKET_NAME + "/s3"/* sub directory */, file.getName(), file);
+						BUCKET_NAME + "/"+dirname/* sub directory */, file.getName(), file);
 				putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead); // file
 																					// permission
 				amazonS3.putObject(putObjectRequest); // upload file
@@ -49,6 +49,8 @@ public class S3UploadAndList {
 			}
 		}
 	}
+	
+	
 
 	public File multipartToFile(MultipartFile multipart) throws IllegalStateException, IOException {
 		File convFile = new File(multipart.getOriginalFilename());

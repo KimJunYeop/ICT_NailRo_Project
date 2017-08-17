@@ -6,8 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,12 +15,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,16 +32,15 @@ import org.xml.sax.SAXException;
 import com.javalec.Response.ResDiscountCoupon;
 import com.javalec.Response.ResRecommendRegion;
 import com.javalec.Response.ResWeather;
-import com.javalec.gapi.Descending;
-import com.javalec.gapi.GooglePlace;
+import com.javalec.discount.DisCountCoupon;
+import com.javalec.discount.DisCountCouponObj;
+import com.javalec.manual.ManualContactMessage;
 import com.javalec.message.Keyboard;
 import com.javalec.message.Message;
 import com.javalec.message.MessageButton;
 import com.javalec.message.Photo;
 import com.javalec.message.RequestMessage;
 import com.javalec.message.ResponseMessageVO;
-import com.javalec.object.AreaCode;
-import com.javalec.object.JPlace;
 import com.javalec.object.JTourCourse;
 import com.javalec.object.JTourCourseContent;
 import com.javalec.object.JTourCourseOverview;
@@ -52,8 +49,9 @@ import com.javalec.parse.ParseArea;
 import com.javalec.s3.S3UploadAndList;
 import com.javalec.tourAPI.JTourApi;
 import com.javalec.tourAPI.TourAPI;
-import com.javalec.init.InitDiscountCoupon;
-import com.javalec.manual.ManualContactMessage;
+
+import net.sourceforge.barbecue.BarcodeException;
+import net.sourceforge.barbecue.output.OutputException;
 
 @Controller
 public class ChatbotController {
@@ -97,11 +95,12 @@ public class ChatbotController {
 			msg.setText("당신에게 딱 맞는 추천코스!\n 바로 여기에!(하트)\n 맞줌형 추천코스, 도별 추천코스 중 선택하세요.");
 
 			keyboard = new Keyboard(new String[] { "맞춤형 추천코스", "도별 추천코스" });
-		} else if (req_msg.getContent().equals("메뉴얼")){ 
+		} else if (req_msg.getContent().equals("메뉴얼")) {
 			String text = "내일로 챗봇의 홈페이지입니다. 내일로 챗봇 팀원 및 사용방법을 보시려면 url을 클릭하세요!";
-			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "http://13.124.143.250:8080/ICT_Nailro_Project/manual");
-		}
-		else if (req_msg.getContent().equals("맞춤형 추천코스")) {
+			;
+			msg = messageWithMessageButton(msg, text, "오픈채팅방입장",
+					"http://13.124.143.250:8080/ICT_Nailro_Project/manual");
+		} else if (req_msg.getContent().equals("맞춤형 추천코스")) {
 			// 추천 코스로 들어가기 위한 안내문.
 			msg.setText("추천 받으실 도시의 이름을 코스와 함께 입력해주세요! \n ex ) 코스서울");
 			keyboard = new Keyboard();
@@ -128,7 +127,7 @@ public class ChatbotController {
 			} else {
 				response_message = request + "에 대한 관광정보가 없습니다. 죄송합니다. \n 처음을 돌아가시려면 \"처음으로\" 를 입력하세요";
 			}
-			
+
 			msg.setText(response_message);
 			keyboard = new Keyboard();
 		} else if (req_msg.getContent().equals("도별 추천코스")) {
@@ -146,21 +145,16 @@ public class ChatbotController {
 			String text = "내일로 오픈채팅방에 오신 것을 환영합니다!\n" + "아래 링크를 클릭하세요.";
 			msg = messageWithMessageButton(msg, text, "오픈채팅방입장", "https://open.kakao.com/o/gUUCJQx");
 		} else if (req_msg.getContent().equals("할인혜택")) {
-			msg.setText("내일로 봇의 다양한 할인 혜택을 만나보세요!");
-			keyboard = new Keyboard(new String[] { "전라도의 혜택", "경상도의 혜택", "강원도의 혜택", "충청도의 혜택" });
-		} else if (req_msg.getContent().equals("전라도의 혜택")) {
-			msg = responseDiscountCoupon("전라도", msg);
-		} else if (req_msg.getContent().equals("경상도의 혜택")) {
-			msg = responseDiscountCoupon("경상도", msg);
-		} else if (req_msg.getContent().equals("강원도의 혜택")) {
-			msg = responseDiscountCoupon("강원도", msg);
-		} else if (req_msg.getContent().equals("충청도의 혜택")) {
-			msg = responseDiscountCoupon("충청도", msg);
+			msg.setText("내일로 봇의 다양한 할인 혜택을 만나보세요! \n 아래의 쿠폰받기를 눌러주세요!");
+			keyboard = new Keyboard(new String[] { "쿠폰받기" });
+		} else if (req_msg.getContent().equals("쿠폰받기")) {
+			DisCountCoupon disCC = new DisCountCoupon();
+			//DisCountCouopon 조회 후 출력.
 		} else if (req_msg.getContent().equals("여행지정보")) {
 			msg.setText("여행지 정보를 얻으세요! \n" + "도시와 카테고리를 입력해주세요. \n" + "도시만 입력한 경우, 통합결과를 제공해요(씨익)\n"
-					+ " ---------------------- \n\n" + "1. 관광\n" + "2. 문화\n" + "3. 축제\n"
-					+ "4. 음식\n" + "\nEX ) 서울, 부산축제, 강릉관광");
-		} else if (area.isTrue(req_msg.getContent().toString())) { 
+					+ " ---------------------- \n\n" + "1. 관광\n" + "2. 문화\n" + "3. 축제\n" + "4. 음식\n"
+					+ "\nEX ) 서울, 부산축제, 강릉관광");
+		} else if (area.isTrue(req_msg.getContent().toString())) {
 			// 입력받은 값의 앞 두글자가 DB상에
 			// 존재하는 지역이름인 경우 여행지의 타입을 설정
 			area.setContentType(req_msg.getContent().toString());
@@ -170,8 +164,8 @@ public class ChatbotController {
 			weather.response(area.getAreaName());
 			String text = weather.getText();
 
-//			msg = messageWithMessageButton(msg, text, "URL", "http://113.30.24.37:8080/spring_ex_pjt/region/" + area.getAreaName() + area.getContentType());
-			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/" + area.getAreaName() + area.getContentType());
+			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/"
+					+ area.getAreaName() + area.getContentType());
 		} else {
 			msg.setText("입력하신 문장이 적절하지 않습니다. 다시 입력하시거나 \n 처음 메뉴로 돌아가고 싶으시면 \"처음으로\"를 입력해주세요.");
 		}
@@ -218,14 +212,50 @@ public class ChatbotController {
 		msg.setPhoto(resDiscountCoupon.getPhoto());
 		return msg;
 	}
+
 	/*
-	 * discount page  
+	 * discount page
 	 */
-	@RequestMapping(value="/discount", method = RequestMethod.GET)
-	public String discountPageLoading(){
+	@RequestMapping(value = "/discount", method = RequestMethod.GET)
+	public String discountPageLoading() {
 		return "discount_page";
 	}
-	
+
+	/*
+	 * discount create
+	 */
+	@RequestMapping(value = "/discount_create", method = RequestMethod.POST)
+	public String discountCreate(MultipartHttpServletRequest request, HttpServletResponse response)
+			throws IllegalStateException, IOException, BarcodeException, OutputException {
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		String dis_owner_name = request.getParameter("dis_owner_name");
+		String dis_shop_name = request.getParameter("dis_shop_name");
+		String dis_shop_addr = request.getParameter("dis_shop_addr");
+		String dis_shop_description = request.getParameter("dis_shop_description");
+		String dis_shop_photo = "https://s3.ap-northeast-2.amazonaws.com/ictnailro/discount/";
+		String dis_barcode = "";
+
+		DisCountCoupon disCC = context.getBean("disCountCoupon", DisCountCoupon.class);
+		dis_barcode = disCC.createBarcode();
+
+		// s3에 파일 업로드
+		S3UploadAndList s3 = new S3UploadAndList();
+		MultipartFile report = request.getFile("uploadfile");
+		File upload_file;
+		upload_file = s3.multipartToFile(report);
+		s3.uploadFile(upload_file, "discount");
+		dis_shop_photo += upload_file.getName();
+
+		DisCountCouponObj discc_obj = new DisCountCouponObj(dis_owner_name, dis_shop_name, dis_shop_addr,
+				dis_shop_description, dis_shop_photo, dis_barcode);
+		System.out.println("discc_obj.getname() : " + discc_obj.getDis_owner_name());
+		System.out.println(dis_barcode);
+		System.out.println(discc_obj.getDis_barcode());
+		disCC.insertDisCountCoupon(discc_obj);
+
+		return "discount_page";
+	}
+
 	@RequestMapping(value = "/awsTest", method = RequestMethod.GET)
 	public String awsTest(Locale local, Model model) {
 		// model.addAttribute("test","123");
@@ -241,14 +271,13 @@ public class ChatbotController {
 	@RequestMapping(value = "/s3upload", method = RequestMethod.POST)
 	public void submitReport(MultipartHttpServletRequest request, HttpServletResponse response)
 			throws IllegalStateException, IOException {
+
 		S3UploadAndList s3 = new S3UploadAndList();
 		MultipartFile report = request.getFile("uploadfile");
 		File upload_file;
 		upload_file = s3.multipartToFile(report);
 
-		s3.uploadFile(upload_file);
-
-		response.sendRedirect("http://13.124.143.250:8080/ICT_Nailro_Project/awsTest");
+		s3.uploadFile(upload_file, "s3");
 	}
 
 	@RequestMapping(value = "/s3list", method = RequestMethod.POST)
@@ -266,6 +295,7 @@ public class ChatbotController {
 		TourAPI tour = new TourAPI();
 		JSONArray details = new JSONArray();
 		JSONArray intros = new JSONArray();
+		JSONArray images = new JSONArray();
 		String type = new String();
 		String region = new String();
 
@@ -276,48 +306,58 @@ public class ChatbotController {
 			ArrayList<String> contentid = tour.areaBased(region, "12", "3");
 			details = tour.contentDetail(contentid);
 			intros = tour.introAttraction(contentid);
+			images = tour.imageDetail(contentid, "12");
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
+			model.addAttribute("images", images);
 
 			return "attraction";
 		} else if (type.equals("문화")) {
 			ArrayList<String> contentid = tour.areaBased(region, "14", "3");
 			details = tour.contentDetail(contentid);
 			intros = tour.introCulture(contentid);
-			
+			images = tour.imageDetail(contentid, "14");
+
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
+			model.addAttribute("images", images);
 
 			return "culture";
 		} else if (type.equals("축제")) {
 			ArrayList<String> contentid = tour.searchFestival(region, "3");
 			details = tour.contentDetail(contentid);
 			intros = tour.introFestival(contentid);
+			images = tour.imageDetail(contentid, "15");
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
+			model.addAttribute("images", images);
 
 			return "festival";
 		} else if (type.equals("음식")) {
 			ArrayList<String> contentid = tour.areaBased(region, "39", "3");
 			details = tour.contentDetail(contentid);
 			intros = tour.introFood(contentid);
+			images = tour.imageDetail(contentid, "39");
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
 			model.addAttribute("intros", intros);
+			model.addAttribute("images", images);
 
 			return "food";
 		} else {
 			ArrayList<String> contentid = tour.areaBased(region, "", "3");
 			details = tour.contentDetail(contentid);
+			images = tour.imageDetail(contentid, "15");
 
 			model.addAttribute("city_name", region);
 			model.addAttribute("details", details);
+			model.addAttribute("images", images);
 
 			return "region_infomation";
 		}
@@ -347,44 +387,38 @@ public class ChatbotController {
 	public String google(Locale locale, Model model) throws SQLException {
 		return "google";
 	}
-	
+
 	/*
-	 * 메뉴얼 페이지 
+	 * 메뉴얼 페이지
 	 */
 	@RequestMapping(value = "/manual", method = RequestMethod.GET)
 	public String discount(Locale locale, Model model) {
-		
+
 		return "manual_page";
 	}
-	
+
 	/*
 	 * 메뉴얼 Contact
 	 */
 	@RequestMapping(value = "/manual_contact", method = RequestMethod.POST)
-	public String manualContact(HttpServletRequest httpServeletRequest){
+	public String manualContact(HttpServletRequest httpServeletRequest) {
+		@SuppressWarnings("resource")
 		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		
-		
+
 		String user_name = httpServeletRequest.getParameter("user_name");
 		String user_email = httpServeletRequest.getParameter("user_email");
 		String user_phone = httpServeletRequest.getParameter("user_phone");
 		String user_message = httpServeletRequest.getParameter("user_message");
-		
-		System.out.println(user_name+user_email+user_phone+user_message);
-		
-		
-		
-		ManualContactUser mc_user = new ManualContactUser(user_name,user_email,user_phone,user_message);
+
+		ManualContactUser mc_user = new ManualContactUser(user_name, user_email, user_phone, user_message);
 		System.out.println(mc_user.getUser_message());
 		System.out.println(mc_user.getUser_name());
 		System.out.println(mc_user.getUser_email());
 		System.out.println(mc_user.getUser_phone());
-		
-		ManualContactMessage mc_message = context.getBean("menualContactMessage",ManualContactMessage.class);
+
+		ManualContactMessage mc_message = context.getBean("menualContactMessage", ManualContactMessage.class);
 		mc_message.insertContactMessage(mc_user);
 
-		
 		return "manual_page";
 	}
-
 }

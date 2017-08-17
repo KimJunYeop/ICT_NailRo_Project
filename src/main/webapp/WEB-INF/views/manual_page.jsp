@@ -118,7 +118,7 @@
 					class="fa fa-circle fa-stack-2x text-primary"></i> <i
 					class="fa fa-info fa-stack-1x fa-inverse"></i>
 				</span>
-				<h4 class="service-heading">관광지 정보!</h4>
+				<h4 class="service-heading">여행지 정보!</h4>
 				<p class="text-muted">도시의 축제, 맛집에 대한 정보!</p>
 				<p class="text-muted">관광지에 대한 정보를 간편하게 얻으세요!</p>
 			</div>
@@ -171,8 +171,24 @@
 					<p class="text-muted">간편하게 도시의 코스를 추천받으세요.</p>
 				</div>
 			</div>
-
-
+		</div>	
+		<div class="row">
+			<div class="col-md-4 col-sm-6 portfolio-item">
+				<a href="#portfolioModal2" class="portfolio-link"
+					data-toggle="modal">
+					<div class="portfolio-hover">
+						<div class="portfolio-hover-content">
+							<i class="fa fa-plus fa-3x"></i>
+						</div>
+					</div> <img
+					src="${pageContext.request.contextPath}/resources/image/searchAttractionSample.png"
+					class="img-responsive" alt="">
+				</a>
+				<div class="portfolio-caption">
+					<h4>여행지정보</h4>
+					<p class="text-muted">원하는 지역의 여행지 정보를 검색하세요.</p>
+				</div>
+			</div>
 		</div>
 	</div>
 	</section>
@@ -540,6 +556,111 @@
 									<div class="col-sm-7">
 										<h2>코스의 위치를 확인하세요!</h2>
 										<p>코스의 대략적인 위치가 나타납니다.</p>
+									</div>
+								</div>
+
+								<button type="button" class="btn btn-primary"
+									data-dismiss="modal">
+									<i class="fa fa-times"></i> Close
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="portfolio-modal modal fade" id="portfolioModal2"
+		tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="close-modal" data-dismiss="modal">
+					<div class="lr">
+						<div class="rl"></div>
+					</div>
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-8 col-lg-offset-2">
+							<div class="modal-body">
+								<!-- Project Details Go Here -->
+								<h2>여행지정보</h2>
+								<p class="item-intro text-muted">여행 중 궁금한 지역정보를 쉽게 검색하세요.</p>
+								
+
+								<div class="row panel panel-default">
+									<div class="col-sm-5">
+										<img class="img-responsive img_course"
+											src="${pageContext.request.contextPath}/resources/image/searchAtt1.png"
+											alt="">
+									</div>
+									<div class="col-sm-7">
+										<h3>여행지정보를 클릭하세요!</h3>
+										<p>클릭하면 검색을 위한 입력단계로 넘어갑니다.</p>
+									</div>
+
+								</div>
+
+								<div class="row panel panel-default">
+									<div class="col-sm-5">
+										<img class="img-responsive img_course"
+											src="${pageContext.request.contextPath}/resources/image/searchAtt2.png"
+											alt="">
+									</div>
+									<div class="col-sm-7">
+										<h3>원하는 정보를 입력하세요!</h3>
+										<p>지역명과 카테고리를 선택해서 입력합니다.</p>
+										<p>
+											<b>1. 지역명</b></br>
+											- 지역 입력 범위는 특별시, 광역시, 시, 군 단위 입니다.</br>(일부 군은 검색이 안될 수도 있습니다.)</br>
+											- 지역이름은 단위를 제외한 이름만 입력합니다.</br> 
+											- ex) 서울, 부산, 여수, 평창</br></br>
+											<b>2. 카테고리</b></br>
+											- 카테고리는 관광, 문화, 축제, 음식 4가지로 분류됩니다.</br>
+											- 카테고리는 정해진 4개의 텍스트 입력만 가능합니다.</br>
+											- 해당되지 않는 카테고리 외의 다른 텍스트를 입력하거나 카테고리를 입력하지 않으면 통합정보를 제공합니다.</br>
+											- 통합정보는 일부 정보제공이 제한됩니다. </br></br></br>
+											<b>3. 통합</b></br>
+											- 지역명은 반드시 앞에 입력해야됩니다.</br>
+											- 지역명과 카테고리 사이에 띄어쓰기는 무관합니다.</br>
+											- ex) 서울, 부산축제, 강릉 관광</br>
+											
+										</p>
+									</div>
+								</div>
+
+								<div class="row panel panel-default">
+									<div class="col-sm-7">
+										<h3>URL을 클릭하세요.</h3>
+										<p>검색한 지역의 날씨 정보와 url을 전송합니다.</p>
+									</div>
+									<div class="col-sm-5">
+										<img class="img-responsive img_course"
+											src="${pageContext.request.contextPath}/resources/image/searchAtt3.png"
+											alt="">
+									</div>
+									<div class="col-sm-7">
+										<p>
+											- url을 클릭하면 원하는 정보를 얻을 수 있는 페이지로 이동합니다.</br>
+											- 다른 정보를 원하면 다시 입력하면 됩니다.</br> 
+											ex)경주 문화, 여수 관광</br>
+											- "처음으로"를 입력하면 내일로챗봇 메인메뉴로 돌아갑니다.</br>
+										</p>
+									</div>
+										
+								</div>
+
+								<div class="row panel panel-default">
+									<div class="col-sm-7">
+										<h3>상세정보를 확인하세요!</h3>
+										<p>페이지를 넘기며 원하는 정보를 얻으세요. </p>
+									</div>
+									<div class="col-sm-5">
+										<img class="img-responsive img_course"
+											src="${pageContext.request.contextPath}/resources/image/searchAtt4.png"
+											alt="">
 									</div>
 								</div>
 
