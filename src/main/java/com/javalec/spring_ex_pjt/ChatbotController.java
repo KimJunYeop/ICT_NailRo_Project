@@ -218,40 +218,14 @@ public class ChatbotController {
 		msg.setPhoto(resDiscountCoupon.getPhoto());
 		return msg;
 	}
-	@RequestMapping(value = "/init", method = RequestMethod.GET)
-	private String rediInit() {
-		return "init_market";
+	/*
+	 * discount page  
+	 */
+	@RequestMapping(value="/discount", method = RequestMethod.GET)
+	public String discountPageLoading(){
+		return "discount_page";
 	}
-	@RequestMapping(value = "/init", method = RequestMethod.POST)
-	private void init(@RequestParam String market_name, 
-			@RequestParam String area, 
-			@RequestParam String serialNum, MultipartHttpServletRequest request) throws SQLException {
-		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-		InitDiscountCoupon initDiscountCoupon = context.getBean("InitDiscountCoupon", InitDiscountCoupon.class);
-		initDiscountCoupon.initCouponData(market_name, serialNum, area);
-		MultipartFile mr = request.getFile("uploadfile");
-		String savepath = request.getSession().getServletContext().getRealPath("/") + "fileBox/";
-		String filename = mr.getOriginalFilename();
-		System.out.println("filename is " + filename);
-		System.out.println("System absolute path : " + request.getSession().getServletContext().getRealPath("/") + "fileBox");
-		directoryConfirmAndMake(savepath);
-		try {
-		//File = new File(현재 어플리케이션의 디렉토리 위치 + 저장할 디렉토리 + /filename);
-		File file = new File(savepath + filename);
-		mr.transferTo(file);
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	public void directoryConfirmAndMake(String targetDir) {
-		File searchPath = new File(targetDir);
-		if(!searchPath.isDirectory()) {
-			searchPath.mkdirs();
-		}
-		else {
-		}
-	}
-
+	
 	@RequestMapping(value = "/awsTest", method = RequestMethod.GET)
 	public String awsTest(Locale local, Model model) {
 		// model.addAttribute("test","123");
@@ -408,7 +382,8 @@ public class ChatbotController {
 		
 		ManualContactMessage mc_message = context.getBean("menualContactMessage",ManualContactMessage.class);
 		mc_message.insertContactMessage(mc_user);
-//		
+
+		
 		return "manual_page";
 	}
 

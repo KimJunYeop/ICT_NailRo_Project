@@ -329,10 +329,15 @@
 	<!-- Contact Section -->
 	<section id="img_contact">
 	<div class="container">
-		<div class="row" style="margin-bottom : 20px;">
-			<div class="col-lg-12 text-center" style="color : #eee;"}>
-				<h2><span style="background-color :#fed136;">Contact Us</span></h2>
-				<h3><span style="background-color :#fed136;">개선을 바라는 점이 있다면 주저말고 연락주세요!</span></h3>
+		<div class="row" style="margin-bottom: 20px;">
+			<div class="col-lg-12 text-center" style="color: #eee;"}>
+				<h2>
+					<span style="background-color: #fed136;">Contact Us</span>
+				</h2>
+				<h3>
+					<span style="background-color: #fed136;">개선을 바라는 점이 있다면 주저말고
+						연락주세요!</span>
+				</h3>
 			</div>
 		</div>
 		<div class="row">
@@ -363,11 +368,13 @@
 							<div class="form-group">
 								<textarea class="form-control" placeholder="Your Message *"
 									name="user_message" required
-									data-validation-required-message="Please enter a message." rows="6"></textarea>
+									data-validation-required-message="Please enter a message."
+									rows="6"></textarea>
 								<p class="help-block text-danger"></p>
 							</div>
 						</div>
 						<div class="clearfix"></div>
+						</br>
 						<div class="col-lg-12 text-center">
 							<div id="success"></div>
 							<button type="submit" class="btn btn-xl">Send Message</button>
@@ -379,17 +386,36 @@
 	</div>
 	</section>
 
+
+	<section id="discount" class="bg-light-gray">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<h2 class="section-heading">내일로 할인쿠폰 등록</h2>
+				<h3 class="section-subheading text-muted">
+					점주이신가요? 내일로 챗봇을 통한 할인쿠폰을 등록하세요!</br>내일러들이 당신의 매장을 찾아갑니다.
+				</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<div id="success"></div>
+				<a href="discount"><button class="btn btn-xl">할인쿠폰 등록하기</button></a>
+			</div>
+		</div>
+	</div>
+	</section>
+
+
 	<footer>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-4">
 				<span class="copyright">Copyright &copy; Nailro_Project 2017</span>
 			</div>
-			
-			<div class="col-md-4">
-				
-			</div>
-			
+
+			<div class="col-md-4"></div>
+
 			<div class="col-md-4">
 				<ul class="list-inline quicklinks">
 					<li><a href="#">내일로 챗봇</a></li>
@@ -420,7 +446,7 @@
 								<h2>코스 추천</h2>
 								<p class="item-intro text-muted">헤매지마세요. 코스 추천으로 알찬 여행을
 									즐기세요.</p>
-								
+
 
 								<div class="row panel panel-default">
 									<div class="col-sm-5">
@@ -516,7 +542,7 @@
 										<p>코스의 대략적인 위치가 나타납니다.</p>
 									</div>
 								</div>
-								
+
 								<button type="button" class="btn btn-primary"
 									data-dismiss="modal">
 									<i class="fa fa-times"></i> Close
@@ -574,10 +600,10 @@
 	</div>
 	-->
 
-	
 
-	
-	
+
+
+
 
 	<!-- jQuery -->
 	<script
