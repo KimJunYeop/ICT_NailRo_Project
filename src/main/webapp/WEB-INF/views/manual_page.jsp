@@ -148,13 +148,16 @@
 	<!-- Portfolio Grid Section -->
 	<section id="portfolio" class="bg-light-gray">
 	<div class="container">
+	
 		<div class="row">
 			<div class="col-lg-12 text-center">
 				<h2 class="section-heading">Instructions</h2>
 				<h3 class="section-subheading text-muted">각 서비스 사용법을 확인하세요.</h3>
 			</div>
 		</div>
+		
 		<div class="row">
+		
 			<div class="col-md-4 col-sm-6 portfolio-item">
 				<a href="#portfolioModal1" class="portfolio-link"
 					data-toggle="modal">
@@ -171,6 +174,7 @@
 					<p class="text-muted">간편하게 도시의 코스를 추천받으세요.</p>
 				</div>
 			</div>
+			
 			<div class="col-md-4 col-sm-6 portfolio-item">
 				<a href="#portfolioModal2" class="portfolio-link"
 					data-toggle="modal">
@@ -179,7 +183,7 @@
 							<i class="fa fa-plus fa-3x"></i>
 						</div>
 					</div> <img
-					src="${pageContext.request.contextPath}/resources/image/searchAttractionSample.png"
+					src="${pageContext.request.contextPath}/resources/image/manual/searchAtt.png"
 					class="img-responsive" alt="">
 				</a>
 				<div class="portfolio-caption">
@@ -187,6 +191,24 @@
 					<p class="text-muted">원하는 지역의 여행지 정보를 검색하세요.</p>
 				</div>
 			</div>
+			
+			<div class="col-md-4 col-sm-6 portfolio-item">
+				<a href="#portfolioModal3" class="portfolio-link"
+					data-toggle="modal">
+					<div class="portfolio-hover">
+						<div class="portfolio-hover-content">
+							<i class="fa fa-plus fa-3x"></i>
+						</div>
+					</div> <img
+					src="${pageContext.request.contextPath}/resources/image/manual/discount.png"
+					class="img-responsive" alt="">
+				</a>
+				<div class="portfolio-caption">
+					<h4>할인혜택</h4>
+					<p class="text-muted">각종 할인혜택을 받아보세요.</p>
+				</div>
+			</div>
+			
 		</div>
 	</div>
 	</section>
@@ -486,9 +508,6 @@
 											src="https://s3.ap-northeast-2.amazonaws.com/ictnailro/s3/course/course_2.png"
 											alt="">
 									</div>
-
-
-
 								</div>
 
 								<div class="row panel panel-default">
@@ -591,7 +610,7 @@
 								<div class="row panel panel-default">
 									<div class="col-sm-5">
 										<img class="img-responsive img_course"
-											src="${pageContext.request.contextPath}/resources/image/searchAtt1.png"
+											src="${pageContext.request.contextPath}/resources/image/manual/searchAtt1.png"
 											alt="">
 									</div>
 									<div class="col-sm-7">
@@ -604,7 +623,7 @@
 								<div class="row panel panel-default">
 									<div class="col-sm-5">
 										<img class="img-responsive img_course"
-											src="${pageContext.request.contextPath}/resources/image/searchAtt2.png"
+											src="${pageContext.request.contextPath}/resources/image/manual/searchAtt2.png"
 											alt="">
 									</div>
 									<div class="col-sm-7">
@@ -631,7 +650,7 @@
 									</div>
 									<div class="col-sm-5">
 										<img class="img-responsive img_course"
-											src="${pageContext.request.contextPath}/resources/image/searchAtt3.png"
+											src="${pageContext.request.contextPath}/resources/image/manual/searchAtt3.png"
 											alt="">
 									</div>
 									<div class="col-sm-7">
@@ -650,8 +669,77 @@
 									</div>
 									<div class="col-sm-5">
 										<img class="img-responsive img_course"
-											src="${pageContext.request.contextPath}/resources/image/searchAtt4.png"
+											src="${pageContext.request.contextPath}/resources/image/manual/searchAtt4.png"
 											alt="">
+									</div>
+								</div>
+
+								<button type="button" class="btn btn-primary"
+									data-dismiss="modal">
+									<i class="fa fa-times"></i> Close
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="portfolio-modal modal fade" id="portfolioModal3"
+		tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="close-modal" data-dismiss="modal">
+					<div class="lr">
+						<div class="rl"></div>
+					</div>
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-8 col-lg-offset-2">
+							<div class="modal-body">
+								<!-- Project Details Go Here -->
+								<h2>할인혜택</h2>
+								<p class="item-intro text-muted">여행 중 유용한 할인쿠폰을 받아보세요.</p>
+
+
+								<div class="row panel panel-default">
+									<div class="col-sm-5">
+										<img class="img-responsive img_course"
+											src="${pageContext.request.contextPath}/resources/image/manual/discount1.png"
+											alt="">
+									</div>
+									<div class="col-sm-7">
+										<h3>할인혜택을 클릭하세요!</h3>
+										<p>클릭하면 쿠폰받기 단계로 넘어갑니다.</p>
+									</div>
+								</div>
+
+								<div class="row panel panel-default">
+									<div class="col-sm-7">
+										<h3>쿠폰받기를 클릭하세요!</h3>
+										<p>할인쿠폰이 랜덤으로 제공됩니다.</p>
+									</div>
+									<div class="col-sm-5">
+										<img class="img-responsive img_course"
+											src="${pageContext.request.contextPath}/resources/image/manual/discount2.png"
+											alt="">
+									</div>
+								</div>
+
+								<div class="row panel panel-default">
+									<div class="col-sm-7">
+										<h3>할인혜택을 누려보세요.</h3>
+										<p>할인정보를 확인할 수 있습니다.</p>
+									</div>
+									<div class="col-sm-5">
+										<img class="img-responsive img_course"
+											src="${pageContext.request.contextPath}/resources/image/manual/discount3.png"
+											alt="">
+									</div>
+									<div class="col-sm-7">
+										<P>매장 이름, 주소, 매장 소개, 할인내용과 바코드 이미지가 제공됩니다.</P>
 									</div>
 								</div>
 

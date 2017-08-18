@@ -99,7 +99,7 @@ public class ChatbotController {
 		} else if (req_msg.getContent().equals("메뉴얼")) {
 			String text = "내일로 챗봇의 홈페이지입니다. 내일로 챗봇 팀원 및 사용방법을 보시려면 url을 클릭하세요!";
 			;
-			msg = messageWithMessageButton(msg, text, "오픈채팅방입장",
+			msg = messageWithMessageButton(msg, text, "메뉴얼보기",
 					"http://13.124.143.250:8080/ICT_Nailro_Project/manual");
 		} else if (req_msg.getContent().equals("맞춤형 추천코스")) {
 			// 추천 코스로 들어가기 위한 안내문.
@@ -182,7 +182,7 @@ public class ChatbotController {
 			weather.response(area.getAreaName());
 			String text = weather.getText();
 
-			msg = messageWithMessageButton(msg, text, "URL", "http://13.124.143.250:8080/ICT_Nailro_Project/region/"
+			msg = messageWithMessageButton(msg, text, "여행지정보 Go", "http://13.124.143.250:8080/ICT_Nailro_Project/region/"
 					+ area.getAreaName() + area.getContentType());
 		} else {
 			msg.setText("입력하신 문장이 적절하지 않습니다. 다시 입력하시거나 \n 처음 메뉴로 돌아가고 싶으시면 \"처음으로\"를 입력해주세요.");
