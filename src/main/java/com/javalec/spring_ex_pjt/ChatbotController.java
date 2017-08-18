@@ -65,7 +65,6 @@ public class ChatbotController {
 	public Keyboard keyboard() {
 		// 초반에 1번 keyboard 초기화
 		Keyboard keyboard = new Keyboard(new String[] { "메뉴얼", "할인혜택", "추천코스검색", "여행지정보", "축제정보", "오픈채팅방입장" });
-
 		return keyboard;
 	}
 
