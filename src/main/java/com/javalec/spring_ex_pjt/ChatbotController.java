@@ -34,6 +34,7 @@ import com.javalec.Response.ResRecommendRegion;
 import com.javalec.Response.ResWeather;
 import com.javalec.discount.DisCountCoupon;
 import com.javalec.discount.DisCountCouponObj;
+import com.javalec.discount.JBarcode;
 import com.javalec.manual.ManualContactMessage;
 import com.javalec.message.Keyboard;
 import com.javalec.message.Message;
@@ -148,8 +149,25 @@ public class ChatbotController {
 			msg.setText("내일로 봇의 다양한 할인 혜택을 만나보세요! \n 아래의 쿠폰받기를 눌러주세요!");
 			keyboard = new Keyboard(new String[] { "쿠폰받기" });
 		} else if (req_msg.getContent().equals("쿠폰받기")) {
-			DisCountCoupon disCC = new DisCountCoupon();
-			//DisCountCouopon 조회 후 출력.
+			ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+			Photo photo = new Photo();
+			photo.setUrl("https://s3.ap-northeast-2.amazonaws.com/ictnailro/barcode/1983115.png");
+			photo.setHeight(100);
+			photo.setWidth(300);
+
+			DisCountCoupon dis = context.getBean("disCountCoupon", DisCountCoupon.class);
+
+			DisCountCouponObj obj = new DisCountCouponObj();
+			obj = dis.getDisCountCoupon();
+
+			msg.setPhoto(photo);
+			msg.setText("할인혜택을 받으세요! \n" + "해당 매장에가서 제출하세요! \n\n" + "---------------------------\n" + "매장 이름 : "
+					+ obj.getDis_shop_name() + "\n" + "매장 주소 : " + obj.getDis_shop_addr() + "\n" + "매장 소개 : "
+					+ obj.getDis_shop_description() + "\n" + "할인 혜택 : " + obj.getDis_type() + "\n"
+					+ "---------------------------\n\n" + "처음 메뉴로 돌아가시면 \n \"처음으로\"를 입력하세요.");
+			keyboard = new Keyboard();
+
+			// DisCountCouopon 조회 후 출력.
 		} else if (req_msg.getContent().equals("여행지정보")) {
 			msg.setText("여행지 정보를 얻으세요! \n" + "도시와 카테고리를 입력해주세요. \n" + "도시만 입력한 경우, 통합결과를 제공해요(씨익)\n"
 					+ " ---------------------- \n\n" + "1. 관광\n" + "2. 문화\n" + "3. 축제\n" + "4. 음식\n"
@@ -234,6 +252,7 @@ public class ChatbotController {
 		String dis_shop_description = request.getParameter("dis_shop_description");
 		String dis_shop_photo = "https://s3.ap-northeast-2.amazonaws.com/ictnailro/discount/";
 		String dis_barcode = "";
+		String dis_type = request.getParameter("dis_type");
 
 		DisCountCoupon disCC = context.getBean("disCountCoupon", DisCountCoupon.class);
 		dis_barcode = disCC.createBarcode();
@@ -247,10 +266,7 @@ public class ChatbotController {
 		dis_shop_photo += upload_file.getName();
 
 		DisCountCouponObj discc_obj = new DisCountCouponObj(dis_owner_name, dis_shop_name, dis_shop_addr,
-				dis_shop_description, dis_shop_photo, dis_barcode);
-		System.out.println("discc_obj.getname() : " + discc_obj.getDis_owner_name());
-		System.out.println(dis_barcode);
-		System.out.println(discc_obj.getDis_barcode());
+				dis_shop_description, dis_shop_photo, dis_barcode, dis_type);
 		disCC.insertDisCountCoupon(discc_obj);
 
 		return "discount_page";

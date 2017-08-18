@@ -133,6 +133,12 @@
 								<p class="help-block text-danger"></p>
 							</div>
 							<div class="form-group">
+								<input type="text" class="form-control"
+									placeholder="Your Discount Type *       ex) 할인 10%" name="dis_type" required
+									data-validation-required-message="Please enter your discount type.">
+								<p class="help-block text-danger"></p>
+							</div>
+							<div class="form-group">
 								<!-- <input type="text" class="form-control"
 									placeholder="Your Shop Photo *" name="dis_shop_photo" required
 									data-validation-required-message="Please upload your shop photo."> -->
@@ -149,7 +155,7 @@
 									placeholder="Your Shop Description *"
 									name="dis_shop_description" required
 									data-validation-required-message="Please enter a shop descriotion."
-									rows="6"></textarea>
+									rows="8"></textarea>
 								<p class="help-block text-danger"></p>
 							</div>
 						</div>
@@ -157,7 +163,7 @@
 						</br>
 						<div class="col-lg-12 text-center">
 							<div id="success"></div>
-							<button type="submit" class="btn btn-xl">Create Coupone</button>
+							<button type="submit" class="btn btn-xl">Create Coupon</button>
 						</div>
 					</div>
 				</form>

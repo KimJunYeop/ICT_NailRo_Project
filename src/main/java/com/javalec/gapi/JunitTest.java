@@ -1,16 +1,14 @@
 package com.javalec.gapi;
 
-import java.io.File;
-import java.util.Random;
-
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 import com.javalec.discount.DisCountCoupon;
+import com.javalec.discount.DisCountCouponObj;
+import com.javalec.discount.JBarcode;
 
-import net.sourceforge.barbecue.Barcode;
 import net.sourceforge.barbecue.BarcodeException;
-import net.sourceforge.barbecue.BarcodeFactory;
-import net.sourceforge.barbecue.BarcodeImageHandler;
 import net.sourceforge.barbecue.output.OutputException;
 
 public class JunitTest {
@@ -227,8 +225,25 @@ public class JunitTest {
 	// }
 	@Test
 	public void barcodeTest() throws BarcodeException, OutputException {
-		DisCountCoupon dis = new DisCountCoupon();
-		dis.createBarcode();
+		ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+		JBarcode bar = new JBarcode();
+		
+		DisCountCoupon dis = context.getBean("disCountCoupon", DisCountCoupon.class);
+		
+		DisCountCouponObj obj = new DisCountCouponObj();
+		obj = dis.getDisCountCoupon();
+		
+		System.out.println("!@#!@#!@#!@#!@#!@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println("barcode :" + obj.getDis_barcode());
+		System.out.println("shopname :" + obj.getDis_shop_name());
+		System.out.println("ownername :" + obj.getDis_owner_name());
+		System.out.println("shopPhoto :" + obj.getDis_shop_photo());
+		System.out.println("shop_dsc :" + obj.getDis_shop_description());
+		System.out.println("shop_addr :" + obj.getDis_shop_addr());
+		
+		bar.getBarcode(obj.getDis_barcode());
+		
+		
 	}
 
 }
